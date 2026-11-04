@@ -34,13 +34,19 @@ h1{font-weight:800;font-size:clamp(46px,6.6vw,86px);line-height:.95}
 h1 span{color:var(--accent)}
 .lede{color:var(--muted);font-size:clamp(18px,1.7vw,21px);margin:22px 0 30px;max-width:46ch}
 .micro{color:var(--muted);font-size:14px;margin-top:14px}
-.phones{position:relative;height:560px}
+.phones{position:relative;height:560px;max-width:620px;width:100%;margin-left:auto}
 .phone{position:absolute;width:200px;aspect-ratio:9/16;border-radius:30px;overflow:hidden;border:6px solid #1e1e22;background:#000;box-shadow:0 30px 60px rgba(0,0,0,.5)}
 .phone video{width:100%;height:100%;object-fit:cover;display:block}
 .phone:nth-child(1){left:2%;top:70px;transform:rotate(-6deg)}
-.phone:nth-child(2){left:34%;top:0;z-index:2;width:220px}
-.phone:nth-child(3){left:68%;top:90px;transform:rotate(6deg)}
+.phone:nth-child(2){left:50%;margin-left:-110px;top:0;z-index:2;width:220px}
+.phone:nth-child(3){right:0;top:90px;transform:rotate(6deg)}
 .pill{position:absolute;left:10px;bottom:10px;font-size:12px;font-weight:700;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);padding:5px 10px;border-radius:999px}
+.marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:34px -20px 0;padding:14px 0;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.track{display:flex;gap:12px;width:max-content;animation:run 38s linear infinite}
+.track span{white-space:nowrap;font-weight:700;font-size:15px;padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+.track span.a{background:var(--accent);color:var(--ink);border-color:var(--accent)}
+@keyframes run{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.track{animation:none}}
 /* proof */
 .proof{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:var(--r);margin:30px 0 0;overflow:hidden}
 .proof div{padding:22px 24px;border-right:1px solid var(--line)}
@@ -95,8 +101,8 @@ details p{color:var(--muted);margin-top:8px;font-size:16px}
 .final p{margin:14px auto 28px;max-width:46ch;font-size:19px}
 .final .btn{background:var(--ink);color:var(--accent)}
 footer{color:var(--muted);font-size:14px;padding:36px 0;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-@media (max-width:960px){.hero{grid-template-columns:1fr}.phones{height:440px}.phone{width:160px}.phone:nth-child(2){width:180px}.wall{grid-template-columns:repeat(3,1fr)}.plans{grid-template-columns:1fr 1fr}.proof{grid-template-columns:1fr 1fr}.proof div:nth-child(2){border-right:0}.proof div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
-@media (max-width:600px){.phones{height:360px}.phone{width:128px;border-width:4px;border-radius:22px}.phone:nth-child(2){width:146px}.wall{grid-template-columns:1fr 1fr}.steps,.who,.plans,.faq{grid-template-columns:1fr}.nav-cta{display:none}}
+@media (max-width:960px){.hero{grid-template-columns:1fr}.phones{height:440px}.phone{width:160px}.phone:nth-child(2){width:180px;margin-left:-90px}.wall{grid-template-columns:repeat(3,1fr)}.plans{grid-template-columns:1fr 1fr}.proof{grid-template-columns:1fr 1fr}.proof div:nth-child(2){border-right:0}.proof div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+@media (max-width:600px){.phones{height:360px}.phone{width:128px;border-width:4px;border-radius:22px}.phone:nth-child(2){width:146px;margin-left:-73px}.wall{grid-template-columns:1fr 1fr}.steps,.who,.plans,.faq{grid-template-columns:1fr}.nav-cta{display:none}}
 </style>
 </head>
 <body>
@@ -119,6 +125,8 @@ footer{color:var(--muted);font-size:14px;padding:36px 0;display:flex;justify-con
     <div class="phone"><video src="reels/xia-rooftop-bistro.mp4" poster="reels/xia-rooftop-bistro.jpg" autoplay muted loop playsinline></video><span class="pill">Brand</span></div>
   </div>
 </header>
+
+<div class="marquee" aria-hidden="true"><div class="track"><span class="">Instagram Reels</span><span class="">YouTube Shorts</span><span class="">TikToks</span><span class="a">Hooks that stop the scroll</span><span class="">Captions</span><span class="">Real estate tours</span><span class="">Talking heads</span><span class="a">Finance creators</span><span class="">AI explainers</span><span class="">Brand reels</span><span class="">White-label for agencies</span><span class="a">Ready in 48 h</span><span class="">Instagram Reels</span><span class="">YouTube Shorts</span><span class="">TikToks</span><span class="a">Hooks that stop the scroll</span><span class="">Captions</span><span class="">Real estate tours</span><span class="">Talking heads</span><span class="a">Finance creators</span><span class="">AI explainers</span><span class="">Brand reels</span><span class="">White-label for agencies</span><span class="a">Ready in 48 h</span></div></div>
 
 <div class="proof">
   <div><b>13K</b><small>average views a reel for the real estate firm I edit for</small></div>
