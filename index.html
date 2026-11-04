@@ -89,6 +89,17 @@ h2{font-weight:800;font-size:clamp(34px,4.6vw,58px);line-height:1}
 .plan li{padding:6px 0;border-top:1px solid var(--line)}
 .plan li:before{content:"✓ ";color:var(--accent)}
 .fine{color:var(--muted);font-size:14px;margin-top:16px}
+.me{display:grid;grid-template-columns:150px 1fr;gap:28px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:28px;margin-top:96px}
+.me img{width:150px;height:150px;border-radius:50%;object-fit:cover;border:3px solid var(--accent)}
+.me h2{font-size:clamp(28px,3.4vw,40px)}
+.me p{color:var(--muted);margin-top:8px;max-width:62ch}
+.me a.ig{color:var(--accent);font-weight:700}
+.vs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.vs div{border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.vs div.me2{border-color:var(--accent)}
+.vs b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:26px}
+.vs small{color:var(--muted)}
+@media (max-width:600px){.me{grid-template-columns:1fr;text-align:center}.me img{margin:0 auto}.vs{grid-template-columns:1fr}}
 /* faq */
 .faq{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 details{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
@@ -115,7 +126,7 @@ footer{color:var(--muted);font-size:14px;padding:36px 0;display:flex;justify-con
 <header class="hero">
   <div>
     <h1>Short-form edits that get <span>views.</span></h1>
-    <p class="lede">Reels, Shorts and TikToks for agencies, creators and real estate teams. Send raw clips, get edits ready to post in 48 hours.</p>
+    <p class="lede">Reels, Shorts and TikToks for agencies, creators and real estate teams. 12 edits a month for $700, ready in 48 hours. Your first edit is free.</p>
     <a class="btn" href="#start">Get a free test edit →</a>
     <p class="micro">Reply within 24 h · no card needed · the test edit is yours to keep</p>
   </div>
@@ -133,6 +144,15 @@ footer{color:var(--muted);font-size:14px;padding:36px 0;display:flex;justify-con
   <div><b>44K</b><small>views on the best reel</small></div>
   <div><b>48 h</b><small>from raw clips to a finished edit</small></div>
   <div><b>14 days</b><small>money back if you're not happy</small></div>
+</div>
+
+<div class="me">
+  <img src="sahil.jpg" alt="Sahil Jamnani" width="150" height="150">
+  <div>
+    <h2>Hi, I'm Sahil.</h2>
+    <p>I'm a short-form video editor in Goa, India. I edit reels for a luxury real estate firm (13K views a reel on average) and for my own money and AI channel. You work with me directly, not a team you never meet. I reply within 24 hours, and because of the time difference your edits are often ready when you wake up.</p>
+    <p><a class="ig" href="https://www.instagram.com/thatsahil.24/" target="_blank" rel="noopener">See my own reels on Instagram →</a></p>
+  </div>
 </div>
 
 <section id="work">
@@ -182,6 +202,11 @@ footer{color:var(--muted);font-size:14px;padding:36px 0;display:flex;justify-con
     <div class="plan"><h3>Growth</h3><div class="amt">$1,300<small> /month</small></div><ul><li>20 reels a month</li><li>+ 2 YouTube videos</li><li>Priority turnaround</li></ul></div>
     <div class="plan"><h3>Agencies</h3><div class="amt">Custom</div><ul><li>30+ reels a month</li><li>White-label, your brand</li><li>Volume price</li></ul></div>
   </div>
+  <div class="vs">
+    <div><small>Hiring an in-house editor</small><b>$3,000+ /month</b><small>plus weeks of hiring</small></div>
+    <div><small>Editing agencies</small><b>$1,000–4,000 /month</b><small>you rarely talk to the editor</small></div>
+    <div class="me2"><small>Working with me</small><b>$700 /month</b><small>first edit free, cancel any time</small></div>
+  </div>
   <p class="fine">Just need one? A single reel is $75. Every plan has a 14-day money-back promise.</p>
 </section>
 
@@ -193,6 +218,7 @@ footer{color:var(--muted);font-size:14px;padding:36px 0;display:flex;justify-con
     <details><summary>Can you work under my agency's name?</summary><p>Yes. White-label is normal for me. Your clients only see your brand.</p></details>
     <details><summary>What time zone are you in?</summary><p>India (IST). I work with clients in the UK, Australia, Canada and the UAE, so your edits are often ready when you wake up.</p></details>
     <details><summary>How do I pay?</summary><p>Monthly in advance by card or bank transfer (Wise or PayPal). The test edit is free.</p></details>
+    <details><summary>Who owns the videos?</summary><p>You do. Once a month is paid, every edit and project file from it is yours to use anywhere.</p></details>
     <details><summary>What if I don't like an edit?</summary><p>Two rounds of changes on every reel. If you're still not happy in the first 14 days, you get your money back.</p></details>
   </div>
 </section>
