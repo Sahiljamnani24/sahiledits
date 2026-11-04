@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sahil Edits · Short-form video editing</title>
+<meta name="description" content="Reels, Shorts and TikToks edited to keep people watching. For agencies (white-label), creators and real estate teams. 48-hour turnaround.">
+<meta property="og:title" content="Sahil Edits · Short-form video editing">
+<meta property="og:description" content="Reels, Shorts and TikToks for agencies, creators and real estate teams. 48-hour turnaround. Free test edit.">
+<meta property="og:image" content="https://sahiledits.com/reels/moira-villa-tour.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111'/%3E%3Cpath d='M24 18l24 14-24 14z' fill='%23f2c14e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0c;--panel:#161614;--line:#2a2926;--text:#f3f1ec;--muted:#a9a59c;--accent:#f2c14e;--radius:18px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0}
+.logo{font-family:"Instrument Serif",serif;font-size:26px;letter-spacing:.2px;text-decoration:none}
+.logo span{color:var(--accent)}
+.btn{display:inline-block;padding:13px 22px;border-radius:999px;background:var(--accent);color:#111;font-weight:600;text-decoration:none;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.hero{padding:70px 0 40px}
+h1{font-family:"Instrument Serif",serif;font-weight:400;font-size:clamp(44px,7.5vw,92px);line-height:1;letter-spacing:-.5px;max-width:13ch}
+h1 em{color:var(--accent)}
+.lede{color:var(--muted);font-size:clamp(17px,2vw,20px);max-width:58ch;margin:26px 0 32px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:56px 0 0}
+.stats div{background:var(--bg);padding:22px}
+.stats b{display:block;font-family:"Instrument Serif",serif;font-weight:400;font-size:clamp(34px,5vw,52px);line-height:1}
+.stats small{color:var(--muted);font-size:14px}
+section{padding:80px 0 0}
+h2{font-family:"Instrument Serif",serif;font-weight:400;font-size:clamp(34px,5vw,56px);line-height:1.05;margin-bottom:12px}
+.sub{color:var(--muted);max-width:60ch;margin-bottom:34px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.reel{position:relative;aspect-ratio:9/16;border-radius:var(--radius);overflow:hidden;background:var(--panel);cursor:pointer;border:1px solid var(--line)}
+.reel video{width:100%;height:100%;object-fit:cover;display:block}
+.reel .tag{position:absolute;left:12px;bottom:12px;right:12px;font-size:13px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);padding:7px 11px;border-radius:999px;width:fit-content}
+.reel .snd{position:absolute;right:12px;top:12px;font-size:12px;background:rgba(0,0,0,.55);padding:5px 9px;border-radius:999px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+.card h3{font-size:18px;margin-bottom:8px}
+.card p{color:var(--muted);font-size:15px}
+.price{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.plan{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column}
+.plan.hot{border-color:var(--accent)}
+.plan h3{font-size:16px;color:var(--muted);font-weight:500}
+.plan .amt{font-family:"Instrument Serif",serif;font-size:46px;line-height:1.1;margin:10px 0 4px}
+.plan .amt small{font-family:Inter,sans-serif;font-size:14px;color:var(--muted)}
+.plan ul{list-style:none;color:var(--muted);font-size:15px;margin:12px 0 0}
+.plan li{padding:5px 0;border-top:1px solid var(--line)}
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{border-top:1px solid var(--line);padding-top:18px}
+.step:before{counter-increment:s;content:"0" counter(s);font-family:"Instrument Serif",serif;color:var(--accent);font-size:28px;display:block}
+.step p{color:var(--muted);font-size:15px}
+.contact{margin:90px 0 0;padding:60px 28px;border:1px solid var(--line);border-radius:28px;text-align:center;background:radial-gradient(600px 220px at 50% 0,rgba(242,193,78,.12),transparent)}
+.contact p{color:var(--muted);margin:10px auto 28px;max-width:52ch}
+footer{color:var(--muted);font-size:13px;padding:40px 0;text-align:center}
+@media (max-width:860px){.grid,.cards,.steps{grid-template-columns:1fr 1fr}.price{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.grid{grid-template-columns:1fr 1fr;gap:10px}.cards,.steps,.price{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.hero{padding-top:40px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <a class="logo" href="#">Sahil <span>Edits</span></a>
+  <a class="btn ghost" href="mailto:sahil@sahiledits.com?subject=Video%20editing">Email me</a>
+</nav>
+
+<header class="hero">
+  <h1>Short-form edits that keep people <em>watching.</em></h1>
+  <p class="lede">I edit Reels, Shorts and TikToks for agencies, creators and real estate teams in the UK, Australia, Canada and the UAE. Strong first two seconds, tight pacing, clean captions. 48-hour turnaround, and white-label for agencies.</p>
+  <div class="ctas">
+    <a class="btn" href="mailto:sahil@sahiledits.com?subject=Free%20test%20edit&body=Hi%20Sahil%2C%0A%0AHere%20is%20a%20link%20to%20one%20raw%20clip%3A%20">Get a free test edit</a>
+    <a class="btn ghost" href="#work">See the work</a>
+  </div>
+  <div class="stats">
+    <div><b>13K</b><small>average views a reel for the real estate firm I edit for</small></div>
+    <div><b>44K</b><small>views on the best one</small></div>
+    <div><b>48 h</b><small>from raw clips to a finished edit</small></div>
+  </div>
+</header>
+
+<section id="work">
+  <h2>Recent work</h2>
+  <p class="sub">Tap a video to hear it. Real estate tours, talking heads, explainers and brand reels.</p>
+  <div class="grid">
+    <div class="reel"><video src="reels/moira-villa-tour.mp4" poster="reels/moira-villa-tour.jpg" muted loop playsinline preload="none"></video><span class="snd">tap for sound</span><span class="tag">Villa tour · real estate</span></div>
+    <div class="reel"><video src="reels/gurgaon-271-crore.mp4" poster="reels/gurgaon-271-crore.jpg" muted loop playsinline preload="none"></video><span class="snd">tap for sound</span><span class="tag">Talking head · property market</span></div>
+    <div class="reel"><video src="reels/renting-one-oil-ship-for-12-crore.mp4" poster="reels/renting-one-oil-ship-for-12-crore.jpg" muted loop playsinline preload="none"></video><span class="snd">tap for sound</span><span class="tag">Explainer · money</span></div>
+    <div class="reel"><video src="reels/villa-reel.mp4" poster="reels/villa-reel.jpg" muted loop playsinline preload="none"></video><span class="snd">tap for sound</span><span class="tag">Listing reel · real estate</span></div>
+    <div class="reel"><video src="reels/openai-agent-muted-a-safety-alert.mp4" poster="reels/openai-agent-muted-a-safety-alert.jpg" muted loop playsinline preload="none"></video><span class="snd">tap for sound</span><span class="tag">Story · AI news</span></div>
+    <div class="reel"><video src="reels/xia-rooftop-bistro.mp4" poster="reels/xia-rooftop-bistro.jpg" muted loop playsinline preload="none"></video><span class="snd">tap for sound</span><span class="tag">Brand reel · restaurant</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Who I work with</h2>
+  <p class="sub">Monthly partners, not one-off gigs. You send raw footage, I send back edits ready to post.</p>
+  <div class="cards">
+    <div class="card"><h3>Agencies</h3><p>Overflow editing under your name. When clients want more video than your team can cut, I take the extra reels so you can say yes to more work.</p></div>
+    <div class="card"><h3>Creators</h3><p>Finance, business, AI and education creators. Shorts and Reels cut from your long videos or raw takes, with hooks that hold the scroll.</p></div>
+    <div class="card"><h3>Real estate teams</h3><p>Listing tours and talking-head reels that bring enquiries. This is where my numbers above come from.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Simple prices</h2>
+  <p class="sub">In US dollars. No setup fee, cancel any time with 14 days' notice.</p>
+  <div class="price">
+    <div class="plan"><h3>Test edit</h3><div class="amt">Free</div><ul><li>One reel from your own footage</li><li>See the quality first</li></ul></div>
+    <div class="plan"><h3>Single reel</h3><div class="amt">$75</div><ul><li>30-60 second edit</li><li>2 rounds of changes</li><li>Money back within 14 days</li></ul></div>
+    <div class="plan hot"><h3>Monthly</h3><div class="amt">$700<small> / month</small></div><ul><li>12 reels a month</li><li>48-hour turnaround</li><li>2 rounds of changes each</li></ul></div>
+    <div class="plan"><h3>Growth</h3><div class="amt">$1,300<small> / month</small></div><ul><li>20 reels a month</li><li>+ 2 YouTube videos</li><li>Priority turnaround</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <div class="steps">
+    <div class="step"><h3>Send raw clips</h3><p>Share a Google Drive or Dropbox link with your footage and any notes or reference reels.</p></div>
+    <div class="step"><h3>Get the edit in 48 hours</h3><p>Captions, music, colour and pacing done, in vertical and ready to post.</p></div>
+    <div class="step"><h3>Ask for changes</h3><p>Two rounds of changes on every reel. Pay monthly by card or bank transfer.</p></div>
+  </div>
+</section>
+
+<div class="contact">
+  <h2>Want a free test edit?</h2>
+  <p>Send me one raw clip and I'll send back a finished reel in 48 hours. If you like it, we talk about a monthly plan.</p>
+  <a class="btn" href="mailto:sahil@sahiledits.com?subject=Free%20test%20edit">sahil@sahiledits.com</a>
+</div>
+<footer>Sahil Jamnani · Video editor in Goa, India · working with clients in UK, Australia, Canada and UAE time zones</footer>
+</div>
+<script>
+document.querySelectorAll('.reel').forEach(function(r){
+  var v=r.querySelector('video'),s=r.querySelector('.snd');
+  r.addEventListener('mouseenter',function(){if(v.muted){v.play().catch(function(){})}});
+  r.addEventListener('mouseleave',function(){if(v.muted){v.pause()}});
+  r.addEventListener('click',function(){
+    document.querySelectorAll('.reel video').forEach(function(o){if(o!==v){o.muted=true;o.pause();o.parentNode.querySelector('.snd').textContent='tap for sound'}});
+    if(v.muted||v.paused){v.muted=false;v.currentTime=0;v.play();s.textContent='tap to stop'}else{v.pause();v.muted=true;s.textContent='tap for sound'}
+  });
+});
+</script>
+</body>
+</html>
