@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Task Box · Sahil Edits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{--bg:#0e0d0b;--card:#171613;--line:#2a2823;--text:#efe9df;--muted:#9c958a;--rec:#ff4a2b;--ok:#7fc79a;--work:#e7b35a;
+--serif:"Instrument Serif",Georgia,serif;--sans:"Inter Tight",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+.stack{display:flex;flex-direction:column;gap:22px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding:32px max(16px,env(safe-area-inset-right)) 64px max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:22px}
+.top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.75rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.rec{display:inline-flex;gap:8px;align-items:center}.rec i{width:8px;height:8px;border-radius:50%;background:var(--rec)}
+h1{font-family:var(--serif);font-weight:400;font-size:3rem;line-height:1;margin:0}
+h1 em{color:var(--muted)}
+.sub{color:var(--muted);margin:8px 0 0}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+textarea,input{width:100%;border:1px solid var(--line);border-radius:8px;padding:12px;font:inherit;background:var(--bg);color:var(--text)}
+textarea{min-height:110px;resize:vertical}
+textarea:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(--rec);outline-offset:2px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hint{color:var(--muted);font-size:.85rem}
+button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:10px 18px;background:var(--text);color:var(--bg);cursor:pointer}
+button:disabled{opacity:.5}
+.link{background:none;color:var(--muted);padding:2px 0;font-weight:500;font-size:.8rem;text-decoration:underline}
+.msg{font-size:.9rem;color:var(--muted);min-height:1.3em}
+h2{font-family:var(--serif);font-weight:400;font-size:1.6rem;margin:0}
+ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.text{white-space:pre-wrap;overflow-wrap:anywhere}
+.meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.pill{text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:99px;border:1px solid currentColor}
+.waiting{color:var(--muted)}.working{color:var(--work)}.done{color:var(--ok)}
+.reply{border-left:2px solid var(--line);padding-left:10px;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere;font-size:.92rem}
+.empty{color:var(--muted);border-style:dashed;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span class="rec"><i></i>Task Box</span><a href="/" style="color:inherit">sahiledits.com</a></div>
+  <header>
+    <h1>Task <em>Box</em></h1>
+    <p class="sub">Write a task. Claude checks every hour and does it.</p>
+  </header>
+
+  <form class="box" id="lock" hidden>
+    <label for="code" class="hint">Enter your code (it is in your WhatsApp)</label>
+    <input id="code" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div class="row"><span class="msg" id="lockmsg"></span><button type="submit">Open</button></div>
+  </form>
+
+  <div id="app" class="stack" hidden>
+    <form class="box" id="f">
+      <label for="task" class="hint">New task</label>
+      <textarea id="task" placeholder="Example: make 3 hooks for my UPI reel and put them in Drive"></textarea>
+      <div class="row"><span class="hint">Ctrl/Cmd + Enter to add</span><button id="add" type="submit">Add task</button></div>
+      <div class="msg" id="msg" role="status"></div>
+    </form>
+    <section style="display:flex;flex-direction:column;gap:10px">
+      <div class="row"><h2>Your tasks</h2><button class="link" type="button" id="out">Lock</button></div>
+      <p class="hint" style="margin:0">Shows the last 12 hours. Older answers stay in your WhatsApp.</p>
+      <ul id="list"><li class="empty">Loading…</li></ul>
+    </section>
+  </div>
+</div>
+<script>
+const $=s=>document.querySelector(s), NTFY="https://ntfy.sh/";
+let topic=null;
+async function topicFor(code){
+  const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("sahiledits-taskbox:"+code.trim().toLowerCase()));
+  return "sjtb-"+[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("").slice(0,24);
+}
+function store(k,v){try{v===null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}
+function load(k){try{return localStorage.getItem(k)}catch(e){return null}}
+async function poll(t){
+  const r=await fetch(NTFY+t+"/json?poll=1&since=12h"); if(!r.ok) throw 0;
+  return (await r.text()).split("\n").filter(Boolean).map(l=>JSON.parse(l)).filter(m=>m.event==="message");
+}
+const when=s=>new Date(s*1000).toLocaleString(undefined,{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"});
+async function refresh(){
+  try{
+    const [tasks,dones]=await Promise.all([poll(topic),poll(topic+"-done")]);
+    const st={};
+    for(const d of dones){try{const j=JSON.parse(d.message); st[j.id]={...j,time:d.time};}catch(e){}}
+    const ul=$("#list"); ul.textContent="";
+    if(!tasks.length){const li=document.createElement("li");li.className="empty";li.textContent="No tasks in the last 12 hours. Write one above.";ul.append(li);return;}
+    for(const t of tasks.reverse()){
+      const s=st[t.id], status=s?.status==="done"?"done":s?.status==="working"?"working":"waiting";
+      const li=document.createElement("li");
+      const tx=document.createElement("div");tx.className="text";tx.textContent=t.message;
+      const m=document.createElement("div");m.className="meta";
+      const p=document.createElement("span");p.className="pill "+status;p.textContent=status;
+      const w=document.createElement("span");w.textContent="Added "+when(t.time);
+      m.append(p,w); li.append(tx,m);
+      if(s?.reply){const r=document.createElement("div");r.className="reply";r.textContent="Claude: "+s.reply;li.append(r);}
+      ul.append(li);
+    }
+  }catch(e){$("#list").innerHTML='<li class="empty">Could not load. Check your internet and reload.</li>';}
+}
+async function open(code){
+  topic=await topicFor(code); store("tb_code",code.trim().toLowerCase());
+  $("#lock").hidden=true; $("#app").hidden=false; refresh(); setInterval(refresh,60000);
+}
+$("#lock").addEventListener("submit",e=>{e.preventDefault();const c=$("#code").value;if(c.trim().length<6){$("#lockmsg").textContent="That code is too short.";return;}open(c);});
+$("#out").onclick=()=>{store("tb_code",null);location.reload();};
+$("#f").addEventListener("submit",async e=>{
+  e.preventDefault(); const text=$("#task").value.trim(); if(!text){$("#msg").textContent="Write something first.";return;}
+  $("#add").disabled=true;
+  try{const r=await fetch(NTFY+topic,{method:"POST",body:text}); if(!r.ok) throw 0;
+    $("#task").value=""; $("#msg").textContent="Added. Claude picks it up at the next hourly check."; refresh();
+  }catch(err){$("#msg").textContent="Could not save. Check your internet and try again.";}
+  $("#add").disabled=false;
+});
+$("#task").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.metaKey||e.ctrlKey))$("#f").requestSubmit();});
+const saved=load("tb_code"); if(saved) open(saved); else $("#lock").hidden=false;
+</script>
+</body>
+</html>
