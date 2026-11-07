@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>AI Editor · Sahil Edits</title>
+<meta name="theme-color" content="#0e0d0b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e0d0b'/%3E%3Ccircle cx='32' cy='32' r='12' fill='%23ff4a2b'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#0e0d0b;--card:#171613;--line:#2a2823;--text:#efe9df;--muted:#9c958a;--rec:#ff4a2b;--ok:#7fc79a;--work:#e7b35a;
+--serif:"Instrument Serif",Georgia,serif;--sans:"Inter Tight",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:680px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right)) 72px max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:20px}
+a{color:inherit}
+.top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+.top a{text-decoration:none}
+.top a:hover{color:var(--text)}
+.rec{display:inline-flex;gap:8px;align-items:center}
+.rec i{width:8px;height:8px;border-radius:50%;background:var(--rec)}
+h1{font-family:var(--serif);font-weight:400;font-size:2.9rem;line-height:1;margin:0}
+h1 em{color:var(--rec);font-style:italic}
+.sub{color:var(--muted);margin:10px 0 0;max-width:46ch}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+label{font-family:var(--mono);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+textarea,input,select{width:100%;border:1px solid var(--line);border-radius:8px;padding:12px;font:inherit;background:var(--bg);color:var(--text)}
+textarea{min-height:92px;resize:vertical}
+textarea:focus-visible,input:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--rec);outline-offset:2px}
+button{font:inherit;font-weight:600;border:0;border-radius:999px;padding:13px 22px;background:var(--text);color:var(--bg);cursor:pointer;transition:transform .15s}
+button:hover:not(:disabled){transform:translateY(-1px)}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+button.ghost{background:transparent;color:var(--text);border:1px solid var(--line);font-weight:500}
+button.small{padding:9px 16px;font-size:.9rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.hint{color:var(--muted);font-size:.85rem}
+.banner{border-radius:10px;padding:12px 14px;font-size:.88rem;border:1px solid}
+.banner.warn{background:rgba(231,179,90,.08);border-color:rgba(231,179,90,.35);color:#e7b35a}
+.banner.bad{background:rgba(255,74,43,.08);border-color:rgba(255,74,43,.4);color:#ff8a6f}
+.banner.good{background:rgba(127,199,154,.08);border-color:rgba(127,199,154,.35);color:var(--ok)}
+.banner b{display:block;margin-bottom:3px;color:inherit}
+.styles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.styles .opt{border:1px solid var(--line);border-radius:10px;padding:13px;cursor:pointer;background:var(--bg)}
+.styles .opt.on{border-color:var(--rec);background:rgba(255,74,43,.06)}
+.styles .opt b{display:block;font-family:var(--serif);font-size:1.25rem;font-weight:400}
+.styles .opt span{color:var(--muted);font-size:.8rem;line-height:1.35;display:block;margin-top:3px}
+.drop{border:1.5px dashed var(--line);border-radius:10px;padding:26px 16px;text-align:center;cursor:pointer;background:var(--bg)}
+.drop.on{border-color:var(--rec);background:rgba(255,74,43,.05)}
+.drop b{font-family:var(--serif);font-size:1.3rem;font-weight:400;display:block}
+.drop span{color:var(--muted);font-size:.85rem}
+.stages{display:flex;flex-direction:column;gap:2px;font-size:.9rem}
+.stage{display:flex;gap:11px;align-items:flex-start;padding:7px 0}
+.stage .ic{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--line);flex:0 0 auto;margin-top:3px;position:relative}
+.stage.done .ic{background:var(--ok);border-color:var(--ok)}
+.stage.done .ic:after{content:"";position:absolute;left:4px;top:1px;width:4px;height:8px;border:solid var(--bg);border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.stage.now .ic{border-color:var(--work);animation:pulse 1.2s ease-in-out infinite}
+.stage.fail .ic{background:var(--rec);border-color:var(--rec)}
+.stage.now .nm{color:var(--work)}
+.stage.todo .nm{color:var(--muted)}
+.stage.fail .nm{color:var(--rec)}
+@keyframes pulse{50%{opacity:.35}}
+.log{font-family:var(--mono);font-size:.72rem;color:var(--muted);max-height:168px;overflow-y:auto;border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:4px}
+video{width:100%;border-radius:10px;background:#000;display:block;max-height:68vh}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:10px;font-size:.85rem}
+.facts div{border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.facts b{display:block;font-family:var(--serif);font-size:1.4rem;font-weight:400;line-height:1.1}
+.facts small{color:var(--muted);font-size:.72rem;font-family:var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.caps{display:flex;flex-direction:column;gap:7px;max-height:290px;overflow-y:auto}
+.cap{display:grid;grid-template-columns:62px 1fr;gap:9px;align-items:center}
+.cap .t{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.cap input{padding:8px 10px;font-size:.9rem}
+details{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--card)}
+summary{cursor:pointer;font-family:var(--mono);font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+summary:hover{color:var(--text)}
+details .inner{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+pre{font-family:var(--mono);font-size:.7rem;color:var(--muted);overflow-x:auto;white-space:pre-wrap;word-break:break-word;margin:0;max-height:240px;overflow-y:auto}
+.seg{font-family:var(--mono);font-size:.74rem;color:var(--muted);border-left:2px solid var(--line);padding:3px 0 3px 10px}
+.seg b{color:var(--text);font-weight:500}
+hr{border:0;border-top:1px solid var(--line);margin:4px 0}
+@media(max-width:480px){h1{font-size:2.3rem}.styles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <a href="/"><span class="rec"><i></i></span> Sahil Edits</a>
+    <span id="mode">checking backend…</span>
+  </div>
+
+  <header>
+    <h1>Turn your raw talking video into a <em>finished reel.</em></h1>
+    <p class="sub">Upload one take-filled recording. The editor picks the usable takes, cuts the dead air, writes synced subtitles and exports a vertical MP4.</p>
+  </header>
+
+  <div id="offline" class="banner bad" hidden>
+    <b>Backend not running</b>
+    <span id="offlineMsg"></span>
+  </div>
+
+  <div id="demoBanner" class="banner warn" hidden></div>
+
+  <div id="gate" class="box" hidden>
+    <label>Access code</label>
+    <p class="hint" style="margin:0">This prototype is invite-only. Paste the code Sahil gave you.</p>
+    <input id="codeInput" type="password" placeholder="access code" autocomplete="off" spellcheck="false">
+    <div class="row" style="justify-content:space-between">
+      <span class="hint" id="gateMsg"></span>
+      <button id="codeGo">Continue</button>
+    </div>
+  </div>
+
+
+  <!-- ───────── SCREEN 1: START ───────── -->
+  <section id="s1" class="box">
+    <div>
+      <label for="file">Your footage</label>
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose a video file">
+        <b id="dropTitle">Choose a video</b>
+        <span id="dropSub">MP4 or MOV · one person talking to camera</span>
+      </div>
+      <input type="file" id="file" accept="video/mp4,video/quicktime,video/*" hidden>
+    </div>
+
+    <div>
+      <label for="script">Your script <span style="text-transform:none;letter-spacing:0">— optional, helps it pick the right takes</span></label>
+      <textarea id="script" placeholder="Paste what you meant to say. Leave empty if you improvised."></textarea>
+    </div>
+
+    <div>
+      <label>Style</label>
+      <div class="styles" id="styles"></div>
+    </div>
+
+    <div class="row">
+      <div style="flex:1;min-width:150px">
+        <label for="lang">Spoken language</label>
+        <select id="lang">
+          <option value="auto">Detect automatically</option>
+          <option value="en">English</option>
+          <option value="hi">Hindi / Hinglish</option>
+        </select>
+      </div>
+    </div>
+
+    <hr>
+    <div class="row" style="justify-content:space-between">
+      <span class="hint" id="limits"></span>
+      <button id="go" disabled>Edit my video</button>
+    </div>
+  </section>
+
+  <!-- ───────── SCREEN 2: PROCESSING ───────── -->
+  <section id="s2" class="box" hidden>
+    <div class="row" style="justify-content:space-between">
+      <label style="margin:0">Working on it</label>
+      <span class="hint" id="pid"></span>
+    </div>
+    <div class="stages" id="stages"></div>
+    <div id="failBox" class="banner bad" hidden><b>It stopped here</b><span id="failMsg"></span></div>
+    <div class="log" id="log"></div>
+    <div class="row">
+      <button class="ghost small" id="cancel">Start over</button>
+    </div>
+  </section>
+
+  <!-- ───────── SCREEN 3: REVIEW ───────── -->
+  <section id="s3" hidden style="display:flex;flex-direction:column;gap:20px">
+    <div class="box">
+      <div class="row" style="justify-content:space-between">
+        <label style="margin:0">Your reel</label>
+        <span class="hint" id="exportWhere"></span>
+      </div>
+      <video id="out" controls playsinline preload="metadata"></video>
+      <div class="facts" id="facts"></div>
+      <div class="row">
+        <button id="download">Download MP4</button>
+        <button class="ghost" id="regen">Re-render</button>
+        <button class="ghost small" id="newOne">New project</button>
+      </div>
+      <span class="hint" id="regenCost"></span>
+    </div>
+
+    <div id="planWarn" class="banner warn" hidden></div>
+
+    <details id="capsBox">
+      <summary>Subtitles — fix any wrong words</summary>
+      <div class="inner">
+        <p class="hint">Edit the text only. Timings stay locked to your audio, so corrections never drift out of sync. Re-render to see them burned in.</p>
+        <div class="caps" id="caps"></div>
+        <div class="row">
+          <button class="small" id="saveCaps">Save subtitles</button>
+          <span class="hint" id="capsSaved"></span>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary>What it cut, and why</summary>
+      <div class="inner" id="segs"></div>
+    </details>
+
+    <details>
+      <summary>Change style</summary>
+      <div class="inner">
+        <div class="styles" id="styles2"></div>
+        <p class="hint">Pick a style, then Re-render. This reuses the existing transcript and edit plan, so it makes no paid API calls.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Browser export (experimental)</summary>
+      <div class="inner">
+        <div id="wcStatus" class="banner warn"></div>
+        <p class="hint">Rendering on your own device would cut server costs. The check above reports what your browser actually supports — it does not mean a finished browser export exists yet. The working export is the server one above.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Technical detail · plan &amp; usage</summary>
+      <div class="inner">
+        <p class="hint">Saved so edits from different models can be compared later.</p>
+        <pre id="raw"></pre>
+      </div>
+    </details>
+  </section>
+
+  <p class="hint" style="text-align:center;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase">
+    Private prototype · no sign-in yet · don't upload anything confidential
+  </p>
+</div>
+
+<script>
+/* ── API base ────────────────────────────────────────────────────────────
+   The page is static (GitHub Pages). The video work happens in the local
+   backend. Override with ?api=http://host:port and it is remembered. */
+const qs = new URLSearchParams(location.search);
+if (qs.get('api')) localStorage.setItem('reelcut_api', qs.get('api').replace(/\/$/, ''));
+if (qs.get('code')) localStorage.setItem('reelcut_code', qs.get('code'));
+const API = localStorage.getItem('reelcut_api') || 'http://127.0.0.1:8000';
+const CODE = () => localStorage.getItem('reelcut_code') || '';
+
+/* Every API call carries the access code as a header. The code lives only in
+   this browser's localStorage - it is never part of a page URL we publish. */
+function authHeaders(extra){
+  const h = Object.assign({}, extra || {});
+  if (CODE()) h['X-Access-Code'] = CODE();
+  return h;
+}
+function apiFetch(path, opts){
+  opts = opts || {};
+  opts.headers = authHeaders(opts.headers);
+  return fetch(API + path, opts);
+}
+function mediaUrl(path){
+  // <video src> cannot send headers, so media uses a short query param instead.
+  return API + path + (CODE() ? (path.includes('?') ? '&' : '?') + 'code=' + encodeURIComponent(CODE()) : '');
+}
+
+const $ = id => document.getElementById(id);
+const state = { file:null, style:'clean', pid:null, poll:null, health:null, project:null };
+
+const STAGE_LABELS = [
+  ['created',         'Uploaded'],
+  ['reading_video',   'Reading the video'],
+  ['extracting_audio','Extracting audio'],
+  ['transcribing',    'Transcribing speech'],
+  ['planning',        'Planning the edit'],
+  ['validating_plan', 'Checking the plan'],
+  ['rendering',       'Preparing the video'],
+  ['ready',           'Ready to review'],
+];
+
+/* ── health ───────────────────────────────────────────────────────────── */
+async function boot(){
+  try{
+    const r = await apiFetch('/api/health');
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const h = await r.json();
+    state.health = h;
+    $('offline').hidden = true;
+
+    const tReal = h.transcription.is_real, pReal = h.planner.is_real;
+    $('mode').textContent = (tReal && pReal) ? 'live AI' : 'demo mode';
+    $('mode').style.color = (tReal && pReal) ? 'var(--ok)' : 'var(--work)';
+
+    if(!tReal || !pReal){
+      const miss = (h.missing_keys||[]).map(k => `${k.name} → ${k.purpose}`).join('<br>');
+      $('demoBanner').innerHTML =
+        '<b>Demo mode — some results are not real AI</b>' +
+        (!tReal ? 'Speech-to-text is <b style="display:inline">not</b> running: subtitles will be placeholder text, not your words.<br>' : '') +
+        (!pReal ? 'Edit decisions come from a fixed rule (cut silences over 0.8s), <b style="display:inline">not</b> from AI.<br>' : '') +
+        'The cuts, the audio and the exported MP4 are genuinely processed from your file.' +
+        (miss ? '<br><br>To go live, add:<br>' + miss : '');
+      $('demoBanner').hidden = false;
+    }
+
+    if(!h.ffmpeg){
+      $('offlineMsg').textContent = 'FFmpeg was not found on the server, so no video can be exported. See the README.';
+      $('offline').hidden = false;
+    }
+
+    const lim = h.limits;
+    $('limits').textContent = `Up to ${Math.round(lim.max_source_seconds/60)} min source · ${lim.target_min_seconds}–${lim.target_max_seconds}s reel`;
+    $('dropSub').textContent = `MP4 or MOV · up to ${lim.max_upload_mb} MB · one person talking to camera`;
+
+    drawStyles('styles', h.styles);
+    drawStyles('styles2', h.styles);
+    checkWebCodecs();
+    if(h.auth && h.auth.mode === 'access_code' && !CODE()){
+      showGate('');
+      return;
+    }
+  }catch(e){
+    if(e.message === 'HTTP 401'){ showGate('That code was not accepted.'); return; }
+    $('offlineMsg').innerHTML =
+      `Could not reach the editing backend at <b style="display:inline">${API}</b>.<br><br>` +
+      'Start it with:<br><code style="font-family:var(--mono);font-size:.8rem">cd ~/reelcut/backend &amp;&amp; ./run.sh</code>' +
+      '<br><br>Running it elsewhere? Add <code style="font-family:var(--mono);font-size:.8rem">?api=http://your-host:8000</code> to this URL.';
+    $('offline').hidden = false;
+    $('mode').textContent = 'backend offline';
+    $('mode').style.color = 'var(--rec)';
+    $('go').disabled = true;
+  }
+}
+
+function showGate(msg){
+  $('gate').hidden = false;
+  $('s1').hidden = true;
+  $('gateMsg').textContent = msg || '';
+  $('mode').textContent = 'locked';
+  $('mode').style.color = 'var(--work)';
+}
+$('codeGo').onclick = () => {
+  const v = $('codeInput').value.trim();
+  if(!v){ $('gateMsg').textContent = 'Enter the code first.'; return; }
+  localStorage.setItem('reelcut_code', v);
+  $('gate').hidden = true; $('s1').hidden = false;
+  $('codeInput').value = '';
+  boot();
+};
+$('codeInput') && ($('codeInput').onkeydown = e => { if(e.key === 'Enter') $('codeGo').click(); });
+
+function drawStyles(host, styles){
+  const el = $(host); el.innerHTML = '';
+  styles.forEach(s => {
+    const d = document.createElement('div');
+    d.className = 'opt' + (s.id === state.style ? ' on' : '');
+    d.dataset.id = s.id;
+    d.innerHTML = `<b>${s.label}</b><span>${s.description}</span>`;
+    d.onclick = () => {
+      state.style = s.id;
+      document.querySelectorAll(`#${host} .opt`).forEach(o =>
+        o.classList.toggle('on', o.dataset.id === s.id));
+    };
+    el.appendChild(d);
+  });
+}
+
+/* ── file pick ────────────────────────────────────────────────────────── */
+$('drop').onclick = () => $('file').click();
+$('drop').onkeydown = e => { if(e.key === 'Enter' || e.key === ' ') $('file').click(); };
+['dragover','dragenter'].forEach(ev =>
+  $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.add('on'); }));
+['dragleave','drop'].forEach(ev =>
+  $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.remove('on'); }));
+$('drop').addEventListener('drop', e => {
+  if(e.dataTransfer.files[0]) takeFile(e.dataTransfer.files[0]);
+});
+$('file').onchange = e => { if(e.target.files[0]) takeFile(e.target.files[0]); };
+
+function takeFile(f){
+  const okExt = /\.(mp4|mov|m4v|webm)$/i.test(f.name);
+  if(!okExt){
+    $('dropTitle').textContent = 'That file type will not work';
+    $('dropSub').textContent = `"${f.name}" — use MP4 or MOV.`;
+    state.file = null; $('go').disabled = true; return;
+  }
+  const maxMB = state.health?.limits?.max_upload_mb || 2048;
+  const mb = f.size / 1048576;
+  if(mb > maxMB){
+    $('dropTitle').textContent = 'That file is too big';
+    $('dropSub').textContent = `${mb.toFixed(0)} MB — the limit is ${maxMB} MB.`;
+    state.file = null; $('go').disabled = true; return;
+  }
+  state.file = f;
+  $('dropTitle').textContent = f.name;
+  $('dropSub').textContent = `${mb.toFixed(1)} MB · ready`;
+  $('drop').classList.add('on');
+  $('go').disabled = false;
+}
+
+/* ── start ────────────────────────────────────────────────────────────── */
+$('go').onclick = async () => {
+  if(!state.file) return;
+  $('go').disabled = true; $('go').textContent = 'Uploading…';
+  const fd = new FormData();
+  fd.append('video', state.file);
+  fd.append('script', $('script').value);
+  fd.append('style', state.style);
+  fd.append('language_hint', $('lang').value);
+  fd.append('title', state.file.name.replace(/\.[^.]+$/, ''));
+  try{
+    const r = await apiFetch('/api/projects', { method:'POST', body:fd });
+    const j = await r.json();
+    if(!r.ok) throw new Error(j.detail || ('HTTP ' + r.status));
+    state.pid = j.id;
+    $('pid').textContent = '#' + j.id;
+    show('s2');
+    startPolling();
+  }catch(e){
+    $('offlineMsg').textContent = 'Upload failed: ' + e.message;
+    $('offline').hidden = false;
+    $('go').disabled = false; $('go').textContent = 'Edit my video';
+  }
+};
+
+function show(which){
+  ['s1','s2','s3'].forEach(s => $(s).hidden = (s !== which));
+}
+
+/* ── polling ──────────────────────────────────────────────────────────── */
+function startPolling(){
+  clearInterval(state.poll);
+  tick();
+  state.poll = setInterval(tick, 1800);
+}
+
+async function tick(){
+  try{
+    const r = await apiFetch(`/api/projects/${state.pid}`);
+    if(!r.ok) return;
+    const p = await r.json();
+    state.project = p;
+    drawStages(p);
+    drawLog(p.events);
+    if(p.status === 'ready'){ clearInterval(state.poll); showReview(p); }
+    if(p.status === 'failed'){
+      clearInterval(state.poll);
+      $('failMsg').textContent = p.error || 'Unknown error.';
+      $('failBox').hidden = false;
+    }
+  }catch(e){ /* keep polling; transient */ }
+}
+
+function drawStages(p){
+  const reached = STAGE_LABELS.findIndex(s => s[0] === p.stage);
+  const failed = p.status === 'failed';
+  $('stages').innerHTML = STAGE_LABELS.map(([key,label], i) => {
+    let cls = 'todo';
+    if(failed && i === reached) cls = 'fail';
+    else if(reached < 0) cls = 'todo';
+    else if(i < reached || p.status === 'ready') cls = 'done';
+    else if(i === reached) cls = failed ? 'fail' : 'now';
+    return `<div class="stage ${cls}"><span class="ic"></span><span class="nm">${label}</span></div>`;
+  }).join('');
+}
+
+function drawLog(events){
+  $('log').innerHTML = (events||[]).slice(-40).map(e =>
+    `<div>${new Date(e.at*1000).toLocaleTimeString()} · ${esc(e.message)}</div>`).join('');
+  $('log').scrollTop = $('log').scrollHeight;
+}
+
+/* ── review ───────────────────────────────────────────────────────────── */
+function showReview(p){
+  show('s3');
+  $('out').src = mediaUrl(p.output_url + '?t=' + Date.now());
+  $('exportWhere').textContent = 'exported on the server';
+
+  const oi = p.output_info || {}, si = p.source_info || {};
+  const plan = p.plan || {};
+  $('facts').innerHTML = [
+    ['b', fmtTime(oi.duration), 'length'],
+    ['b', (plan.segments||[]).length, 'cuts'],
+    ['b', (plan.captions||[]).length, 'subtitles'],
+    ['b', (plan.graphics||[]).length, 'graphics'],
+    ['b', ((oi.size||0)/1048576).toFixed(0) + ' MB', 'file'],
+    ['b', si.duration ? Math.round((1 - oi.duration/si.duration)*100) + '%' : '—', 'trimmed'],
+  ].map(([,v,l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
+
+  const notes = [];
+  if(p.modes.transcription === 'mock') notes.push('Subtitles are placeholder text — no speech-to-text key is set.');
+  if(p.modes.planner === 'mock') notes.push('Cuts came from a fixed silence rule, not AI.');
+  (p.warnings||[]).forEach(w => notes.push(w));
+  (plan.review_flags||[]).forEach(f => notes.push(f));
+  if(notes.length){
+    $('planWarn').innerHTML = '<b>Worth checking</b>' + notes.map(esc).join('<br>');
+    $('planWarn').hidden = false;
+  } else { $('planWarn').hidden = true; }
+
+  $('segs').innerHTML = (plan.segments||[]).map((s,i) =>
+    `<div class="seg"><b>${fmtTime(s.start)} → ${fmtTime(s.end)}</b> &nbsp;(${(s.end-s.start).toFixed(1)}s)
+     ${s.reason ? '<br>' + esc(s.reason) : ''}</div>`).join('') || '<p class="hint">No segment detail.</p>';
+
+  drawCaps(p);
+
+  const usage = (p.usage||[]).map(u =>
+    `${u.kind}: ${u.provider}${u.model ? '/'+u.model : ''} ${u.is_real ? '(real)' : '(demo)'}` +
+    (u.tokens_in ? ` ${u.tokens_in}+${u.tokens_out} tok` : '') +
+    (u.cost_usd ? ` $${u.cost_usd.toFixed(4)}` : '')).join('\n');
+  $('raw').textContent = usage + '\n\n' + JSON.stringify(plan, null, 1);
+
+  $('regenCost').textContent = 'Re-render reuses the transcript and plan — no paid API calls, just local FFmpeg.';
+  drawStyles('styles2', state.health.styles);
+}
+
+function drawCaps(p){
+  const words = p.transcript?.words || [];
+  if(!words.length){ $('capsBox').hidden = true; return; }
+  $('capsBox').hidden = false;
+  $('caps').innerHTML = words.map((w,i) =>
+    `<div class="cap"><span class="t">${w.start.toFixed(1)}s</span>
+     <input data-i="${i}" value="${esc(w.text)}"></div>`).join('');
+}
+
+$('saveCaps').onclick = async () => {
+  const inputs = [...document.querySelectorAll('#caps input')];
+  const words = inputs.map(i => ({ text: i.value }));
+  $('saveCaps').disabled = true;
+  try{
+    const r = await apiFetch(`/api/projects/${state.pid}/transcript`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ words })
+    });
+    const j = await r.json();
+    if(!r.ok) throw new Error(j.detail || 'failed');
+    $('capsSaved').textContent = 'Saved. Re-render to burn them in.';
+  }catch(e){ $('capsSaved').textContent = 'Could not save: ' + e.message; }
+  $('saveCaps').disabled = false;
+};
+
+$('regen').onclick = async () => {
+  $('regen').disabled = true;
+  try{
+    const r = await apiFetch(`/api/projects/${state.pid}/regenerate`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ style: state.style, reuse_plan:true, reuse_transcript:true })
+    });
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    show('s2'); $('failBox').hidden = true; startPolling();
+  }catch(e){ $('regenCost').textContent = 'Re-render failed: ' + e.message; }
+  $('regen').disabled = false;
+};
+
+$('download').onclick = () => {
+  window.location = mediaUrl(`/api/projects/${state.pid}/download`);
+};
+$('newOne').onclick = $('cancel').onclick = () => {
+  clearInterval(state.poll);
+  state.file = null; state.pid = null;
+  $('file').value = ''; $('script').value = '';
+  $('drop').classList.remove('on');
+  $('dropTitle').textContent = 'Choose a video';
+  $('go').disabled = true; $('go').textContent = 'Edit my video';
+  $('failBox').hidden = true; $('capsSaved').textContent = '';
+  show('s1');
+};
+
+/* ── browser export capability check (honest) ─────────────────────────── */
+async function checkWebCodecs(){
+  const el = $('wcStatus');
+  const has = ('VideoEncoder' in window) && ('VideoDecoder' in window);
+  if(!has){
+    el.className = 'banner bad';
+    el.innerHTML = '<b>Browser export is not supported on this device</b>The WebCodecs API is missing. Server export is used.';
+    return;
+  }
+  try{
+    const cfg = { codec:'avc1.42001f', width:1080, height:1920, bitrate:6e6, framerate:30 };
+    const sup = await VideoEncoder.isConfigSupported(cfg);
+    if(sup.supported){
+      el.className = 'banner warn';
+      el.innerHTML = '<b>Browser export: hardware available, not built yet</b>' +
+        'This browser can encode H.264 1080×1920 via WebCodecs. The export path itself is <b style="display:inline">not implemented</b> — ' +
+        'cuts, audio muxing and caption compositing still run on the server. Marked experimental deliberately rather than shipped half-working.';
+    } else {
+      el.className = 'banner bad';
+      el.innerHTML = '<b>Browser export is not supported on this device</b>WebCodecs exists but will not encode H.264 at 1080×1920. Server export is used.';
+    }
+  }catch(e){
+    el.className = 'banner bad';
+    el.innerHTML = '<b>Browser export check failed</b>' + esc(e.message) + ' — server export is used.';
+  }
+}
+
+/* ── helpers ──────────────────────────────────────────────────────────── */
+function fmtTime(s){
+  if(s == null || isNaN(s)) return '—';
+  const m = Math.floor(s/60), r = Math.round(s%60);
+  return m ? `${m}:${String(r).padStart(2,'0')}` : `${s.toFixed(1)}s`;
+}
+function esc(s){
+  return String(s ?? '').replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+boot();
+</script>
+</body>
+</html>
