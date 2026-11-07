@@ -119,6 +119,7 @@ hr{border:0;border-top:1px solid var(--line);margin:4px 0}
   <section id="s1" class="box">
     <div>
       <label for="file">Your footage</label>
+      <p class="hint" style="margin:0 0 8px">Uploading runs over Sahil's home connection, so allow roughly a minute per 4 MB. A 60–90 second clip is ideal.</p>
       <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose a video file">
         <b id="dropTitle">Choose a video</b>
         <span id="dropSub">MP4 or MOV · one person talking to camera</span>
@@ -423,17 +424,37 @@ function takeFile(f){
 /* ── start ────────────────────────────────────────────────────────────── */
 $('go').onclick = async () => {
   if(!state.file) return;
-  $('go').disabled = true; $('go').textContent = 'Uploading…';
+  $('go').disabled = true;
   const fd = new FormData();
   fd.append('video', state.file);
   fd.append('script', $('script').value);
   fd.append('style', state.style);
   fd.append('language_hint', $('lang').value);
   fd.append('title', state.file.name.replace(/\.[^.]+$/, ''));
+
+  // XHR, not fetch: it reports real upload progress. Over a home connection
+  // this is the slowest part by far, so showing a dead button would be a lie.
   try{
-    const r = await apiFetch('/api/projects', { method:'POST', body:fd });
-    const j = await r.json();
-    if(!r.ok) throw new Error(j.detail || ('HTTP ' + r.status));
+    const j = await new Promise((resolve, reject) => {
+      const x = new XMLHttpRequest();
+      x.open('POST', API + '/api/projects');
+      if(CODE()) x.setRequestHeader('X-Access-Code', CODE());
+      x.upload.onprogress = e => {
+        if(!e.lengthComputable) return;
+        const pct = Math.round(e.loaded / e.total * 100);
+        const mb = (e.total / 1048576).toFixed(0);
+        $('go').textContent = `Uploading ${pct}% of ${mb} MB`;
+      };
+      x.onload = () => {
+        let body = {};
+        try{ body = JSON.parse(x.responseText); }catch(_){}
+        if(x.status >= 200 && x.status < 300) resolve(body);
+        else reject(new Error(body.detail || ('HTTP ' + x.status)));
+      };
+      x.onerror = () => reject(new Error('network error during upload'));
+      x.ontimeout = () => reject(new Error('upload timed out'));
+      x.send(fd);
+    });
     state.pid = j.id;
     $('pid').textContent = '#' + j.id;
     show('s2');
@@ -441,8 +462,8 @@ $('go').onclick = async () => {
   }catch(e){
     $('offlineMsg').textContent = 'Upload failed: ' + e.message;
     $('offline').hidden = false;
-    $('go').disabled = false; $('go').textContent = 'Edit my video';
   }
+  $('go').disabled = false; $('go').textContent = 'Edit my video';
 };
 
 function show(which){
