@@ -311,9 +311,16 @@ async function boot(){
     drawStyles('styles', h.styles);
     drawStyles('styles2', h.styles);
     checkWebCodecs();
-    if(h.auth && h.auth.mode === 'access_code' && !CODE()){
-      showGate('');
-      return;
+    if(h.auth && h.auth.mode === 'access_code'){
+      if(!CODE()){ showGate(''); return; }
+      // Confirm the stored code is still valid before showing the app.
+      const probe = await apiFetch('/api/projects');
+      if(probe.status === 401){
+        localStorage.removeItem('reelcut_code');
+        showGate('That code is no longer valid. Ask Sahil for a new one.');
+        return;
+      }
+      $('gate').hidden = true; $('s1').hidden = false;
     }
   }catch(e){
     if(e.message === 'HTTP 401'){ showGate('That code was not accepted.'); return; }
@@ -335,13 +342,32 @@ function showGate(msg){
   $('mode').textContent = 'locked';
   $('mode').style.color = 'var(--work)';
 }
-$('codeGo').onclick = () => {
+$('codeGo').onclick = async () => {
   const v = $('codeInput').value.trim();
   if(!v){ $('gateMsg').textContent = 'Enter the code first.'; return; }
+  $('codeGo').disabled = true; $('gateMsg').textContent = 'Checking…';
+  // /api/health is public, so verify against an endpoint that actually
+  // requires the code. Otherwise a wrong code would pass the gate and only
+  // fail later, at upload.
+  const prev = localStorage.getItem('reelcut_code');
   localStorage.setItem('reelcut_code', v);
-  $('gate').hidden = true; $('s1').hidden = false;
-  $('codeInput').value = '';
-  boot();
+  try{
+    const r = await apiFetch('/api/projects');
+    if(r.status === 401){
+      if(prev) localStorage.setItem('reelcut_code', prev);
+      else localStorage.removeItem('reelcut_code');
+      $('gateMsg').textContent = 'That code was not accepted.';
+      $('codeGo').disabled = false;
+      return;
+    }
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    $('gate').hidden = true; $('s1').hidden = false;
+    $('codeInput').value = ''; $('gateMsg').textContent = '';
+    boot();
+  }catch(e){
+    $('gateMsg').textContent = 'Could not reach the backend: ' + e.message;
+  }
+  $('codeGo').disabled = false;
 };
 $('codeInput') && ($('codeInput').onkeydown = e => { if(e.key === 'Enter') $('codeGo').click(); });
 
