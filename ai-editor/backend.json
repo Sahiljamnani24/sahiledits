@@ -1,0 +1,5 @@
+{
+  "api": "https://electrical-anthony-referred-considered.trycloudflare.com",
+  "updated": "",
+  "note": "Current ReelCut backend. Rewritten by backend/keepalive.sh when the Cloudflare quick tunnel changes URL."
+}

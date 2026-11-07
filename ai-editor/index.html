@@ -244,7 +244,26 @@ hr{border:0;border-top:1px solid var(--line);margin:4px 0}
 const qs = new URLSearchParams(location.search);
 if (qs.get('api')) localStorage.setItem('reelcut_api', qs.get('api').replace(/\/$/, ''));
 if (qs.get('code')) localStorage.setItem('reelcut_code', qs.get('code'));
-const API = localStorage.getItem('reelcut_api') || 'http://127.0.0.1:8000';
+let API = localStorage.getItem('reelcut_api') || 'http://127.0.0.1:8000';
+
+/* The backend runs behind a Cloudflare quick tunnel whose URL changes every
+   time it restarts, which would strand anyone holding an old link. So the
+   site publishes the current address next to this page; if the stored one
+   stops answering we pick the published one up automatically. */
+async function refreshApiFromSite(){
+  try{
+    const r = await fetch('backend.json?t=' + Date.now(), {cache:'no-store'});
+    if(!r.ok) return false;
+    const j = await r.json();
+    const next = (j.api || '').replace(/\/$/, '');
+    if(next && next !== API){
+      API = next;
+      localStorage.setItem('reelcut_api', next);
+      return true;
+    }
+  }catch(_){}
+  return false;
+}
 const CODE = () => localStorage.getItem('reelcut_code') || '';
 
 /* Every API call carries the access code as a header. The code lives only in
@@ -282,8 +301,20 @@ const STAGE_LABELS = [
 /* ── health ───────────────────────────────────────────────────────────── */
 async function boot(){
   try{
-    const r = await apiFetch('/api/health');
-    if(!r.ok) throw new Error('HTTP ' + r.status);
+    let r;
+    try{
+      r = await apiFetch('/api/health');
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+    }catch(firstErr){
+      // Stored address is dead - the tunnel probably moved. Try the one the
+      // site publishes before telling the user the backend is down.
+      if(await refreshApiFromSite()){
+        r = await apiFetch('/api/health');
+        if(!r.ok) throw new Error('HTTP ' + r.status);
+      } else {
+        throw firstErr;
+      }
+    }
     const h = await r.json();
     state.health = h;
     $('offline').hidden = true;
