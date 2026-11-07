@@ -286,8 +286,26 @@ async function boot(){
     $('offline').hidden = true;
 
     const tReal = h.transcription.is_real, pReal = h.planner.is_real;
-    $('mode').textContent = (tReal && pReal) ? 'live AI' : 'demo mode';
+    const local = (h.transcription.mode === 'local_whisper') ||
+                  (h.planner.mode === 'local_ollama');
+    $('mode').textContent = (tReal && pReal)
+      ? (local ? 'live AI · on-device' : 'live AI')
+      : 'demo mode';
     $('mode').style.color = (tReal && pReal) ? 'var(--ok)' : 'var(--work)';
+
+    // Real AI, but running locally - say what that means for quality.
+    if(tReal && pReal && local){
+      $('demoBanner').innerHTML =
+        '<b>Running on-device — free, no API key</b>' +
+        'Speech-to-text: <b style="display:inline">' + h.transcription.model + '</b>. ' +
+        'Editing decisions: <b style="display:inline">' + h.planner.model + '</b>.<br>' +
+        'Both are real models running on Sahil\'s Mac. The small editing model ' +
+        'is weaker than a paid one, so the app checks its work: it rebuilds the ' +
+        'cut if too little is kept, times subtitles from your actual words, and ' +
+        'removes any on-screen number you did not say.';
+      $('demoBanner').hidden = false;
+      $('demoBanner').style.borderColor = 'var(--ok)';
+    }
 
     if(!tReal || !pReal){
       const miss = (h.missing_keys||[]).map(k => `${k.name} → ${k.purpose}`).join('<br>');
