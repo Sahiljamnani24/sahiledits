@@ -49,17 +49,27 @@ async function analyzeVideo(selected,kind){
   const cached=videoAnalysisCache.get(selected);if(cached&&cached[kind])return cached[kind];
   const mime=selected.type||(/\.mov$/i.test(selected.name)?'video/quicktime':/\.webm$/i.test(selected.name)?'video/webm':'video/mp4');
   const note=$('#transcribeStatus');
-  const data=await new Promise((resolve,reject)=>{
-    const xhr=new XMLHttpRequest();xhr.open('POST','https://fetxqnenytrfxtpzmbru.supabase.co/functions/v1/sahil-analyze');
+  const sendVideo=()=>new Promise((resolve,reject)=>{
+    const xhr=new XMLHttpRequest();let uploadComplete=false,lastProgress=0;
+    xhr.open('POST','https://fetxqnenytrfxtpzmbru.supabase.co/functions/v1/sahil-analyze');
     xhr.setRequestHeader('Content-Type',mime);xhr.setRequestHeader('x-video-size',String(selected.size));xhr.setRequestHeader('x-analysis-kind',kind);xhr.setRequestHeader('apikey','sb_publishable_E3uLCBXf8LWHwUHC4wpsdQ_J_OfjtVI');
     xhr.timeout=300000;note.textContent='Uploading '+kind+' video…';
-    xhr.upload.onprogress=e=>{if(e.lengthComputable){const pct=Math.round(e.loaded/e.total*100);note.textContent=pct>=100?'Upload complete. Waiting for video analysis…':'Uploading '+kind+' video: '+pct+'%'}};
-    xhr.onerror=()=>reject(Error('The video upload lost its connection. Please keep this page open and check your connection.'));
-    xhr.ontimeout=()=>reject(Error('Video upload or analysis timed out. The connection was open for 5 minutes without completing.'));
+    xhr.upload.onprogress=e=>{if(e.lengthComputable){lastProgress=Math.floor(e.loaded/e.total*100);uploadComplete=e.loaded>=e.total;note.textContent=uploadComplete?'Upload complete. Waiting for video analysis…':'Uploading '+kind+' video: '+lastProgress+'%'}};
+    xhr.upload.onload=()=>{uploadComplete=true;note.textContent='Upload complete. Waiting for video analysis…'};
+    xhr.onerror=()=>{const e=Error(uploadComplete?'The '+kind+' upload completed, but the analysis connection was lost.':'The '+kind+' upload connection was lost at '+lastProgress+'%.');e.retryUpload=!uploadComplete;reject(e)};
+    xhr.ontimeout=()=>reject(Error('The '+kind+' upload or analysis timed out.'));
     xhr.onabort=()=>reject(Error('Video upload was cancelled.'));
     xhr.onload=()=>{let body;try{body=JSON.parse(xhr.responseText)}catch{return reject(Error('Video analysis returned an unreadable response (status '+xhr.status+').'))}if(xhr.status<200||xhr.status>=300)return reject(Error(body.error||'Video analysis failed (status '+xhr.status+').'));resolve(body)};
     xhr.send(selected);
   });
+  let data;
+  try{data=await sendVideo()}catch(error){
+    if(!error.retryUpload)throw error;
+    note.textContent='Upload interrupted. Retrying once…';
+    await new Promise(resolve=>setTimeout(resolve,1500));
+    if((kind==='footage'&&file.files[0]!==selected)||(kind==='reference'&&$('#referenceFile').files[0]!==selected))throw Error('The selected video changed, so the upload was stopped.');
+    data=await sendVideo();
+  }
   if(typeof data.analysis!=='string'||!data.analysis)throw Error('Video analysis returned no description.');
   const updated=cached||{};updated[kind]=data.analysis;videoAnalysisCache.set(selected,updated);note.textContent=kind==='reference'?'Reference analysis complete.':'Footage analysis complete.';return data.analysis;
 }
