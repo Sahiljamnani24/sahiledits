@@ -80,7 +80,7 @@ async function makePlan(instruction=''){
     else if($('#ref').value.trim())say('I can only analyze the reference if you upload its video file; the Instagram link alone is not connected yet.');
     if(file.files[0]!==selected||$('#referenceFile').files[0]!==reference){say('Your video changed, so I discarded the analysis.');return}
     say('DeepSeek is planning the hook and cuts…');
-    const response=await fetch('https://fetxqnenytrfxtpzmbru.supabase.co/functions/v1/sahil-plan',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_E3uLCBXf8LWHwUHC4wpsdQ_J_OfjtVI'},body:JSON.stringify({duration:video.duration,words:wordTimes,footageAnalysis,referenceAnalysis,instruction}),signal:AbortSignal.timeout(148000)});
+    const response=await fetch('https://sahiledits-planner-1013977539156.asia-southeast1.run.app',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_E3uLCBXf8LWHwUHC4wpsdQ_J_OfjtVI'},body:JSON.stringify({duration:video.duration,words:wordTimes,footageAnalysis,referenceAnalysis,instruction}),signal:AbortSignal.timeout(1230000)});
     const plan=await response.json();if(!response.ok)throw Error(plan.error||'Planning failed.');
     if(file.files[0]!==selected||$('#referenceFile').files[0]!==reference){say('Your video changed, so I discarded the plan.');return}
     if(!Array.isArray(plan.clips)||!plan.clips.every(c=>Number.isFinite(c.start)&&Number.isFinite(c.end)&&c.start>=0&&c.end>c.start&&c.end<=video.duration))throw Error('The AI returned an invalid plan.');
