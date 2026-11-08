@@ -100,6 +100,7 @@ async function makePlan(instruction=''){
     if(!Array.isArray(plan.clips)||!plan.clips.every(c=>Number.isFinite(c.start)&&Number.isFinite(c.end)&&c.start>=0&&c.end>c.start&&c.end<=video.duration))throw Error('The AI returned an invalid plan.');
     if(Array.isArray(plan.zooms)&&plan.zooms.every(z=>Number.isFinite(z.start)&&Number.isFinite(z.end)&&z.start>=0&&z.end>z.start&&z.end<=video.duration&&z.end-z.start<=5)){zooms=plan.zooms;drawPreview()}
     if(!plan.clips.length)throw Error('The editor returned no usable sections.');video.pause();editClips=plan.clips.map(c=>({start:c.start,end:c.end}));editIndex=0;editFinished=false;cuts=makePauseCuts(wordTimes);video.currentTime=editClips[0].start;if(typeof plan.hook==='string'&&plan.hook.trim()){titleGraphic={text:plan.hook.trim().slice(0,75),start:editClips[0].start,end:Math.min(editClips[0].end,editClips[0].start+3.5)}}drawPreview();say('Your first cut is ready. Play the preview to review the selected sections. Captions, a hook title and selected zooms are included. Music and advanced graphics are not yet added.');
+    if(Array.isArray(plan.broll)&&plan.broll.length){say('Looking for relevant public-domain images…');try{await findImages(plan.broll)}catch(error){say('Image search was unavailable; the first cut is still ready.')}}
   }catch(e){say(e.name==='TimeoutError'?'The request timed out. Please try again.':(e.message||'Planning failed.'))}finally{button.disabled=false;aiBusy=false}
 }
 $('#planVideo').onclick=()=>makePlan();
