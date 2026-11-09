@@ -12,6 +12,7 @@ class FactSuggestionTests(unittest.TestCase):
             {'start': 10.5, 'end': 10.8, 'word': 'celsius'}]}
         facts = suggest_facts(timeline)
         self.assertEqual([f['text'] for f in facts], ['5G FORCE', '1000°C'])
+        self.assertEqual([f['kicker'] for f in facts], ['G-FORCE', 'TEMPERATURE'])
         self.assertEqual(facts[0]['start'], 1)
 
 
