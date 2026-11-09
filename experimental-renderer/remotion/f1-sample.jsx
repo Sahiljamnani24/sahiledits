@@ -49,12 +49,26 @@ function RacingInsert({start,end,type}) {
  </AbsoluteFill>
 }
 
+function ForceIllustration() {
+ const f=useCurrentFrame(), start=sec(4.22), end=sec(6.65);
+ if(f<start||f>=end)return null;
+ const fadeIn=interpolate(f,[start,start+7],[0,1],{extrapolateRight:'clamp'});
+ const fadeOut=interpolate(f,[end-7,end],[1,0],{extrapolateLeft:'clamp'});
+ const scale=interpolate(f,[start,end],[1.02,1.12],{extrapolateRight:'clamp'});
+ return <AbsoluteFill style={{zIndex:3,opacity:Math.min(fadeIn,fadeOut),backgroundColor:'#121016',overflow:'hidden'}}>
+  <Img src={staticFile('force-illustration.png')} style={{width:'100%',height:'100%',objectFit:'cover',transform:`scale(${scale})`}} />
+  <div style={{position:'absolute',top:40,left:35,color:'#fff',font:'bold 18px Arial',letterSpacing:3,background:'#e5262b',padding:'9px 12px'}}>ILLUSTRATION • BRAKING FORCE</div>
+  <div style={{position:'absolute',bottom:150,left:30,right:30,background:'linear-gradient(transparent, #000a)',height:190}} />
+ </AbsoluteFill>
+}
+
 function Reel() {
  const frame=useCurrentFrame(); let cursor=0;
  const zoom=1+0.025*Math.sin(frame/fps*1.5);
  return <AbsoluteFill style={{background:'#080a10',overflow:'hidden'}}>
   {plan.map((clip,i)=>{const at=cursor;cursor+=clip.frames;return <Sequence key={i} from={at} durationInFrames={clip.frames}><OffthreadVideo src={staticFile('source.mp4')} trimBefore={sec(clip.start)} durationInFrames={clip.frames} style={{width:'100%',height:'100%',objectFit:'cover',transform:`scale(${zoom})`}}/></Sequence>})}
   <RacingInsert start={0.18} end={2.0} type="race"/>
+  <ForceIllustration/>
   <RacingInsert start={13.45} end={15.65} type="brakes"/>
   <Stat from={2.08} to={3.18} large="5G" small="FORCE UNDER BRAKING"/>
   <Stat from={13.75} to={15.5} large="1,000°" small="BRAKE TEMPERATURE"/>
