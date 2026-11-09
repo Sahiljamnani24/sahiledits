@@ -3,16 +3,16 @@ import {AbsoluteFill, Audio, Composition, Img, OffthreadVideo, Sequence, interpo
 
 // Hand-edited sample, not a general-purpose template or a claim about AI quality.
 const fps = 30;
-const clips = [[26.78,30.7],[32.3,35.85],[37.2,39.15],[40.45,41.7],[44.25,50.18],[62.22,64.38]];
+const clips = [[26.78,30.7],[32.3,35.85],[37.2,39.15],[40.45,41.7],[44.25,47.95],[49.1,50.18],[62.22,64.38]];
 const plan = clips.map(([start,end]) => ({start, frames: Math.round((end-start)*fps)}));
 const length = plan.reduce((s,c) => s+c.frames,0);
 const sec = (n) => Math.round(n*fps);
 const words = [
- [0.00,'A FORMULA'],[.76,'DRIVER CAN'],[1.60,'FACE UP TO'],[2.14,'5G OF FORCE'],
- [3.18,"THAT'S"],[4.68,'ALMOST 5 TIMES'],[6.86,'THE'],[8.68,'BODY WEIGHT'],
- [9.34,'PUSHING'],[9.85,'AGAINST THEM'],[10.67,'AND THE BRAKE'],[12.00,'CAN REACH'],
- [12.76,'UP TO A'],[13.00,'TEMPERATURE OF'],[13.76,'1,000'],[15.62,'DEGREES CELSIUS'],
- [16.60,"THEY'RE NOT"],[16.98,'SLOWING DOWN'],[17.80,"THEY'RE FIGHTING"],[18.34,'PHYSICS.']
+ [0.00,'A Formula'],[.76,'driver can'],[1.60,'face up to'],[2.14,'5G of force'],
+ [3.18,"that's"],[4.68,'almost 5 times'],[6.86,'the'],[8.68,'body weight'],
+ [9.34,'pushing'],[9.85,'against them'],[10.67,'and the brake'],[12.00,'can reach'],
+ [12.76,'up to a'],[13.00,'temperature of'],[13.76,'1,000'],[14.47,'degrees Celsius'],
+ [15.45,'They are not'],[15.83,'slowing down'],[16.65,'they are fighting'],[17.19,'physics.']
 ];
 
 function Caption() {
@@ -21,7 +21,7 @@ function Caption() {
  if(idx<0 || (idx+1<words.length && words[idx+1][0]-words[idx][0]>1.15 && time>words[idx][0]+1.05)) return null;
  const [at,text]=words[idx];
  const pop=interpolate(time-at,[0,.13],[.9,1],{extrapolateRight:'clamp'});
- return <div style={{position:'absolute',left:35,right:35,top:910,textAlign:'center',fontFamily:'Arial, sans-serif',fontWeight:900,fontSize:55,lineHeight:1.04,color:'white',textShadow:'-3px -3px #111,3px -3px #111,-3px 3px #111,3px 3px #111,0 6px 16px #000',transform:`scale(${pop})`,zIndex:9}}>{text}</div>
+ return <div style={{position:'absolute',left:55,right:55,top:1000,textAlign:'center',fontFamily:'Arial, Helvetica, sans-serif',fontWeight:700,fontSize:48,lineHeight:1.08,color:'white',letterSpacing:-.6,textShadow:'0 3px 7px #000, 0 0 4px #000, 1px 1px 2px #000',transform:`scale(${pop})`,zIndex:9}}>{text}</div>
 }
 
 function Stat({from,to,large,small}) {
