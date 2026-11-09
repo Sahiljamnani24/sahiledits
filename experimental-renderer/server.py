@@ -60,10 +60,11 @@ def parse_form(content_type, data):
 
 def validate_timeline(plan, duration):
     # Uploaded timelines cannot ask the renderer to read local images or files.
-    if not isinstance(plan, dict) or set(plan) - {'clips', 'words', 'graphics', 'zooms', 'warnings', 'auto_graphics'}:
+    if not isinstance(plan, dict) or set(plan) - {'clips', 'words', 'graphics', 'zooms', 'warnings', 'auto_graphics', 'audio_cleanup', 'color_grade'}:
         raise ValueError('Unsupported timeline field')
-    if not isinstance(plan.get('auto_graphics', False), bool):
-        raise ValueError('Invalid automatic graphics setting')
+    for option in ('auto_graphics', 'audio_cleanup', 'color_grade'):
+        if not isinstance(plan.get(option, False), bool):
+            raise ValueError(f'Invalid {option} setting')
     clips, _, _, output_duration, _, _ = prepare(plan)
     if output_duration > 120 or any(end > duration + .1 for _, end, _ in clips):
         raise ValueError('Timeline exceeds the video limits')
