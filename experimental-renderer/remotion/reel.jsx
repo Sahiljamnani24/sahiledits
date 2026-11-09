@@ -1,6 +1,5 @@
 import React from 'react';
 import {AbsoluteFill, Composition, OffthreadVideo, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
-import edit from './test-timeline.json';
 
 const FPS = 30;
 const frames = (seconds) => Math.round(seconds * FPS);
@@ -57,7 +56,7 @@ function Graphic({item}) {
   </div>;
 }
 
-export function Reel({timeline = edit}) {
+export function Reel({timeline}) {
   const {clips, words} = prepareTimeline(timeline);
   const frame = useCurrentFrame();
   const zoom = (timeline.zooms || []).find((z) => frame >= frames(z.start) && frame < frames(z.end));
@@ -72,6 +71,8 @@ export function Reel({timeline = edit}) {
 }
 
 export function Root() {
-  const duration = prepareTimeline(edit).duration;
-  return <Composition id="SahilReel" component={Reel} fps={FPS} width={720} height={1280} durationInFrames={duration} />;
+  const defaultProps = {timeline:{clips:[{start:0,end:1}], words:[], graphics:[], zooms:[]}};
+  return <Composition id="SahilReel" component={Reel} fps={FPS} width={720} height={1280} durationInFrames={FPS}
+    defaultProps={defaultProps}
+    calculateMetadata={({props}) => ({durationInFrames: Math.max(1, prepareTimeline(props.timeline).duration)})} />;
 }
