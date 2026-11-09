@@ -11,15 +11,13 @@ from email.parser import BytesParser
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from render import prepare, render
+from fact_suggestions import suggest_facts
 
 MAX_REQUEST = 25 * 1024 * 1024
 ALLOWED_ORIGINS = {'https://sahiledits.com', 'https://www.sahiledits.com'}
 
 
 def reserve():
-    # Only for an IAM-private Cloud Run test service. Never enable on a public service.
-    if os.environ.get('PRIVATE_RENDER_TEST') == '1':
-        return True
     url, token = os.environ.get('SUPABASE_URL'), os.environ.get('SUPABASE_SERVICE_ROLE_KEY')
     if not url or not token:
         raise RuntimeError('Usage limit is not configured')
@@ -62,8 +60,10 @@ def parse_form(content_type, data):
 
 def validate_timeline(plan, duration):
     # Uploaded timelines cannot ask the renderer to read local images or files.
-    if not isinstance(plan, dict) or set(plan) - {'clips', 'words', 'graphics', 'zooms', 'warnings'}:
+    if not isinstance(plan, dict) or set(plan) - {'clips', 'words', 'graphics', 'zooms', 'warnings', 'auto_graphics'}:
         raise ValueError('Unsupported timeline field')
+    if not isinstance(plan.get('auto_graphics', False), bool):
+        raise ValueError('Invalid automatic graphics setting')
     clips, _, _, output_duration, _, _ = prepare(plan)
     if output_duration > 120 or any(end > duration + .1 for _, end, _ in clips):
         raise ValueError('Timeline exceeds the video limits')
@@ -129,6 +129,8 @@ class Handler(BaseHTTPRequestHandler):
                 source.write_bytes(video)
                 duration = probe(source)
                 validate_timeline(plan, duration)
+                if plan.get('auto_graphics'):
+                    plan['graphics'] = (plan.get('graphics', []) + suggest_facts(plan))[:50]
                 render(source, output, plan, 'ffmpeg')
                 size = output.stat().st_size
                 self.headers_common(200, 'video/mp4')
