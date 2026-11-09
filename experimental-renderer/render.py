@@ -123,11 +123,11 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         # Cards are on output time; all content is escaped before becoming ASS.
         if style == 'fact':
             safe = ass_escape(text)
-            events.append(f'Dialogue: 1,{timestamp(start)},{timestamp(end)},Fact,,0,0,0,,{{\\pos(360,540)\\fad(220,180)}}{safe}')
+            events.append(f'Dialogue: 1,{timestamp(start)},{timestamp(end)},Fact,,0,0,0,,{{\\move(360,585,360,540,0,260)\\fscx90\\fscy90\\t(0,260,\\fscx100\\fscy100)\\fad(180,180)}}{safe}')
             if kicker:
-                events.append(f'Dialogue: 1,{timestamp(start)},{timestamp(end)},FactLabel,,0,0,0,,{{\\pos(360,365)\\fad(220,180)}}{ass_escape(kicker).upper()}')
+                events.append(f'Dialogue: 1,{timestamp(start)},{timestamp(end)},FactLabel,,0,0,0,,{{\\move(360,385,360,365,0,220)\\fad(180,180)}}{ass_escape(kicker).upper()}')
         else:
-            events.append(f'Dialogue: 1,{timestamp(start)},{timestamp(end)},Headline,,0,0,0,,{{\\an7\\pos(70,145)\\fad(180,180)}}{ass_escape(text)}')
+            events.append(f'Dialogue: 1,{timestamp(start)},{timestamp(end)},Headline,,0,0,0,,{{\\an7\\move(35,145,70,145,0,220)\\fad(180,180)}}{ass_escape(text)}')
     for source_start, source_end, offset in clips:
         visible = []
         previous_start = offset
@@ -180,6 +180,10 @@ def render(source, output, plan, ffmpeg, music=None):
                          f'aresample=48000[a{i}]')
         graph.append(''.join(f'[v{i}][a{i}]' for i in range(count))+f'concat=n={count}:v=1:a=1[vcat][acat]')
         current = '[vcat]'
+        # Optional, modest overall correction. This is not face tracking or relighting.
+        if plan.get('color_grade', False):
+            graph.append(f'{current}eq=brightness=0.025:contrast=1.04:saturation=1.04[graded]')
+            current = '[graded]'
         if zooms:
             terms = [f"({strength-1})*max(0,min(1,min((on/30-{start})*4,({end}-on/30)*4)))"
                      for start, end, strength in zooms]
@@ -205,15 +209,23 @@ def render(source, output, plan, ffmpeg, music=None):
                              f"drawbox=x=42:y=105:w=9:h=172:color=0xd9fa29:t=fill:enable='between(t,{start},{end})'{label}")
             current = label
         graph.append(f"{current}ass=filename='{subfile}'[outv]")
+        audio = '[acat]'
+        if plan.get('audio_cleanup', False):
+            # The first free baseline uses FFmpeg's built-in spectral denoiser.
+            # It can reduce steady fan noise; it is not DeepFilterNet.
+            graph.append('[acat]highpass=f=80,afftdn=nr=10:nf=-35,'
+                         'acompressor=threshold=0.1:ratio=2:attack=20:release=200,'
+                         'alimiter=limit=0.95[cleaned]')
+            audio = '[cleaned]'
         if music:
             graph.append(f'[1:a]atrim=duration={duration},asetpts=PTS-STARTPTS,volume=0.12[bg]')
-            graph.append('[acat][bg]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,alimiter=limit=0.95[outa]')
+            graph.append(f'{audio}[bg]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,alimiter=limit=0.95[outa]')
         command = [ffmpeg, '-hide_banner', '-loglevel', 'warning', '-y', '-protocol_whitelist', 'file,pipe', '-i', str(source)]
         if music:
             command += ['-stream_loop', '-1', '-protocol_whitelist', 'file,pipe', '-i', str(music)]
         for _, _, path in visuals:
             command += ['-loop', '1', '-framerate', '30', '-protocol_whitelist', 'file,pipe', '-i', path]
-        command += ['-filter_complex', ';'.join(graph), '-map', '[outv]', '-map', '[outa]' if music else '[acat]',
+        command += ['-filter_complex', ';'.join(graph), '-map', '[outv]', '-map', '[outa]' if music else audio,
                     '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '20', '-pix_fmt', 'yuv420p',
                     '-c:a', 'aac', '-b:a', '160k', '-t', str(duration), '-movflags', '+faststart', str(output)]
         print(f'Rendering {len(clips)} clips, {len(words)} timed words and {len(graphics)} graphics ({duration:.1f}s)', flush=True)
