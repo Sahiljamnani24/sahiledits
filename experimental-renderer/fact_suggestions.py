@@ -20,19 +20,23 @@ def suggest_facts(timeline):
         start = output_time(word.get('start', -1), clips)
         if start is None:
             continue
-        card = None
+        card, kicker = None, 'KEY FIGURE'
         if re.fullmatch(r'\d+(?:\.\d+)?g', raw):
             card = raw.upper() + ' FORCE'
+            kicker = 'G-FORCE'
         elif re.fullmatch(r'\d{2,5}', raw):
             next_words = ' '.join(str(w.get('word', '')).lower().strip('.,!') for w in words[index+1:index+4])
             if re.match(r'degrees? celsius\b', next_words):
                 card = raw + '°C'
+                preceding = ' '.join(str(w.get('word', '')).lower() for w in words[max(0,index-8):index])
+                kicker = 'BRAKE TEMPERATURE' if re.search(r'\bbrakes?\b', preceding) else 'TEMPERATURE'
             elif re.match(r'(kmph|km/h)\b', next_words):
                 card = raw + ' KM/H'
+                kicker = 'SPEED'
         if card:
             left = min(max(0, start), total)
             right = min(total, left + 2.2)
             if right - left >= 1:
                 candidates.append({'start': round(left, 2), 'end': round(right, 2),
-                                   'text': card, 'kicker': 'FROM THE VIDEO', 'style': 'fact'})
+                                   'text': card, 'kicker': kicker, 'style': 'fact'})
     return candidates[:3]
