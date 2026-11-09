@@ -27,6 +27,12 @@ class ServerValidationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_timeline({'clips': [{'start': 0, 'end': 20}]}, 5)
 
+    def test_rejects_non_object_input(self):
+        with self.assertRaises(ValueError):
+            validate_timeline({'clips': ['not an object']}, 5)
+        with self.assertRaises(ValueError):
+            validate_timeline({'clips': [{'start': 0, 'end': 5}], 'auto_graphics': 'yes'}, 5)
+
     def test_http_upload_and_response(self):
         body = (b'--abc\r\nContent-Disposition: form-data; name="video"; filename="a.mp4"\r\n'
                 b'Content-Type: video/mp4\r\n\r\n\x00\x00\x00\x18ftypisomtest\r\n'
