@@ -95,13 +95,112 @@ async function makePlan(instruction=''){
     if(file.files[0]!==selected||$('#referenceFile').files[0]!==reference){say('Your video changed, so I discarded the analysis.');return}
     say('DeepSeek is planning the hook and cuts…');
     const planningStatus=$('#transcribeStatus'),planningStarted=Date.now();planningStatus.textContent='DeepSeek is planning your edit: 0s';const planningTimer=setInterval(()=>{planningStatus.textContent='DeepSeek is planning your edit: '+Math.floor((Date.now()-planningStarted)/1000)+'s'},1000);
-    let response;try{response=await fetch('https://sahiledits-planner-1013977539156.asia-southeast1.run.app',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_E3uLCBXf8LWHwUHC4wpsdQ_J_OfjtVI'},body:JSON.stringify({duration:video.duration,words:wordTimes,footageAnalysis,referenceAnalysis,instruction}),signal:AbortSignal.timeout(1230000)});}finally{clearInterval(planningTimer);planningStatus.textContent='Planning finished.'}
-    const plan=await response.json();if(!response.ok)throw Error(plan.error||'Planning failed.');
+    let response;try{response=await fetch('https://sahiledits-planner-1013977539156.asia-southeast1.run.app',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_E3uLCBXf8LWHwUHC4wpsdQ_J_OfjtVI'},body:JSON.stringify({duration:video.duration,words:wordTimes,footageAnalysis,referenceAnalysis,instruction}),signal:AbortSignal.timeout(1230000)});}finally{clearInterval(planningTimer)}
+    const plan=await response.json();if(!response.ok)throw Error(plan.error||'Planning failed.');planningStatus.textContent='Edit plan received. Preparing the preview…';
     if(file.files[0]!==selected||$('#referenceFile').files[0]!==reference){say('Your video changed, so I discarded the plan.');return}
     if(!Array.isArray(plan.clips)||!plan.clips.every(c=>Number.isFinite(c.start)&&Number.isFinite(c.end)&&c.start>=0&&c.end>c.start&&c.end<=video.duration))throw Error('The AI returned an invalid plan.');
     if(Array.isArray(plan.zooms)&&plan.zooms.every(z=>Number.isFinite(z.start)&&Number.isFinite(z.end)&&z.start>=0&&z.end>z.start&&z.end<=video.duration&&z.end-z.start<=5)){zooms=plan.zooms;drawPreview()}
     if(!plan.clips.length)throw Error('The editor returned no usable sections.');video.pause();editClips=plan.clips.map(c=>({start:c.start,end:c.end}));editIndex=0;editFinished=false;cuts=makePauseCuts(wordTimes);video.currentTime=editClips[0].start;if(typeof plan.hook==='string'&&plan.hook.trim()){titleGraphic={text:plan.hook.trim().slice(0,75),start:editClips[0].start,end:Math.min(editClips[0].end,editClips[0].start+3.5)}}drawPreview();const keptSeconds=editClips.reduce((sum,c)=>sum+c.end-c.start,0);say('Your first cut is ready. Play the preview to review the selected sections. Captions, a hook title and selected zooms are included. Music and advanced graphics are not yet added.'+(keptSeconds<video.duration*.4?' Warning: the AI selected only '+fmt(keptSeconds)+' from '+fmt(video.duration)+' of footage; check that important parts of the story were not removed.':''));
-    if(Array.isArray(plan.broll)&&plan.broll.length){say('Looking for relevant public-domain images…');try{await findImages(plan.broll)}catch(error){say('Image search was unavailable; the first cut is still ready.')}}
-  }catch(e){say(e.name==='TimeoutError'?'The request timed out. Please try again.':(e.message||'Planning failed.'))}finally{button.disabled=false;aiBusy=false}
+    if(Array.isArray(plan.broll)&&plan.broll.length){say('Looking for relevant public-domain images…');try{await findImages(plan.broll)}catch(error){say('Image search was unavailable; the first cut is still ready.')}}planningStatus.textContent='Edit plan ready.';
+  }catch(e){$('#transcribeStatus').textContent='Edit request did not finish.';say(e.name==='TimeoutError'?'The request timed out. Please try again.':(e.message||'Planning failed.'))}finally{button.disabled=false;aiBusy=false}
 }
 $('#planVideo').onclick=()=>makePlan();
+
+
+/* Prototype integration snippet. Insert into the website only after the service is deployed and tested. */
+function makeCloudTimeline(duration, selectedClips, removedPauses, zooms, words, title) {
+  const selected = selectedClips.length ? selectedClips : [{start: 0, end: duration}];
+  const pauses = removedPauses.slice().sort((a, b) => a.start - b.start);
+  const clips = [];
+  for (const clip of selected) {
+    let cursor = clip.start;
+    for (const pause of pauses) {
+      if (pause.end <= cursor || pause.start >= clip.end) continue;
+      if (pause.start - cursor >= .08) clips.push({start: cursor, end: Math.min(pause.start, clip.end)});
+      cursor = Math.max(cursor, pause.end);
+      if (cursor >= clip.end) break;
+    }
+    if (clip.end - cursor >= .08) clips.push({start: cursor, end: clip.end});
+  }
+  if (!clips.length || clips.length > 50) throw Error('This edit has too many cuts to export.');
+  let offset = 0;
+  const outputZooms = [];
+  for (const clip of clips) {
+    for (const zoom of zooms) {
+      const left = Math.max(clip.start, zoom.start), right = Math.min(clip.end, zoom.end);
+      if (right > left) outputZooms.push({start: offset + left - clip.start, end: offset + right - clip.start, scale: 1.12});
+    }
+    offset += clip.end - clip.start;
+  }
+  const graphics = title && title.text ? [{start: 0, end: Math.min(3.5, offset), text: title.text}] : [];
+  return {clips, words, zooms: outputZooms, graphics};
+}
+
+function exportCloudVideo(url, selectedFile, timeline, onStatus) {
+  if (!selectedFile || selectedFile.size > 24 * 1024 * 1024) {
+    return Promise.reject(Error('Cloud export currently supports videos up to 24 MB.'));
+  }
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest(), form = new FormData();
+    form.append('video', selectedFile);
+    form.append('timeline', JSON.stringify(timeline));
+    xhr.open('POST', url + '/render');
+    xhr.responseType = 'blob';
+    xhr.timeout = 360000;
+    xhr.upload.onprogress = event => {
+      if (event.lengthComputable) onStatus('Uploading video: ' + Math.round(event.loaded / event.total * 100) + '%');
+    };
+    xhr.upload.onload = () => onStatus('Video uploaded. Rendering the edit on the server…');
+    xhr.onload = async () => {
+      if (xhr.status !== 200) {
+        try { reject(Error(JSON.parse(await xhr.response.text()).error || 'The server could not render this video.')); }
+        catch (_) { reject(Error('The server could not render this video.')); }
+        return;
+      }
+      if (!xhr.response || xhr.response.size < 1000 || !xhr.response.type.startsWith('video/')) {
+        reject(Error('The server returned an invalid video.'));
+        return;
+      }
+      onStatus('Render complete. Downloading MP4…');
+      resolve(xhr.response);
+    };
+    xhr.onerror = () => reject(Error('The connection to the renderer was lost.'));
+    xhr.ontimeout = () => reject(Error('Rendering timed out.'));
+    xhr.send(form);
+  });
+}
+
+// Combined with browser-integration.js and the website's editor after staging.
+const cloudExportButton = document.querySelector('#exportCloudMP4');
+cloudExportButton.onclick = async () => {
+  const selected = file.files[0];
+  if (!selected || !Number.isFinite(video.duration)) {
+    status.textContent = 'Choose a video first.';
+    return;
+  }
+  if (recording || aiBusy) {
+    status.textContent = 'Wait for the current edit to finish.';
+    return;
+  }
+  try {
+    const timeline = makeCloudTimeline(video.duration, editClips, cuts, zooms, wordTimes, titleGraphic);
+    timeline.auto_graphics = true;
+    cloudExportButton.disabled = true;
+    const result = await exportCloudVideo('https://sahiledits-render-stage-1013977539156.asia-southeast1.run.app', selected, timeline, text => {
+      status.textContent = text;
+    });
+    const link = document.createElement('a');
+    const resultUrl = URL.createObjectURL(result);
+    link.href = resultUrl;
+    link.download = 'sahiledits-experimental.mp4';
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(resultUrl), 60000);
+    status.textContent = 'MP4 downloaded. Review the cuts and captions.';
+    say('Your MP4 is ready. Please review its cuts, captions and visual cards; these are still experimental.');
+  } catch (error) {
+    status.textContent = 'MP4 export failed: ' + (error.message || 'Please try again.');
+    say(status.textContent);
+  } finally {
+    cloudExportButton.disabled = false;
+  }
+};
