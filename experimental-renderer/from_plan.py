@@ -30,9 +30,62 @@ def bridge_short_words(clips, words):
     return result, repairs
 
 
-def convert(plan, words, source_duration, bridge_words=False):
+def apply_pause_suggestions(clips, pauses):
+    """Split clips around reviewed source-time pause suggestions."""
+    normalized = sorted(pauses, key=lambda p: p['start'])
+    result = []
+    for clip in clips:
+        cursor = clip['start']
+        for pause in normalized:
+            start, end = pause['start'], pause['end']
+            if end <= cursor or start >= clip['end']:
+                continue
+            if start - cursor >= .08:
+                result.append({'start': cursor, 'end': min(start, clip['end'])})
+            cursor = min(clip['end'], max(cursor, end))
+        if clip['end'] - cursor >= .08:
+            result.append({'start': cursor, 'end': clip['end']})
+    return result
+
+
+def trim_word_intervals(words, pauses):
+    """Narrow words spanning a long proposed silence. Heuristic; review required."""
+    aligned = []
+    changed = 0
+    for item in words:
+        word = dict(item)
+        start, end = word.get('start'), word.get('end')
+        if not isinstance(start, (int, float)) or not isinstance(end, (int, float)) or end - start < .8:
+            aligned.append(word)
+            continue
+        segments = [(start, end)]
+        for pause in pauses:
+            next_segments = []
+            for left, right in segments:
+                if pause['end'] <= left or pause['start'] >= right:
+                    next_segments.append((left, right))
+                else:
+                    if pause['start'] - left >= .08:
+                        next_segments.append((left, min(right, pause['start'])))
+                    if right - pause['end'] >= .08:
+                        next_segments.append((max(left, pause['end']), right))
+            segments = next_segments
+        if segments:
+            left, right = max(segments, key=lambda span: span[1]-span[0])
+            if left > start or right < end:
+                word['start'], word['end'] = round(left, 3), round(right, 3)
+                changed += 1
+        aligned.append(word)
+    return aligned, changed
+
+
+def convert(plan, words, source_duration, bridge_words=False, pauses=None):
     clips = plan.get('clips', [])
     clips, repaired = bridge_short_words(clips, words) if bridge_words else (clips, 0)
+    aligned_count = 0
+    if pauses:
+        clips = apply_pause_suggestions(clips, pauses)
+        words, aligned_count = trim_word_intervals(words, pauses)
     base = {'clips': clips, 'words': words, 'graphics': [], 'zooms': []}
     normalized, _, _, kept, _, _ = prepare(base)
     if any(end > source_duration for _, end, _ in normalized):
@@ -50,6 +103,10 @@ def convert(plan, words, source_duration, bridge_words=False):
     warnings = []
     if repaired:
         warnings.append(f'Reconnected {repaired} short missing-word gaps; review the pacing and cuts.')
+    if pauses:
+        warnings.append('Applied experimental pause suggestions; listen for quiet speech being removed.')
+        if aligned_count:
+            warnings.append(f'Adjusted {aligned_count} stretched word timings heuristically; verify subtitles against the audio.')
     if kept < source_duration * .4:
         warnings.append(f'The plan keeps {kept:.1f} of {source_duration:.1f} seconds; review for missing context.')
     for start, end, _ in normalized:
@@ -70,6 +127,7 @@ def main():
     parser.add_argument('--duration', type=float, required=True)
     parser.add_argument('--output', required=True)
     parser.add_argument('--bridge-short-words', action='store_true')
+    parser.add_argument('--reviewed-pauses', help='JSON file of manually reviewed source-time pauses')
     args = parser.parse_args()
     with open(args.plan, encoding='utf-8') as f:
         plan = json.load(f)
@@ -77,7 +135,11 @@ def main():
         words = json.load(f)
     if isinstance(words, dict):
         words = words.get('words', [])
-    result = convert(plan, words, args.duration, args.bridge_short_words)
+    pauses = None
+    if args.reviewed_pauses:
+        with open(args.reviewed_pauses, encoding='utf-8') as f:
+            pauses = json.load(f).get('pauses', [])
+    result = convert(plan, words, args.duration, args.bridge_short_words, pauses)
     with open(args.output, 'w', encoding='utf-8') as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
     for warning in result['warnings']:
