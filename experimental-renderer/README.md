@@ -8,7 +8,7 @@ Timeline JSON: `clips` is an ordered array of source `{start,end}` ranges in sec
 
 This is a rendering primitive, not an AI editor or a guarantee of a high-quality result. Still needed: a validated AI-generated timeline, accurate word alignment, richer motion and B-roll, robust upload and jobs, per-user privacy, abuse and spend limits, and end-to-end deployment.
 
-`server.py` is an experimental Cloud Run adapter. It accepts files up to 25 MiB, only with video and audio up to 120 seconds, checks the existing shared quota, returns MP4 as the HTTP response, and discards the temporary files after the request. `PRIVATE_RENDER_TEST=1` bypasses quota only for an IAM-private service; never use that setting on a public service. Do not make this service public until the production quota, privacy model, browser integration and abuse controls have been verified. Cloud Run services, build and storage can cost money.
+`server.py` is an experimental Cloud Run adapter. It accepts files up to 25 MiB, only with video and audio up to 120 seconds, checks the existing shared quota, returns MP4 as the HTTP response, and discards the temporary files after the request. It requires the private `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE_URL` to check the quota. Do not make this service public until the production quota, privacy model, browser integration and abuse controls have been verified. Cloud Run services, build and storage can cost money.
 
 The separate `from_plan.py` converter maps the current planner's source-time clips and zooms to the output timeline. It warns about very short selections and cut boundaries within words. It does not yet fetch images or reinterpret the reference, and should not be used as an approval of editorial quality.
 
