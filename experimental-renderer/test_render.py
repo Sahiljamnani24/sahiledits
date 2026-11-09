@@ -1,6 +1,6 @@
 import unittest
 from render import prepare, subtitles
-from from_plan import convert
+from from_plan import convert, apply_pause_suggestions, trim_word_intervals
 
 
 class TimelineTests(unittest.TestCase):
@@ -60,6 +60,20 @@ class TimelineTests(unittest.TestCase):
         self.assertIn('Reconnected', result['warnings'][0])
         other = convert(plan, [{'start': 1, 'end': 2, 'word': 'mistake'}], 3, bridge_words=True)
         self.assertEqual(len(other['clips']), 2)
+
+    def test_pause_suggestions_apply_within_reordered_clips(self):
+        clips = [{'start': 10, 'end': 15}, {'start': 0, 'end': 5}]
+        pauses = [{'start': 1, 'end': 2}, {'start': 12, 'end': 13}]
+        self.assertEqual(apply_pause_suggestions(clips, pauses), [
+            {'start': 10, 'end': 12}, {'start': 13, 'end': 15},
+            {'start': 0, 'end': 1}, {'start': 2, 'end': 5}])
+
+    def test_word_spanning_long_silence_is_shortened(self):
+        words = [{'start': 1, 'end': 4, 'word': 'that'}, {'start': 4, 'end': 4.3, 'word': 'works'}]
+        aligned, count = trim_word_intervals(words, [{'start': 1.5, 'end': 3.2}])
+        self.assertEqual(count, 1)
+        self.assertEqual((aligned[0]['start'], aligned[0]['end']), (3.2, 4))
+        self.assertEqual(aligned[1], words[1])
 
 
 if __name__ == '__main__':
