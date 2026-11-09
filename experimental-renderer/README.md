@@ -12,4 +12,4 @@ This is a rendering primitive, not an AI editor or a guarantee of a high-quality
 
 The separate `from_plan.py` converter maps the current planner's source-time clips and zooms to the output timeline. It warns about very short selections and cut boundaries within words. It does not yet fetch images or reinterpret the reference, and should not be used as an approval of editorial quality.
 
-`pause_suggestions.py` is an offline experiment that measures audio energy and produces candidate pauses for review. It does not apply cuts or guarantee voice detection; music, noise and quiet speech can lead to mistakes. It expects a 16-bit mono PCM WAV and the recognizer's word JSON.
+`pause_suggestions.py` is an offline experiment that measures audio energy and produces candidate pauses for review. It does not apply cuts or guarantee voice detection; music, noise and quiet speech can lead to mistakes. It expects a 16-bit mono PCM WAV and the recognizer's word JSON. `from_plan.py --reviewed-pauses` can apply reviewed suggestions and heuristically adjust word intervals crossing those gaps. The resulting audio and captions require review; this is not forced alignment.
