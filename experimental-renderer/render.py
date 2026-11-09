@@ -35,6 +35,8 @@ def prepare(plan):
     normalized = []
     offset = 0.0
     for item in clips:
+        if not isinstance(item, dict):
+            raise ValueError('each clip must be an object')
         start = num(item.get('start'), 'clip start')
         end = num(item.get('end'), 'clip end')
         if end <= start or end - start < .08:
@@ -46,6 +48,8 @@ def prepare(plan):
         raise ValueError('words must be an array of at most 5000 items')
     clean_words = []
     for item in words:
+        if not isinstance(item, dict):
+            raise ValueError('each word must be an object')
         start = num(item.get('start'), 'word start')
         end = num(item.get('end'), 'word end')
         text = str(item.get('word', '')).strip()
@@ -58,6 +62,8 @@ def prepare(plan):
         raise ValueError('graphics must be an array of at most 50 items')
     clean_graphics = []
     for graphic in graphics:
+        if not isinstance(graphic, dict):
+            raise ValueError('each graphic must be an object')
         start = num(graphic.get('start'), 'graphic start', high=offset)
         end = num(graphic.get('end'), 'graphic end', high=offset)
         text = str(graphic.get('text', '')).strip()
@@ -71,6 +77,8 @@ def prepare(plan):
         raise ValueError('zooms must be an array of at most 50 items')
     clean_zooms = []
     for zoom in zooms:
+        if not isinstance(zoom, dict):
+            raise ValueError('each zoom must be an object')
         start = num(zoom.get('start'), 'zoom start', high=offset)
         end = num(zoom.get('end'), 'zoom end', high=offset)
         strength = num(zoom.get('scale', 1.12), 'zoom scale', low=1, high=1.4)
@@ -82,6 +90,8 @@ def prepare(plan):
         raise ValueError('visuals must be an array of at most 20 items')
     clean_visuals = []
     for visual in visuals:
+        if not isinstance(visual, dict):
+            raise ValueError('each visual must be an object')
         start = num(visual.get('start'), 'visual start', high=offset)
         end = num(visual.get('end'), 'visual end', high=offset)
         path = Path(str(visual.get('path', '')))
