@@ -1,9 +1,33 @@
 import unittest
-from render import prepare, subtitles
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
+from render import prepare, subtitles, render
 from from_plan import convert, apply_pause_suggestions, trim_word_intervals
 
 
 class TimelineTests(unittest.TestCase):
+    def test_cleanup_and_grade_are_optional_and_audio_is_mixed_after_cleanup(self):
+        with TemporaryDirectory() as tmp:
+            source = Path(tmp) / 'source.mp4'
+            music = Path(tmp) / 'music.wav'
+            source.touch()
+            music.touch()
+            base = {'clips': [{'start': 0, 'end': 2}]}
+            with patch('render.subprocess.run') as run:
+                render(source, Path(tmp) / 'out.mp4', base, 'ffmpeg')
+                cmd = run.call_args.args[0]
+                graph = cmd[cmd.index('-filter_complex') + 1]
+                self.assertNotIn('afftdn=', graph)
+                self.assertNotIn('[graded]', graph)
+                render(source, Path(tmp) / 'out.mp4',
+                       {**base, 'audio_cleanup': True, 'color_grade': True}, 'ffmpeg', music)
+                cmd = run.call_args.args[0]
+                graph = cmd[cmd.index('-filter_complex') + 1]
+                self.assertIn('afftdn=', graph)
+                self.assertIn('eq=brightness=', graph)
+                self.assertIn('[cleaned][bg]amix=', graph)
+
     def test_clips_map_words_to_new_timeline_in_requested_order(self):
         plan = {'clips': [{'start': 10, 'end': 12}, {'start': 0, 'end': 2}],
                 'words': [{'start': 10.2, 'end': 10.5, 'word': 'second'},
@@ -28,6 +52,16 @@ class TimelineTests(unittest.TestCase):
         result = subtitles(clips, words, graphics)
         self.assertNotIn('{\\bad} hi', result)
         self.assertIn('(／bad) hi', result)
+
+    def test_graphics_have_timed_motion(self):
+        plan = {'clips': [{'start': 0, 'end': 3}], 'graphics': [
+            {'start': 0, 'end': 1, 'text': 'Headline'},
+            {'start': 1, 'end': 3, 'style': 'fact', 'text': '5G', 'kicker': 'force'},
+        ]}
+        clips, words, graphics, _, _, _ = prepare(plan)
+        script = subtitles(clips, words, graphics)
+        self.assertIn('\\move(35,145,70,145,0,220)', script)
+        self.assertIn('\\move(360,585,360,540,0,260)', script)
 
     def test_overlapping_timestamps_keep_transcript_word_order(self):
         clips, words, graphics, _, _, _ = prepare({'clips': [{'start': 0, 'end': 3}],
