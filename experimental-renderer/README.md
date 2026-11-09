@@ -1,0 +1,13 @@
+# Timeline renderer prototype
+
+This isolated renderer assembles ordered sections of one source video into an MP4, remaps timestamped words onto the output timeline, burns word-highlighted captions, draws timed headline cards, overlays local images, applies animated zooms, and can mix an optional local music file. It is not yet connected to the public website, is not a job service, and is not safe to expose directly to untrusted users.
+
+Requirements: Python 3 and an FFmpeg build containing libx264, libass, and AAC. The source must contain a video and audio stream. Render locally using `python3 render.py --video INPUT --timeline TIMELINE.json --output OUTPUT.mp4 --ffmpeg /path/to/ffmpeg`. Add `--music MUSIC_FILE` to mix a local audio file quietly under speech.
+
+Timeline JSON: `clips` is an ordered array of source `{start,end}` ranges in seconds. `words` is an optional list of `{start,end,word}` timed in the original source. `graphics` is an optional list of `{start,end,text}` timed in the final output; `style: "fact"` and `kicker` create a full-screen card. Optional `zooms` contain `{start,end,scale}` on the output timeline. Optional `visuals` contain `{start,end,path}` for local JPG, PNG or WebP images on the output timeline. Check clip boundaries carefully: a transcript cannot tell whether a cut has removed important context. Text is escaped before being passed to the subtitle renderer.
+
+This is a rendering primitive, not an AI editor or a guarantee of a high-quality result. Still needed: a validated AI-generated timeline, accurate word alignment, richer motion and B-roll, robust upload and jobs, per-user privacy, abuse and spend limits, and end-to-end deployment.
+
+`server.py` is an experimental Cloud Run adapter. It accepts files up to 25 MiB, only with video and audio up to 120 seconds, checks the existing shared quota, returns MP4 as the HTTP response, and discards the temporary files after the request. `PRIVATE_RENDER_TEST=1` bypasses quota only for an IAM-private service; never use that setting on a public service. Do not make this service public until the production quota, privacy model, browser integration and abuse controls have been verified. Cloud Run services, build and storage can cost money.
+
+The separate `from_plan.py` converter maps the current planner's source-time clips and zooms to the output timeline. It warns about very short selections and cut boundaries within words. It does not yet fetch images or reinterpret the reference, and should not be used as an approval of editorial quality.
