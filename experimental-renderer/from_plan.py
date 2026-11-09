@@ -3,6 +3,7 @@
 import argparse
 import json
 from render import prepare
+from take_review import review_words
 
 
 def bridge_short_words(clips, words):
@@ -101,6 +102,11 @@ def convert(plan, words, source_duration, bridge_words=False, pauses=None):
     if hook:
         base['graphics'].append({'start': 0, 'end': min(3.5, kept), 'text': hook[:100]})
     warnings = []
+    review = review_words(words)
+    if review['timing_warnings']:
+        warnings.append(f"{len(review['timing_warnings'])} transcript word timings need review before making precise cuts or captions.")
+    if review['repeated_take_candidates']:
+        warnings.append(f"Found {len(review['repeated_take_candidates'])} possible repeated takes; compare them before removing speech.")
     if repaired:
         warnings.append(f'Reconnected {repaired} short missing-word gaps; review the pacing and cuts.')
     if pauses:
@@ -116,6 +122,7 @@ def convert(plan, words, source_duration, bridge_words=False, pauses=None):
                 warnings.append(f'A cut at {start:.2f}–{end:.2f} seconds may split a spoken word.')
                 break
     base['warnings'] = warnings
+    base['take_review'] = review
     prepare(base)
     return base
 
