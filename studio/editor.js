@@ -146,12 +146,18 @@ function exportCloudVideo(url, selectedFile, timeline, onStatus) {
     form.append('timeline', JSON.stringify(timeline));
     xhr.open('POST', url + '/render');
     xhr.responseType = 'blob';
-    xhr.timeout = 510000;
+    xhr.timeout = 840000;
+    let renderTimer = null;
     xhr.upload.onprogress = event => {
       if (event.lengthComputable) onStatus('Uploading video: ' + Math.round(event.loaded / event.total * 100) + '%');
     };
-    xhr.upload.onload = () => onStatus('Video uploaded. Rendering the edit on the server…');
+    xhr.upload.onload = () => {
+      const started = Date.now();
+      onStatus('Video uploaded. Rendering the edit; this can take several minutes…');
+      renderTimer = setInterval(() => onStatus('Rendering on the server: ' + Math.floor((Date.now() - started) / 1000) + ' seconds elapsed. Keep this page open.'), 5000);
+    };
     xhr.onload = async () => {
+      clearInterval(renderTimer);
       if (xhr.status !== 200) {
         try { reject(Error(JSON.parse(await xhr.response.text()).error || 'The server could not render this video.')); }
         catch (_) { reject(Error('The server could not render this video.')); }
@@ -164,8 +170,9 @@ function exportCloudVideo(url, selectedFile, timeline, onStatus) {
       onStatus('Render complete. Downloading MP4…');
       resolve(xhr.response);
     };
-    xhr.onerror = () => reject(Error('The connection to the renderer was lost.'));
-    xhr.ontimeout = () => reject(Error('Rendering timed out.'));
+    xhr.onerror = () => { clearInterval(renderTimer); reject(Error('The connection to the renderer was lost.')); };
+    xhr.ontimeout = () => { clearInterval(renderTimer); reject(Error('Rendering timed out. Try a shorter edit.')); };
+    xhr.onabort = () => { clearInterval(renderTimer); reject(Error('Rendering was cancelled.')); };
     xhr.send(form);
   });
 }
@@ -185,6 +192,8 @@ cloudExportButton.onclick = async () => {
   try {
     const timeline = makeCloudTimeline(video.duration, editClips, cuts, zooms, wordTimes, titleGraphic);
     timeline.auto_graphics = true;
+    timeline.audio_cleanup = true;
+    timeline.color_grade = true;
     cloudExportButton.disabled = true;
     const result = await exportCloudVideo('https://sahiledits-render-stage-1013977539156.asia-southeast1.run.app', selected, timeline, text => {
       status.textContent = text;
