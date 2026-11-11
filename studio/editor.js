@@ -185,8 +185,6 @@ cloudExportButton.onclick = async () => {
   try {
     const timeline = makeCloudTimeline(video.duration, editClips, cuts, zooms, wordTimes, titleGraphic);
     timeline.auto_graphics = true;
-    timeline.audio_cleanup = true;
-    timeline.color_grade = true;
     cloudExportButton.disabled = true;
     const result = await exportCloudVideo('https://sahiledits-render-stage-1013977539156.asia-southeast1.run.app', selected, timeline, text => {
       status.textContent = text;
