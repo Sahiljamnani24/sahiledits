@@ -146,7 +146,7 @@ function exportCloudVideo(url, selectedFile, timeline, onStatus) {
     form.append('timeline', JSON.stringify(timeline));
     xhr.open('POST', url + '/render');
     xhr.responseType = 'blob';
-    xhr.timeout = 360000;
+    xhr.timeout = 510000;
     xhr.upload.onprogress = event => {
       if (event.lengthComputable) onStatus('Uploading video: ' + Math.round(event.loaded / event.total * 100) + '%');
     };
@@ -185,6 +185,8 @@ cloudExportButton.onclick = async () => {
   try {
     const timeline = makeCloudTimeline(video.duration, editClips, cuts, zooms, wordTimes, titleGraphic);
     timeline.auto_graphics = true;
+    timeline.audio_cleanup = true;
+    timeline.color_grade = true;
     cloudExportButton.disabled = true;
     const result = await exportCloudVideo('https://sahiledits-render-stage-1013977539156.asia-southeast1.run.app', selected, timeline, text => {
       status.textContent = text;
