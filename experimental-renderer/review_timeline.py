@@ -3,6 +3,7 @@
 import argparse
 import json
 from pathlib import Path
+from take_review import review_words
 
 
 def review(timeline, source_duration):
@@ -19,8 +20,16 @@ def review(timeline, source_duration):
             for word in words:
                 if word.get('start', -1) + .02 < edge < word.get('end', -1) - .02:
                     cut_warnings.append({'at': round(edge, 3), 'word': word.get('word', '')})
+    repeated = []
+    for pair in review_words(words)['repeated_take_candidates']:
+        # Report only when both full candidate phrases are retained. This is
+        # evidence for review, not proof that either take should be deleted.
+        retained = lambda start, end: any(c['start'] <= start and end <= c['end'] for c in clips)
+        if retained(pair['first_start'], pair['first_end']) and retained(pair['second_start'], pair['second_end']):
+            repeated.append(pair)
     return {'source_seconds': round(source_duration, 2), 'edit_seconds': round(kept_duration, 2),
             'kept_transcript': ' '.join(selected_words), 'cut_warnings': cut_warnings,
+            'possible_repeated_takes': repeated,
             'graphics_count': len(timeline.get('graphics', [])),
             'important': 'Transcript timing may be wrong. Listen to every cut and compare visuals with the reference.'}
 
