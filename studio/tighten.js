@@ -27,6 +27,23 @@
     return found;
   }
 
+  /* Cut windows from the audio itself: every stretch of silence >= thr, keeping ~0.17s of room. */
+  function buildAudioCuts(env, thr, duration) {
+    const mask = voicedMask(env); if (!mask) return null;
+    const found = [];
+    for (let i = 0; i < mask.length;) {
+      let j = i; while (j < mask.length && mask[j] === mask[i]) j++;
+      if (!mask[i]) {
+        const a = i * env.hop, b = j * env.hop, len = b - a;
+        if (i === 0 && len >= 0.4) found.push({ start: 0, end: round(b - 0.08) });                       // dead air before the first sound
+        else if (j >= mask.length - 1 && Number.isFinite(duration) && duration - a >= 0.6) found.push({ start: round(a + 0.3), end: round(duration) });   // and after the last
+        else if (len >= thr) { const s0 = a + PAD_AFTER, e0 = b - PAD_BEFORE; if (e0 - s0 >= 0.12) found.push({ start: round(s0), end: round(e0) }); }
+      }
+      i = j;
+    }
+    return found;
+  }
+
   /* Pause windows to REMOVE. Every gap >= 0.35s goes; if that makes too many cuts for the
    * exporter (50 clips), the threshold is raised step by step so the export never fails. */
   function makeTightCuts(words, opt) {
@@ -35,7 +52,7 @@
     const maxCuts = opt.maxCuts == null ? 40 : opt.maxCuts;
     let found = [];
     for (const thr of (opt.thresholds || [0.35, 0.45, 0.6, 0.8, 1.2, 2])) {
-      found = buildCuts(sorted, thr, opt.duration);
+      found = (opt.env && buildAudioCuts(opt.env, thr, opt.duration)) || buildCuts(sorted, thr, opt.duration);   // real silence when we have the audio
       if (found.length <= maxCuts) break;
     }
     return found;
@@ -110,7 +127,69 @@
     return out;
   }
 
+  /* ---- real silence from the audio -------------------------------------------------------------
+   * Speech-to-text (Groq / Whisper) stretches a word's end over the silence that follows it ("braking," 4.4s),
+   * so gaps between words hide the real pauses. Measure loudness instead: 10 ms frames in dB. */
+  function envelope(samples, rate, hop) {
+    hop = hop || 0.01;
+    const H = Math.max(1, Math.round(rate * hop)), W = H * 2, n = Math.max(0, Math.floor((samples.length - W) / H));
+    const db = new Float32Array(n);
+    for (let i = 0; i < n; i++) {
+      let sum = 0; const a = i * H;
+      for (let k = 0; k < W; k++) { const v = samples[a + k]; sum += v * v; }
+      db[i] = 10 * Math.log10(sum / W + 1e-12);
+    }
+    return { hop, db };
+  }
+
+  /* voiced = clearly above the room noise: threshold sits 30% of the way from noise floor (10th pct) to speech (90th pct). */
+  function voicedMask(env) {
+    const sorted = Array.from(env.db).sort((a, b) => a - b);
+    if (sorted.length < 20) return null;
+    const floor = sorted[Math.floor(sorted.length * 0.1)], speech = sorted[Math.floor(sorted.length * 0.9)];
+    if (speech - floor < 8) return null;                      // no clear speech/noise separation: do not guess
+    const thr = floor + Math.max(6, 0.3 * (speech - floor));
+    const mask = Array.from(env.db, v => v > thr);
+    const fill = Math.round(0.06 / env.hop), blip = Math.round(0.04 / env.hop);   // bridge 60 ms dips, drop 40 ms clicks
+    for (let i = 0; i < mask.length;) {
+      let j = i; while (j < mask.length && mask[j] === mask[i]) j++;
+      if (!mask[i] && j - i <= fill && i > 0 && j < mask.length) for (let k = i; k < j; k++) mask[k] = true;
+      i = j;
+    }
+    for (let i = 0; i < mask.length;) {
+      let j = i; while (j < mask.length && mask[j] === mask[i]) j++;
+      if (mask[i] && j - i <= blip) for (let k = i; k < j; k++) mask[k] = false;
+      i = j;
+    }
+    return mask;
+  }
+
+  /* Pull each word's start/end onto the sound that is really there. Words keep their order and text. */
+  function refineWords(words, env) {
+    const mask = env && voicedMask(env);
+    if (!mask) return words;
+    const hop = env.hop, out = [];
+    for (const w of words || []) {
+      if (!ok(w)) { out.push(w); continue; }
+      const i0 = Math.max(0, Math.floor(w.start / hop)), i1 = Math.min(mask.length, Math.ceil(w.end / hop));
+      // sound runs inside the word. A short sliver glued to either edge is the NEIGHBOUR's tail or onset (20 ms analysis frames bleed), so ignore it.
+      const runs = [];
+      for (let i = i0; i < i1;) { if (!mask[i]) { i++; continue; } let j = i; while (j < i1 && mask[j]) j++; runs.push([i, j]); i = j; }
+      const solid = runs.filter(([a, b]) => !((a === i0 || b === i1) && b - a < 5));
+      const first = solid.length ? solid[0][0] : -1, last = solid.length ? solid[solid.length - 1][1] - 1 : -1;
+      let start = w.start, end = w.end;
+      if (first >= 0) {
+        const s2 = Math.max(0, first * hop - 0.03), e2 = (last + 1) * hop + 0.05;
+        if (s2 - start > 0.08) start = s2;                    // the word really starts later than reported
+        if (end - e2 > 0.08) end = e2;                        // the word really ends earlier: the rest is silence
+      }
+      if (end < start + 0.05) { start = w.start; end = w.end; }
+      out.push(Object.assign({}, w, { start: round(start), end: round(end) }));
+    }
+    return out;
+  }
+
   function round(n) { return Math.round(n * 1000) / 1000; }
-  const api = { makeTightCuts, snapClips, groupCaptionWords, applyWordFixes, highlight: false };
+  const api = { makeTightCuts, snapClips, groupCaptionWords, applyWordFixes, envelope, voicedMask, refineWords, highlight: false };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TIGHTEN = api;
 })(typeof window !== 'undefined' ? window : globalThis);
