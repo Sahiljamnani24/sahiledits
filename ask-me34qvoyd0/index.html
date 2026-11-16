@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Questions · Sahil Edits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{--bg:#0e0d0b;--card:#171613;--line:#2a2823;--text:#efe9df;--muted:#9c958a;--rec:#ff4a2b;--ok:#7fc79a;
+--serif:"Instrument Serif",Georgia,serif;--sans:"Inter Tight",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right)) 64px max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:22px}
+.top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.75rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.rec{display:inline-flex;gap:8px;align-items:center}.rec i{width:8px;height:8px;border-radius:50%;background:var(--rec)}
+h1{font-family:var(--serif);font-weight:400;font-size:2.8rem;line-height:1;margin:0}
+h1 em{color:var(--muted)}
+.sub{color:var(--muted);margin:8px 0 0}
+h2{font-family:var(--mono);font-weight:500;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.meta{font-family:var(--mono);font-size:.7rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;display:flex;gap:10px;flex-wrap:wrap}
+.q{font-family:var(--serif);font-size:1.7rem;line-height:1.15;margin:0;overflow-wrap:anywhere}
+.ctx{color:var(--muted);font-size:.95rem;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.opts{display:grid;gap:10px}
+button{font:inherit;font-weight:600;border:0;border-radius:10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.opt{min-height:56px;padding:14px 16px;background:var(--text);color:var(--bg);text-align:left;font-size:1.05rem;overflow-wrap:anywhere}
+.opt:active{transform:scale(.99)}
+.send{min-height:48px;padding:10px 18px;background:var(--rec);color:#fff}
+button:disabled{opacity:.45;cursor:default}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;font-size:16px;background:var(--bg);color:var(--text);min-height:84px;resize:vertical}
+textarea::placeholder{color:#6f695f}
+textarea:focus-visible,button:focus-visible{outline:2px solid var(--rec);outline-offset:2px}
+.row{display:flex;gap:10px;align-items:flex-end}
+.row textarea{flex:1}
+.done{opacity:.55}
+.done .q{font-size:1.35rem}
+.ans{font-weight:600;color:var(--ok)}
+.ans span{color:var(--text);font-weight:500}
+.sent{font-weight:600;color:var(--ok);font-size:1.05rem}
+.err{color:var(--rec);font-size:.9rem}
+.empty{color:var(--muted);text-align:center;padding:28px 0}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><span class="rec"><i></i>Questions</span><span id="count"></span></div>
+  <div>
+    <h1>Claude <em>asks</em></h1>
+    <p class="sub">Tap an answer. Or write your own.</p>
+  </div>
+  <section id="open" class="stack" style="display:flex;flex-direction:column;gap:16px"></section>
+  <section class="card" id="msgbox">
+    <div class="meta">Message to Claude</div>
+    <textarea id="msg" placeholder="Anything you want Claude to know or do"></textarea>
+    <div class="row" style="justify-content:flex-end"><button class="send" id="msgsend">Send</button></div>
+    <div id="msgstate"></div>
+  </section>
+  <h2 id="donehead" hidden>Answered</h2>
+  <section id="done" style="display:flex;flex-direction:column;gap:12px"></section>
+</main>
+<script>
+const TOPIC = "sahil-ans-86pwckswsg1hrg9i";
+const $ = s => document.querySelector(s);
+const store = {
+  get(){ try { return JSON.parse(localStorage.getItem("askSent") || "{}"); } catch(e){ return {}; } },
+  set(o){ try { localStorage.setItem("askSent", JSON.stringify(o)); } catch(e){} }
+};
+function el(tag, cls, text){ const e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; }
+function ago(t){ const d = new Date(t); if(isNaN(d)) return ""; const m = Math.round((Date.now()-d)/60000);
+  if(m < 1) return "just now"; if(m < 60) return m+" min ago"; const h = Math.round(m/60); if(h < 24) return h+" h ago";
+  return d.toLocaleDateString(undefined,{day:"numeric",month:"short"}); }
+
+async function post(qid, answer, text){
+  const body = JSON.stringify({qid, answer, text, time: new Date().toISOString()});
+  const r = await fetch("https://ntfy.sh/" + TOPIC, {method:"POST", body});
+  if(!r.ok) throw new Error("HTTP " + r.status);
+}
+
+function sentLine(card, label){
+  card.querySelectorAll("button,textarea").forEach(b => b.disabled = true);
+  const s = el("div","sent","Sent ✓  " + label);
+  card.appendChild(s);
+}
+
+function render(qs){
+  const sent = store.get();
+  const open = $("#open"), done = $("#done");
+  open.textContent = ""; done.textContent = "";
+  const openQs = qs.filter(q => !q.answered).sort((a,b) => (b.time||"").localeCompare(a.time||""));
+  const doneQs = qs.filter(q => q.answered).sort((a,b) => (b.answered.time||"").localeCompare(a.answered.time||""));
+  $("#count").textContent = openQs.length ? openQs.length + " open" : "all clear";
+  if(!openQs.length) open.appendChild(el("div","empty","No open questions right now."));
+  for(const q of openQs){
+    const c = el("article","card");
+    const m = el("div","meta"); if(q.from) m.appendChild(el("span",null,q.from)); m.appendChild(el("span",null,ago(q.time))); c.appendChild(m);
+    c.appendChild(el("p","q",q.question));
+    if(q.context) c.appendChild(el("p","ctx",q.context));
+    const opts = el("div","opts");
+    for(const o of (q.options||[])){
+      const b = el("button","opt",o);
+      b.onclick = () => send(c, q.id, o, "");
+      opts.appendChild(b);
+    }
+    c.appendChild(opts);
+    const row = el("div","row");
+    const ta = el("textarea"); ta.placeholder = "None of these / tell me more"; ta.rows = 2;
+    const sb = el("button","send","Send");
+    sb.onclick = () => { const t = ta.value.trim(); if(!t){ ta.focus(); return; } send(c, q.id, "other", t); };
+    row.appendChild(ta); row.appendChild(sb); c.appendChild(row);
+    if(sent[q.id]) sentLine(c, sent[q.id]);
+    open.appendChild(c);
+  }
+  $("#donehead").hidden = !doneQs.length;
+  for(const q of doneQs.slice(0,30)){
+    const c = el("article","card done");
+    const m = el("div","meta"); if(q.from) m.appendChild(el("span",null,q.from)); m.appendChild(el("span",null,ago(q.time))); c.appendChild(m);
+    c.appendChild(el("p","q",q.question));
+    const a = el("div","ans","Your answer: ");
+    const parts = [q.answered.answer && q.answered.answer !== "other" ? q.answered.answer : "", q.answered.text || ""].filter(Boolean).join(" — ");
+    a.appendChild(el("span",null,parts || "—")); c.appendChild(a);
+    done.appendChild(c);
+  }
+}
+
+async function send(card, qid, answer, text){
+  card.querySelectorAll("button,textarea").forEach(b => b.disabled = true);
+  const old = card.querySelector(".err"); if(old) old.remove();
+  try {
+    await post(qid, answer, text);
+    const label = answer === "other" ? "your note" : answer;
+    const s = store.get(); s[qid] = label; store.set(s);
+    sentLine(card, label);
+  } catch(e){
+    card.querySelectorAll("button,textarea").forEach(b => b.disabled = false);
+    card.appendChild(el("div","err","Did not send. Check internet and tap again."));
+  }
+}
+
+$("#msgsend").onclick = async () => {
+  const t = $("#msg").value.trim(); if(!t){ $("#msg").focus(); return; }
+  $("#msgsend").disabled = true; $("#msgstate").textContent = "";
+  try { await post("msg", "message", t); $("#msg").value = ""; $("#msgstate").className = "sent"; $("#msgstate").textContent = "Sent ✓"; }
+  catch(e){ $("#msgstate").className = "err"; $("#msgstate").textContent = "Did not send. Tap again."; }
+  $("#msgsend").disabled = false;
+};
+
+async function load(){
+  try {
+    const r = await fetch("questions.json?t=" + Date.now(), {cache:"no-store"});
+    const d = await r.json();
+    render(d.questions || []);
+  } catch(e){ $("#open").textContent = ""; $("#open").appendChild(el("div","empty","Could not load questions. Pull to refresh.")); }
+}
+load();
+</script>
+</body>
+</html>
