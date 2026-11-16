@@ -10,7 +10,12 @@
       ],
       "context": "Test only",
       "from": "ask page test",
-      "time": "2026-11-16T10:54:04+05:30"
+      "time": "2026-11-16T10:54:04+05:30",
+      "answered": {
+        "answer": "other",
+        "text": "curl test: none, bring tea",
+        "time": "2026-11-16T10:58:00+05:30"
+      }
     }
   ]
 }
