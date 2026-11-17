@@ -15,6 +15,18 @@
         "text": "Yeah do your research as much as possible and start on your own. Don't ask approval from me but I want you to do good research on this. What can convert",
         "time": "2026-11-17T15:51:34.296Z"
       }
+    },
+    {
+      "id": "q08ksto",
+      "kind": "choice",
+      "question": "TEST choice: tea or coffee?",
+      "context": "",
+      "from": "hub test",
+      "time": "2026-11-17T21:28:51+05:30",
+      "options": [
+        "Tea",
+        "Coffee"
+      ]
     }
   ]
 }
