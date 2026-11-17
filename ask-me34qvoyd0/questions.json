@@ -57,7 +57,12 @@
       "options": [
         "OK, send it",
         "No"
-      ]
+      ],
+      "answered": {
+        "answer": "OK, send it",
+        "text": "",
+        "time": "2026-11-17T16:21:58.044Z"
+      }
     }
   ]
 }
