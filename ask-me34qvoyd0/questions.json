@@ -40,6 +40,31 @@
         "OK, send it",
         "No"
       ]
+    },
+    {
+      "id": "qeqzi90",
+      "kind": "pick",
+      "question": "TEST pick: which?",
+      "context": "",
+      "from": "hub test",
+      "time": "2026-11-17T21:28:59+05:30",
+      "items": [
+        {
+          "type": "video",
+          "url": "m/qeqzi90/1.mp4",
+          "poster": "m/qeqzi90/1.jpg",
+          "label": "Bars"
+        },
+        {
+          "type": "image",
+          "url": "m/qeqzi90/2.jpg",
+          "label": "Orange"
+        }
+      ],
+      "options": [
+        "Bars",
+        "Orange"
+      ]
     }
   ]
 }
