@@ -3,77 +3,106 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="robots" content="noindex,nofollow">
+<meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="referrer" content="no-referrer">
-<title>Questions · Sahil Edits</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<meta name="theme-color" content="#0e0d0b">
+<title>Claude asks</title>
+<link rel="preconnect" href="https://ntfy.sh" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter+Tight:wght@400;600&display=swap">
 <style>
-:root{--bg:#0e0d0b;--card:#171613;--line:#2a2823;--text:#efe9df;--muted:#9c958a;--rec:#ff4a2b;--ok:#7fc79a;
---serif:"Instrument Serif",Georgia,serif;--sans:"Inter Tight",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;color-scheme:dark}
+:root{--bg:#0e0d0b;--card:#171613;--line:#2a2823;--text:#efe9df;--muted:#9c958a;--rec:#ff4a2b;--ok:#7fc79a;--no:#3a3732;
+--serif:"Instrument Serif",Georgia,serif;--sans:"Inter Tight",-apple-system,system-ui,sans-serif;--mono:ui-monospace,Menlo,monospace;color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{overflow-x:hidden}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%}
-.wrap{max-width:640px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right)) 64px max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:22px}
-.top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.75rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.wrap{max-width:640px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-right)) 64px max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:18px}
+.top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
 .rec{display:inline-flex;gap:8px;align-items:center}.rec i{width:8px;height:8px;border-radius:50%;background:var(--rec)}
-h1{font-family:var(--serif);font-weight:400;font-size:2.8rem;line-height:1;margin:0}
+.rec.clear i{background:var(--ok)}
+.refresh{background:none;color:var(--muted);font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;padding:8px 0 8px 12px;min-height:0}
+h1{font-family:var(--serif);font-weight:400;font-size:2.6rem;line-height:1;margin:0}
 h1 em{color:var(--muted)}
-.sub{color:var(--muted);margin:8px 0 0}
-h2{font-family:var(--mono);font-weight:500;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
+h2{font-family:var(--mono);font-weight:500;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:14px 0 0}
+.stack{display:flex;flex-direction:column;gap:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
-.meta{font-family:var(--mono);font-size:.7rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;display:flex;gap:10px;flex-wrap:wrap}
-.q{font-family:var(--serif);font-size:1.7rem;line-height:1.15;margin:0;overflow-wrap:anywhere}
+.meta{font-family:var(--mono);font-size:.68rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;display:flex;gap:10px;flex-wrap:wrap}
+.meta .kind{color:var(--rec)}
+.q{font-family:var(--serif);font-size:1.65rem;line-height:1.15;margin:0;overflow-wrap:anywhere}
 .ctx{color:var(--muted);font-size:.95rem;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.body{font-family:var(--sans);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.98rem;max-height:60vh;overflow-y:auto}
+.cut{color:var(--muted);font-size:.85rem}
 .opts{display:grid;gap:10px}
-button{font:inherit;font-weight:600;border:0;border-radius:10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.two{grid-template-columns:1fr 1fr}
+button{font:inherit;font-weight:600;border:0;border-radius:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;min-height:48px}
 .opt{min-height:56px;padding:14px 16px;background:var(--text);color:var(--bg);text-align:left;font-size:1.05rem;overflow-wrap:anywhere}
-.opt:active{transform:scale(.99)}
-.send{min-height:48px;padding:10px 18px;background:var(--rec);color:#fff}
+.opt.yes{background:var(--ok);color:#0b1a10;text-align:center}
+.opt.no{background:var(--no);color:var(--text);text-align:center}
+.opt:active,.send:active{transform:scale(.99)}
+.send{padding:10px 18px;background:var(--rec);color:#fff}
 button:disabled{opacity:.45;cursor:default}
-textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;font-size:16px;background:var(--bg);color:var(--text);min-height:84px;resize:vertical}
+textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;font-size:16px;background:var(--bg);color:var(--text);min-height:52px;resize:vertical}
+textarea.big{min-height:120px}
 textarea::placeholder{color:#6f695f}
 textarea:focus-visible,button:focus-visible{outline:2px solid var(--rec);outline-offset:2px}
 .row{display:flex;gap:10px;align-items:flex-end}
 .row textarea{flex:1}
-.done{opacity:.55}
-.done .q{font-size:1.35rem}
+.grid{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+.grid.one{grid-template-columns:1fr}
+.tile{display:flex;flex-direction:column;gap:8px;min-width:0}
+.tile img,.tile video{width:100%;border-radius:10px;background:#000;display:block;max-height:46vh;object-fit:contain}
+.tile a.lnk{display:flex;align-items:center;justify-content:center;min-height:90px;border:1px dashed var(--line);border-radius:10px;color:var(--text);text-decoration:none;padding:10px;overflow-wrap:anywhere;text-align:center}
+.tile .opt{margin-top:auto;text-align:center;min-height:50px;padding:10px}
+.done{opacity:.6}
+.done .q{font-size:1.3rem}
 .ans{font-weight:600;color:var(--ok)}
 .ans span{color:var(--text);font-weight:500}
+.change{align-self:flex-start;background:none;color:var(--muted);text-decoration:underline;padding:0;min-height:32px;font-weight:500}
 .sent{font-weight:600;color:var(--ok);font-size:1.05rem}
 .err{color:var(--rec);font-size:.9rem}
 .empty{color:var(--muted);text-align:center;padding:28px 0}
+details summary{cursor:pointer;color:var(--muted);font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;padding:6px 0}
 </style>
 </head>
 <body>
 <main class="wrap">
-  <div class="top"><span class="rec"><i></i>Questions</span><span id="count"></span></div>
-  <div>
-    <h1>Claude <em>asks</em></h1>
-    <p class="sub">Tap an answer. Or write your own.</p>
-  </div>
-  <section id="open" class="stack" style="display:flex;flex-direction:column;gap:16px"></section>
-  <section class="card" id="msgbox">
-    <div class="meta">Message to Claude</div>
+  <div class="top"><span class="rec" id="status"><i></i><span id="count">Loading</span></span><button class="refresh" id="refresh">Refresh</button></div>
+  <h1>Claude <em>asks</em></h1>
+  <section id="open" class="stack"></section>
+  <details class="card" id="msgbox">
+    <summary>Message to Claude</summary>
     <textarea id="msg" placeholder="Anything you want Claude to know or do"></textarea>
-    <div class="row" style="justify-content:flex-end"><button class="send" id="msgsend">Send</button></div>
+    <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="send" id="msgsend">Send</button></div>
     <div id="msgstate"></div>
-  </section>
+  </details>
   <h2 id="donehead" hidden>Answered</h2>
-  <section id="done" style="display:flex;flex-direction:column;gap:12px"></section>
+  <section id="done" class="stack"></section>
 </main>
 <script>
-const TOPIC = "sahil-ans-86pwckswsg1hrg9i";
+const TOPIC = "sahil-ans-86pwckswsg1hrg9i", QTOPIC = "sahil-q-xgxl06hfhjdsxh2l";
 const $ = s => document.querySelector(s);
 const store = {
-  get(){ try { return JSON.parse(localStorage.getItem("askSent") || "{}"); } catch(e){ return {}; } },
-  set(o){ try { localStorage.setItem("askSent", JSON.stringify(o)); } catch(e){} }
+  get(){ try { return JSON.parse(localStorage.getItem("askSent2") || "{}"); } catch(e){ return {}; } },
+  set(o){ try { localStorage.setItem("askSent2", JSON.stringify(o)); } catch(e){} }
 };
+const reopen = new Set();
+let lastQs = [], drafting = false;
 function el(tag, cls, text){ const e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; }
-function ago(t){ const d = new Date(t); if(isNaN(d)) return ""; const m = Math.round((Date.now()-d)/60000);
+function ts(t){ const d = new Date(t); return isNaN(d) ? 0 : d.getTime(); }
+function ago(t){ const v = ts(t); if(!v) return ""; const m = Math.round((Date.now()-v)/60000);
   if(m < 1) return "just now"; if(m < 60) return m+" min ago"; const h = Math.round(m/60); if(h < 24) return h+" h ago";
-  return d.toLocaleDateString(undefined,{day:"numeric",month:"short"}); }
+  return new Date(v).toLocaleDateString(undefined,{day:"numeric",month:"short"}); }
+function safeUrl(u){ return /^https:\/\//.test(u) || /^m\/[\w\-\/.]+$/.test(u) ? u : ""; }
+function ansText(a){ return [a.answer && !["other","text","message"].includes(a.answer) ? a.answer : "", a.text || ""].filter(Boolean).join(" — ") || "—"; }
+
+async function ntfy(topic){
+  try {
+    const r = await fetch("https://ntfy.sh/" + topic + "/json?poll=1&since=12h", {cache:"no-store"});
+    if(!r.ok) return [];
+    return (await r.text()).split("\n").filter(Boolean).map(l => { try { return JSON.parse(l); } catch(e){ return null; } })
+      .filter(m => m && m.event === "message").map(m => { try { return JSON.parse(m.message); } catch(e){ return null; } }).filter(Boolean);
+  } catch(e){ return []; }
+}
 
 async function post(qid, answer, text){
   const body = JSON.stringify({qid, answer, text, time: new Date().toISOString()});
@@ -81,64 +110,130 @@ async function post(qid, answer, text){
   if(!r.ok) throw new Error("HTTP " + r.status);
 }
 
-function sentLine(card, label){
-  card.querySelectorAll("button,textarea").forEach(b => b.disabled = true);
-  const s = el("div","sent","Sent ✓  " + label);
-  card.appendChild(s);
+function lock(card, on){ card.querySelectorAll("button:not(.change),textarea").forEach(b => b.disabled = on); }
+
+async function send(card, q, answer, text){
+  lock(card, true);
+  const old = card.querySelector(".err"); if(old) old.remove();
+  try {
+    await post(q.id, answer, text);
+    const s = store.get(); s[q.id] = {answer, text, time: new Date().toISOString()}; store.set(s);
+    reopen.delete(q.id);
+    card.appendChild(el("div","sent","Sent ✓  " + ansText({answer, text})));
+    setTimeout(() => render(lastQs), 900);
+  } catch(e){
+    lock(card, false);
+    card.appendChild(el("div","err","Did not send. Check internet and tap again."));
+  }
+}
+
+function otherBox(card, q, placeholder, big){
+  const row = el("div","row");
+  const ta = el("textarea", big ? "big" : null); ta.placeholder = placeholder; ta.rows = big ? 4 : 2;
+  ta.addEventListener("focus", () => drafting = true); ta.addEventListener("blur", () => drafting = false);
+  const sb = el("button","send","Send");
+  sb.onclick = () => { const t = ta.value.trim(); if(!t){ ta.focus(); return; } send(card, q, q.kind === "text" ? "text" : "other", t); };
+  row.appendChild(ta); row.appendChild(sb); return row;
+}
+
+function meta(q){
+  const m = el("div","meta");
+  const k = {ok:"OK to send?", pick:"Pick one", text:"Write back"}[q.kind];
+  if(k) m.appendChild(el("span","kind",k));
+  if(q.from) m.appendChild(el("span",null,q.from));
+  m.appendChild(el("span",null,ago(q.time)));
+  return m;
+}
+
+function openCard(q){
+  const c = el("article","card");
+  c.appendChild(meta(q));
+  c.appendChild(el("p","q",q.question));
+  if(q.context) c.appendChild(el("p","ctx",q.context));
+  if(q.answered) c.appendChild(el("div","ans","Before you said: " + ansText(q.answered)));
+  const kind = q.kind || "choice";
+  if(kind === "ok"){
+    c.appendChild(el("pre","body",q.body || ""));
+    if(q.cut) c.appendChild(el("div","cut","Full text loads in a minute. Pull to refresh."));
+    const o = el("div","opts two");
+    const [yes, no] = q.options && q.options.length === 2 ? q.options : ["OK, send it","No"];
+    const by = el("button","opt yes",yes); by.onclick = () => send(c, q, yes, "");
+    const bn = el("button","opt no",no); bn.onclick = () => send(c, q, no, "");
+    o.appendChild(by); o.appendChild(bn); c.appendChild(o);
+    c.appendChild(otherBox(c, q, "Change it: say what to change"));
+  } else if(kind === "pick"){
+    const items = q.items || [];
+    const g = el("div", items.length < 2 ? "grid one" : "grid");
+    for(const it of items){
+      const t = el("div","tile"); const u = safeUrl(it.url || "");
+      if(it.type === "image" && u){ const a = document.createElement("a"); a.href = u; a.target = "_blank"; a.rel = "noopener";
+        const im = document.createElement("img"); im.src = u; im.loading = "lazy"; im.alt = it.label || ""; a.appendChild(im); t.appendChild(a); }
+      else if(it.type === "video" && u){ const v = document.createElement("video"); v.src = u; v.controls = true; v.playsInline = true; v.preload = "metadata";
+        const p = safeUrl(it.poster || ""); if(p) v.poster = p; t.appendChild(v); }
+      else if(u){ const a = el("a","lnk","Open " + (it.label || "link") + " ↗"); a.href = u; a.target = "_blank"; a.rel = "noopener"; t.appendChild(a); }
+      const b = el("button","opt","Pick " + it.label); b.onclick = () => send(c, q, it.label, "");
+      t.appendChild(b); g.appendChild(t);
+    }
+    c.appendChild(g);
+    c.appendChild(otherBox(c, q, "None of these / tell me more"));
+  } else if(kind === "text"){
+    c.appendChild(otherBox(c, q, "Type your answer", true));
+  } else {
+    const o = el("div","opts");
+    for(const opt of (q.options||[])){ const b = el("button","opt",opt); b.onclick = () => send(c, q, opt, ""); o.appendChild(b); }
+    c.appendChild(o);
+    c.appendChild(otherBox(c, q, "None of these / tell me more"));
+  }
+  if(q.answered){ const x = el("button","change","Cancel"); x.onclick = () => { reopen.delete(q.id); render(lastQs); }; c.appendChild(x); }
+  return c;
+}
+
+function doneCard(q){
+  const c = el("article","card done");
+  c.appendChild(meta(q));
+  c.appendChild(el("p","q",q.question));
+  const a = el("div","ans","Your answer: "); a.appendChild(el("span",null,ansText(q.answered))); c.appendChild(a);
+  const ch = el("button","change","Change answer"); ch.onclick = () => { reopen.add(q.id); render(lastQs); window.scrollTo({top:0,behavior:"smooth"}); };
+  c.appendChild(ch);
+  return c;
 }
 
 function render(qs){
+  lastQs = qs;
   const sent = store.get();
+  for(const q of qs){ const s = sent[q.id]; if(s && (!q.answered || ts(s.time) > ts(q.answered.time))) q.answered = s; }
   const open = $("#open"), done = $("#done");
   open.textContent = ""; done.textContent = "";
-  const openQs = qs.filter(q => !q.answered).sort((a,b) => (b.time||"").localeCompare(a.time||""));
-  const doneQs = qs.filter(q => q.answered).sort((a,b) => (b.answered.time||"").localeCompare(a.answered.time||""));
-  $("#count").textContent = openQs.length ? openQs.length + " open" : "all clear";
-  if(!openQs.length) open.appendChild(el("div","empty","No open questions right now."));
-  for(const q of openQs){
-    const c = el("article","card");
-    const m = el("div","meta"); if(q.from) m.appendChild(el("span",null,q.from)); m.appendChild(el("span",null,ago(q.time))); c.appendChild(m);
-    c.appendChild(el("p","q",q.question));
-    if(q.context) c.appendChild(el("p","ctx",q.context));
-    const opts = el("div","opts");
-    for(const o of (q.options||[])){
-      const b = el("button","opt",o);
-      b.onclick = () => send(c, q.id, o, "");
-      opts.appendChild(b);
-    }
-    c.appendChild(opts);
-    const row = el("div","row");
-    const ta = el("textarea"); ta.placeholder = "None of these / tell me more"; ta.rows = 2;
-    const sb = el("button","send","Send");
-    sb.onclick = () => { const t = ta.value.trim(); if(!t){ ta.focus(); return; } send(c, q.id, "other", t); };
-    row.appendChild(ta); row.appendChild(sb); c.appendChild(row);
-    if(sent[q.id]) sentLine(c, sent[q.id]);
-    open.appendChild(c);
-  }
+  const openQs = qs.filter(q => !q.answered || reopen.has(q.id)).sort((a,b) => ts(b.time) - ts(a.time));
+  const doneQs = qs.filter(q => q.answered && !reopen.has(q.id)).sort((a,b) => ts(b.answered.time) - ts(a.answered.time));
+  const n = qs.filter(q => !q.answered).length;
+  $("#count").textContent = n ? n + " open" : "All clear";
+  $("#status").classList.toggle("clear", !n);
+  document.title = n ? "(" + n + ") Claude asks" : "Claude asks";
+  if(!openQs.length) open.appendChild(el("div","empty","Nothing to answer right now."));
+  for(const q of openQs) open.appendChild(openCard(q));
   $("#donehead").hidden = !doneQs.length;
-  for(const q of doneQs.slice(0,30)){
-    const c = el("article","card done");
-    const m = el("div","meta"); if(q.from) m.appendChild(el("span",null,q.from)); m.appendChild(el("span",null,ago(q.time))); c.appendChild(m);
-    c.appendChild(el("p","q",q.question));
-    const a = el("div","ans","Your answer: ");
-    const parts = [q.answered.answer && q.answered.answer !== "other" ? q.answered.answer : "", q.answered.text || ""].filter(Boolean).join(" — ");
-    a.appendChild(el("span",null,parts || "—")); c.appendChild(a);
-    done.appendChild(c);
-  }
+  for(const q of doneQs.slice(0,30)) done.appendChild(doneCard(q));
 }
 
-async function send(card, qid, answer, text){
-  card.querySelectorAll("button,textarea").forEach(b => b.disabled = true);
-  const old = card.querySelector(".err"); if(old) old.remove();
-  try {
-    await post(qid, answer, text);
-    const label = answer === "other" ? "your note" : answer;
-    const s = store.get(); s[qid] = label; store.set(s);
-    sentLine(card, label);
-  } catch(e){
-    card.querySelectorAll("button,textarea").forEach(b => b.disabled = false);
-    card.appendChild(el("div","err","Did not send. Check internet and tap again."));
+async function load(force){
+  if(drafting && !force) return;
+  const live = Promise.all([ntfy(QTOPIC), ntfy(TOPIC)]);
+  const base = await fetch("questions.json?t=" + Date.now(), {cache:"no-store"}).then(r => r.json()).catch(() => null);
+  if(base && !lastQs.length) render(JSON.parse(JSON.stringify(base.questions || [])));  // show the saved list at once
+  const [qev, aev] = await live;
+  if(drafting && !force) return;
+  if(!base && !qev.length){ $("#open").textContent = ""; $("#open").appendChild(el("div","empty","Could not load. Tap Refresh.")); return; }
+  const byId = new Map(((base && base.questions) || []).map(q => [q.id, q]));
+  for(const e of qev){
+    if(e.t === "q" && e.q && e.q.id && !byId.has(e.q.id)) byId.set(e.q.id, e.q);
+    if(e.t === "del" && Array.isArray(e.ids)) e.ids.forEach(id => byId.delete(id));
   }
+  for(const a of aev){
+    const q = byId.get(a.qid); if(!q) continue;
+    if(!q.answered || ts(a.time) > ts(q.answered.time)) q.answered = {answer:a.answer, text:a.text, time:a.time};
+  }
+  render([...byId.values()]);
 }
 
 $("#msgsend").onclick = async () => {
@@ -148,15 +243,10 @@ $("#msgsend").onclick = async () => {
   catch(e){ $("#msgstate").className = "err"; $("#msgstate").textContent = "Did not send. Tap again."; }
   $("#msgsend").disabled = false;
 };
-
-async function load(){
-  try {
-    const r = await fetch("questions.json?t=" + Date.now(), {cache:"no-store"});
-    const d = await r.json();
-    render(d.questions || []);
-  } catch(e){ $("#open").textContent = ""; $("#open").appendChild(el("div","empty","Could not load questions. Pull to refresh.")); }
-}
-load();
+$("#refresh").onclick = () => load(true);
+document.addEventListener("visibilitychange", () => { if(!document.hidden) load(); });
+setInterval(() => { if(!document.hidden) load(); }, 30000);
+load(true);
 </script>
 </body>
 </html>
