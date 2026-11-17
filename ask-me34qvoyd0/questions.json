@@ -32,6 +32,19 @@
         "text": "",
         "time": "2026-11-17T16:05:10.047Z"
       }
+    },
+    {
+      "id": "qno0wrl",
+      "kind": "choice",
+      "question": "Post these 7 old reels on YouTube Shorts?",
+      "context": "These are NOT new reels. They are your 4-11 Nov reels, already live on Instagram, but never put on YouTube. Same final files (latest version).\n1. Norway (IG 5 Nov): every Norwegian owns Rs 3.5 crore. YT 18 Nov 9:00\n2. AI shopping (IG 9 Nov): AI did the bargaining for 69 people. YT 18 Nov 12:00\n3. China (IG 6 Nov): already on YouTube twice, so I removed it\n4. One-person company (IG 10 Nov): Anthropic bought a 1-person company. YT 18 Nov 18:00\n5. Singapore (IG 8 Nov): tiny island now earns 36x India. YT 19 Nov 9:00\n6. AI safety (IG 4 Nov): AI passes a doctor exam, cannot fix a tap. YT 19 Nov 12:00\n7. Rupee (IG 7 Nov): was $1 ever Rs 1? YT 19 Nov 15:00\n8. UPI (IG 11 Nov): who owns UPI. YT 19 Nov 18:00\nTo pick: tap \"Let me pick\" and type the numbers to keep.",
+      "from": "YouTube queue",
+      "time": "2026-11-17T21:40:03+05:30",
+      "options": [
+        "Keep all 7",
+        "Let me pick",
+        "Remove all"
+      ]
     }
   ]
 }
