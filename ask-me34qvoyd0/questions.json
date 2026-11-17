@@ -27,6 +27,19 @@
         "Tea",
         "Coffee"
       ]
+    },
+    {
+      "id": "q5d6es1",
+      "kind": "ok",
+      "question": "TEST ok: send this?",
+      "context": "",
+      "from": "hub test",
+      "time": "2026-11-17T21:28:55+05:30",
+      "body": "Hi Mark,\nTest body line 2.",
+      "options": [
+        "OK, send it",
+        "No"
+      ]
     }
   ]
 }
