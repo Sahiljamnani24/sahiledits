@@ -15,6 +15,18 @@
         "text": "Yeah do your research as much as possible and start on your own. Don't ask approval from me but I want you to do good research on this. What can convert",
         "time": "2026-11-17T15:51:34.296Z"
       }
+    },
+    {
+      "id": "qexw35o",
+      "kind": "choice",
+      "question": "New question page: does it work on your phone?",
+      "context": "From now on every Claude question comes here. Tap an answer. Answered ones drop to the bottom, and you can change them.",
+      "from": "ask page",
+      "time": "2026-11-17T21:31:10+05:30",
+      "options": [
+        "Yes, works",
+        "Something is off"
+      ]
     }
   ]
 }
