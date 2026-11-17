@@ -44,7 +44,12 @@
         "Keep all 7",
         "Let me pick",
         "Remove all"
-      ]
+      ],
+      "answered": {
+        "answer": "other",
+        "text": "A fitted fit hasn't been posted. I want you to post that",
+        "time": "2026-11-17T16:22:50.993Z"
+      }
     },
     {
       "id": "qit6yba",
