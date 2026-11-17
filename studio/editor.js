@@ -1,6 +1,6 @@
 'use strict';
 const $=s=>document.querySelector(s), messages=$('#messages'), input=$('#chatInput'), video=$('#video'), caption=$('#caption'), file=$('#file'), status=$('#exportStatus');
-let objectUrl=null, captionSize=23, zooms=[], audioContext=null, audioSource=null, recording=false, timedCaptions=[], manualCaption='', wordTimes=[], cuts=[], brollClips=[], aiCards=[], audioEnv=null, aiMood=null, aiBroll=[], titleGraphic=null, editClips=[], editIndex=0, editFinished=false;
+let objectUrl=null, captionSize=23, zooms=[], audioContext=null, audioSource=null, recording=false, timedCaptions=[], manualCaption='', wordTimes=[], cuts=[], brollClips=[], aiCards=[], audioEnv=null, aiMood=null, aiBroll=[], titleGraphic=null, editClips=[], editIndex=0, editFinished=false, lastAgentPlan=null;
 function say(text,user=false){const row=document.createElement('div');row.className='message-row'+(user?' userrow':'');if(!user){let icon=document.createElement('div');icon.className='avatar';icon.setAttribute('aria-hidden','true');icon.textContent='✳';row.append(icon)}let bubble=document.createElement('div');bubble.className='bubble';bubble.textContent=text;row.append(bubble);messages.append(row);row.scrollIntoView({block:'nearest',behavior:'smooth'})}
 function isZoomAt(time){return zooms.some(z=>time>=z.start&&time<z.end)}
 function captionAt(time){if(timedCaptions.length){const group=timedCaptions.find(c=>time>=c.start&&time<c.end);return group?group.text:''}return manualCaption}
@@ -31,10 +31,10 @@ else if(/zoom/i.test(text)&&time!==null){if(!file.files[0]||!Number.isFinite(vid
 else { askAI(text); return }
 say(reply)}
 let aiBusy=false;
-async function askAI(instruction){return makePlan(instruction)}
+async function askAI(instruction){return lastAgentPlan?revisePlan(instruction):makePlan(instruction)}
 $('#saveRef').onclick=()=>{let value=$('#ref').value.trim();try{let url=new URL(value),host=url.hostname.toLowerCase();if(!['instagram.com','www.instagram.com'].includes(host)||!/^\/reel\/[a-z0-9_-]+\/?$/i.test(url.pathname))throw Error();$('#refStatus').classList.add('attached');$('#refStatus').textContent='Reference link added for this session. Style analysis is not connected yet.';say('Reference link added. Automatic style analysis is not available yet.')}catch{$('#refStatus').classList.remove('attached');$('#refStatus').textContent='Please enter a complete Instagram Reel link, such as https://www.instagram.com/reel/…'}};
 $('#choose').onclick=()=>file.click();
-file.onchange=()=>{const f=file.files[0];if(!f)return;clearBroll();if(f.size>50*1024*1024){say('This test accepts files up to 50 MB. Please choose a smaller file.');file.value='';$('#exportVideo').disabled=true;$('#transcribe').disabled=true;video.removeAttribute('src');video.classList.add('hidden');$('#empty').classList.remove('hidden');$('#fileStatus').textContent='Choose a smaller video';return}if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=URL.createObjectURL(f);video.src=objectUrl;video.classList.remove('hidden');$('#empty').classList.add('hidden');$('#fileStatus').textContent='Loading '+f.name;$('#choose').textContent='↥  Replace video';$('#exportVideo').disabled=true;$('#transcribe').disabled=true;zooms=[];cuts=[];editClips=[];editIndex=0;editFinished=false;wordTimes=[];timedCaptions=[];manualCaption='';titleGraphic=null;$('#graphicTitle').style.opacity='0';$('#trimPauses').disabled=true;$('#trimPauses').textContent='Remove long pauses';caption.textContent='';status.textContent='';$('#transcribeStatus').textContent='';};
+file.onchange=()=>{const f=file.files[0];if(!f)return;clearBroll();if(f.size>50*1024*1024){say('This test accepts files up to 50 MB. Please choose a smaller file.');file.value='';$('#exportVideo').disabled=true;$('#transcribe').disabled=true;video.removeAttribute('src');video.classList.add('hidden');$('#empty').classList.remove('hidden');$('#fileStatus').textContent='Choose a smaller video';return}if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=URL.createObjectURL(f);video.src=objectUrl;video.classList.remove('hidden');$('#empty').classList.add('hidden');$('#fileStatus').textContent='Loading '+f.name;$('#choose').textContent='↥  Replace video';$('#exportVideo').disabled=true;$('#transcribe').disabled=true;zooms=[];cuts=[];editClips=[];editIndex=0;editFinished=false;lastAgentPlan=null;$('#steerBox').classList.add('hidden');wordTimes=[];timedCaptions=[];manualCaption='';titleGraphic=null;$('#graphicTitle').style.opacity='0';$('#trimPauses').disabled=true;$('#trimPauses').textContent='Remove long pauses';caption.textContent='';status.textContent='';$('#transcribeStatus').textContent='';};
 video.addEventListener('loadedmetadata',()=>{if(!Number.isFinite(video.duration)||video.duration<=0||video.duration>120){say('For this first test, please use a video up to 2 minutes long.');$('#fileStatus').textContent='Choose a shorter video';$('#exportVideo').disabled=true;$('#transcribe').disabled=true;return}$('#fileStatus').textContent=file.files[0].name+' · ready for editing';$('#fileStatus').classList.add('attached');$('#exportVideo').disabled=false;$('#transcribe').disabled=false;say(`Your ${fmt(video.duration)} video is ready. Try “zoom at 5 seconds”, then play the video to see it.`)});
 video.addEventListener('error',()=>{if(video.src){$('#exportVideo').disabled=true;$('#transcribe').disabled=true;say('Chrome could not open that video. Please try an MP4 or WebM video.')}});
 $('#chatForm').onsubmit=e=>{e.preventDefault();run(input.value);input.value=''};document.querySelectorAll('[data-prompt]').forEach(button=>button.onclick=()=>run(button.dataset.prompt));
@@ -80,6 +80,60 @@ async function analyzeVideo(selected,kind){
 function clearBroll(){for(const c of brollClips){if(c.kind!=='image')c.media.pause();c.media.removeAttribute('src');if(c.kind!=='image')c.media.load();c.media.remove()}brollClips=[]}
 async function findBroll(suggestions){if(!Array.isArray(suggestions)||!suggestions.length)return;const response=await fetch('https://fetxqnenytrfxtpzmbru.supabase.co/functions/v1/sahil-broll',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_E3uLCBXf8LWHwUHC4wpsdQ_J_OfjtVI'},body:JSON.stringify({queries:suggestions.map(s=>s.query)}),signal:AbortSignal.timeout(25000)});const data=await response.json();if(!response.ok)throw Error(data.error||'Stock search failed.');clearBroll();for(let i=0;i<suggestions.length;i++){const candidate=data.searches?.[i]?.videos?.[0],segment=suggestions[i];if(!candidate||!Number.isFinite(segment.start)||!Number.isFinite(segment.end)||segment.start<0||segment.end<=segment.start||segment.end>video.duration)continue;let mediaUrl,sourceUrl;try{mediaUrl=new URL(candidate.url);sourceUrl=new URL(candidate.source)}catch{continue}if(mediaUrl.protocol!=='https:'||!mediaUrl.hostname.endsWith('.pexels.com')||sourceUrl.protocol!=='https:'||!sourceUrl.hostname.endsWith('.pexels.com'))continue;const media=document.createElement('video');media.crossOrigin='anonymous';media.muted=true;media.playsInline=true;media.preload='auto';media.src=mediaUrl.href;Object.assign(media.style,{position:'absolute',inset:'0',width:'100%',height:'100%',objectFit:'cover',zIndex:'2',pointerEvents:'none',display:'none'});video.parentElement.insertBefore(media,caption);brollClips.push({start:segment.start,end:segment.end,media});const credit=document.createElement('a');credit.href=sourceUrl.href;credit.target='_blank';credit.rel='noopener noreferrer';credit.textContent='Video by '+candidate.creator+' on Pexels · '+fmt(segment.start);credit.className='small';messages.append(credit)}if(brollClips.length)say('Added '+brollClips.length+' suggested stock clip(s) to the preview. Review each match and the exported result.');else say('No matching stock clips were found.')}
 async function findImages(suggestions){const response=await fetch('https://fetxqnenytrfxtpzmbru.supabase.co/functions/v1/sahil-images',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_E3uLCBXf8LWHwUHC4wpsdQ_J_OfjtVI'},body:JSON.stringify({queries:suggestions.map(s=>s.query)}),signal:AbortSignal.timeout(25000)});const data=await response.json();if(!response.ok)throw Error(data.error||'Image search failed.');clearBroll();for(let i=0;i<suggestions.length;i++){const c=data.searches?.[i]?.images?.[0],s=suggestions[i];if(!c||!Number.isFinite(s.start)||!Number.isFinite(s.end)||s.start<0||s.end<=s.start||s.end>video.duration)continue;let url,source;try{url=new URL(c.url);source=new URL(c.source)}catch{continue}if(url.protocol!=='https:'||!url.hostname.endsWith('.wikimedia.org')||source.protocol!=='https:'||source.hostname!=='commons.wikimedia.org')continue;const media=document.createElement('img');media.crossOrigin='anonymous';media.alt='';media.src=url.href;Object.assign(media.style,{position:'absolute',left:'0',top:'0',width:'100%',height:'44%',objectFit:'contain',background:'#eeece5',borderBottom:'3px solid #d9fa29',zIndex:'2',pointerEvents:'none',display:'none'});video.parentElement.insertBefore(media,caption);brollClips.push({start:s.start,end:s.end,media,kind:'image'});const credit=document.createElement('a');credit.href=source.href;credit.target='_blank';credit.rel='noopener noreferrer';credit.className='small';credit.textContent=c.title+' · '+c.license+' · Wikimedia Commons · '+fmt(s.start);messages.append(credit)}if(brollClips.length)say('Added '+brollClips.length+' suggested images to the preview. Review each match and the exported result.');else say('No matching public-domain images were found.')}
+/* Puts a plan on the page: cuts, captions, cards, zooms, hook. mode: undefined = planner-v2 plan, 'agent' = first cut of the smart editor, 'revise' = a steered cut. */
+function installPlan(plan,mode){
+  const agent=!!mode;
+  if(agent&&Array.isArray(plan.clips))plan.clips=plan.clips.map(c=>({start:c.start,end:Math.min(c.end,video.duration)}));
+  if(!Array.isArray(plan.clips)||!plan.clips.every(c=>Number.isFinite(c.start)&&Number.isFinite(c.end)&&c.start>=0&&c.end>c.start&&c.end<=video.duration))throw Error('The AI returned an invalid plan.');
+  if(Array.isArray(plan.zooms)&&plan.zooms.every(z=>Number.isFinite(z.start)&&Number.isFinite(z.end)&&z.start>=0&&z.end>z.start&&z.end<=video.duration&&z.end-z.start<=5)){zooms=plan.zooms;drawPreview()}else if(agent)zooms=[];
+  if(!plan.clips.length)throw Error('The editor returned no usable sections.');aiCards=Array.isArray(plan.cards)?plan.cards:[];aiMood=typeof plan.musicMood==='string'?plan.musicMood:null;aiBroll=Array.isArray(plan.broll)?plan.broll:[];video.pause();
+  /* the smart editor sends ONE word list (the page's words plus every retake it heard); its captionFixes and cards count words in that list */
+  if(agent&&AGENTCLIENT.validWords(plan.words,video.duration)){wordTimes=plan.words.map(w=>Object.assign({},w));timedCaptions=TIGHTEN.groupCaptionWords(wordTimes,{duration:video.duration})}
+  if(Array.isArray(plan.captionFixes)&&plan.captionFixes.length){wordTimes=TIGHTEN.applyWordFixes(wordTimes,plan.captionFixes);timedCaptions=TIGHTEN.groupCaptionWords(wordTimes,{duration:video.duration})}
+  const snappedClips=TIGHTEN.snapClips(plan.clips,wordTimes,video.duration);editClips=(snappedClips.length?snappedClips:plan.clips).map(c=>({start:c.start,end:c.end}));editIndex=0;editFinished=false;cuts=makePauseCuts(wordTimes);video.currentTime=editClips[0].start;
+  if(typeof plan.hook==='string'&&plan.hook.trim()){titleGraphic={text:plan.hook.trim().slice(0,75),start:editClips[0].start,end:Math.min(editClips[0].end,editClips[0].start+3.5)}}drawPreview();
+  const keptSeconds=editClips.reduce((sum,c)=>sum+c.end-c.start,0);
+  const warn=!agent&&keptSeconds<video.duration*.4?' Warning: the AI selected only '+fmt(keptSeconds)+' from '+fmt(video.duration)+' of footage; check that important parts of the story were not removed.':'';
+  if(mode==='agent')say('Your first cut is ready ('+fmt(keptSeconds)+'). '+(plan.explanation||'')+' Play the preview to review it. Captions, a hook title'+(aiCards.length?', '+aiCards.length+' graphic card'+(aiCards.length===1?'':'s'):'')+' and selected zooms are included; music is not added yet. Use the box under the preview to steer it, for example “punchier”.'+warn);
+  else if(mode==='revise')say('Updated ('+fmt(keptSeconds)+'). '+(plan.explanation||'')+' Play the preview to check it.'+warn);
+  else say('Your first cut is ready. Play the preview to review the selected sections. Captions, a hook title and selected zooms are included. Music and advanced graphics are not yet added.'+warn);
+}
+function agentProgress(note,started){let last='Starting';const show=()=>{note.textContent='Smart editor: '+last+' · '+Math.floor((Date.now()-started)/1000)+'s'};const timer=setInterval(show,1000);show();return{set:t=>{last=t;show()},stop:()=>clearInterval(timer)}}
+function agentMeta(selected,instruction){const m={name:selected.name,duration:video.duration,words:wordTimes.map(w=>({word:w.word,start:w.start,end:w.end})),brief:instruction||''};if(!(selected.size<=AGENTCLIENT.MAX_VIDEO)){const e=AGENTCLIENT.envelopePayload(audioEnv);if(e)m.envelope=e}return m}
+/* One click: the smart editor service (retake removal, checks at every cut). Returns true when a plan was applied; false means "use the quick planner". */
+async function tryAgent(selected,instruction){
+  if(!window.AGENTCLIENT||AGENTCLIENT.disabled())return false;
+  const note=$('#transcribeStatus'),prog=agentProgress(note,Date.now());
+  say('The smart editor is cutting your video: it removes retakes, tightens pauses and checks every cut. This usually takes about a minute.');
+  let plan;
+  try{
+    plan=await AGENTCLIENT.edit({meta:agentMeta(selected,instruction),video:selected.size<=AGENTCLIENT.MAX_VIDEO?selected:null,onProgress:prog.set});
+    if(!AGENTCLIENT.validPlan(plan,video.duration+0.05))throw Error('The smart editor returned an invalid plan.');
+  }catch(e){prog.stop();note.textContent='Smart editor unavailable; using the quick planner.';say('The smart editor did not finish ('+(e.message||'error')+'). I will use the quick planner instead.');return false}
+  prog.stop();
+  if(file.files[0]!==selected){say('Your video changed, so I discarded the plan.');return true}
+  installPlan(plan,'agent');lastAgentPlan=plan;$('#steerBox').classList.remove('hidden');note.textContent='Edit plan ready.';
+  if(Array.isArray(plan.broll)&&plan.broll.length){say('Looking for relevant public-domain images…');try{await findImages(plan.broll)}catch(error){say('Image search was unavailable; the first cut is still ready.')}}
+  return true;
+}
+/* "punchier", "cut the pauses more", "remove the part about X": the service re-cuts the previous plan and the page applies the new one. A failure keeps the current edit. */
+async function revisePlan(instruction){
+  instruction=String(instruction||'').trim();if(!instruction)return;
+  if(aiBusy){say('Please wait for the current edit request to finish.');return}
+  const selected=file.files[0];
+  if(!selected||!lastAgentPlan||!Number.isFinite(video.duration)){say('Make the first cut first, then steer it.');return}
+  aiBusy=true;$('#planVideo').disabled=true;$('#steerBtn').disabled=true;say(instruction,true);
+  const note=$('#transcribeStatus'),prog=agentProgress(note,Date.now());
+  try{
+    const meta={name:selected.name,duration:video.duration,words:lastAgentPlan.words,instruction:instruction.slice(0,1000),plan:AGENTCLIENT.planForRevision(lastAgentPlan)};
+    if(!(selected.size<=AGENTCLIENT.MAX_VIDEO)){const e=AGENTCLIENT.envelopePayload(audioEnv);if(e)meta.envelope=e}
+    const plan=await AGENTCLIENT.revise({meta,video:selected.size<=AGENTCLIENT.MAX_VIDEO?selected:null,onProgress:prog.set});
+    if(!AGENTCLIENT.validPlan(plan,video.duration+0.05))throw Error('The smart editor returned an invalid plan.');
+    if(file.files[0]!==selected){say('Your video changed, so I discarded the revision.');return}
+    installPlan(plan,'revise');lastAgentPlan=plan;note.textContent='Revision ready.';
+  }catch(e){note.textContent='The revision did not finish.';say('The revision did not finish ('+(e.message||'error')+'). Your current edit was kept.')}
+  finally{prog.stop();aiBusy=false;$('#planVideo').disabled=false;$('#steerBtn').disabled=false}
+}
 async function makePlan(instruction=''){
   if(aiBusy){say('Please wait for the current edit request to finish.');return}
   const selected=file.files[0],reference=$('#referenceFile').files[0],button=$('#planVideo');
@@ -88,6 +142,7 @@ async function makePlan(instruction=''){
   aiBusy=true;button.disabled=true;
   try{
     if(!wordTimes.length){say('First I’ll generate captions from your audio…');await $('#transcribe').onclick();if(!wordTimes.length||file.files[0]!==selected)return}
+    if(!reference&&await tryAgent(selected,instruction))return;
     say('Analyzing your footage with Gemini…');
     const footageAnalysis=await analyzeVideo(selected,'footage');let referenceAnalysis='';
     if(reference){say('Analyzing your reference video…');referenceAnalysis=await analyzeVideo(reference,'reference')}
@@ -98,13 +153,12 @@ async function makePlan(instruction=''){
     let response;try{response=await fetch('https://sahiledits-planner-v2-1013977539156.asia-southeast1.run.app',{method:'POST',headers:{'Content-Type':'application/json','apikey':'sb_publishable_E3uLCBXf8LWHwUHC4wpsdQ_J_OfjtVI'},body:JSON.stringify({duration:video.duration,words:wordTimes,footageAnalysis,referenceAnalysis,instruction}),signal:AbortSignal.timeout(1230000)});}finally{clearInterval(planningTimer)}
     const plan=await response.json();if(!response.ok)throw Error(plan.error||'Planning failed.');planningStatus.textContent='Edit plan received. Preparing the preview…';
     if(file.files[0]!==selected||$('#referenceFile').files[0]!==reference){say('Your video changed, so I discarded the plan.');return}
-    if(!Array.isArray(plan.clips)||!plan.clips.every(c=>Number.isFinite(c.start)&&Number.isFinite(c.end)&&c.start>=0&&c.end>c.start&&c.end<=video.duration))throw Error('The AI returned an invalid plan.');
-    if(Array.isArray(plan.zooms)&&plan.zooms.every(z=>Number.isFinite(z.start)&&Number.isFinite(z.end)&&z.start>=0&&z.end>z.start&&z.end<=video.duration&&z.end-z.start<=5)){zooms=plan.zooms;drawPreview()}
-    if(!plan.clips.length)throw Error('The editor returned no usable sections.');aiCards=Array.isArray(plan.cards)?plan.cards:[];aiMood=typeof plan.musicMood==='string'?plan.musicMood:null;aiBroll=Array.isArray(plan.broll)?plan.broll:[];video.pause();if(Array.isArray(plan.captionFixes)&&plan.captionFixes.length){wordTimes=TIGHTEN.applyWordFixes(wordTimes,plan.captionFixes);timedCaptions=TIGHTEN.groupCaptionWords(wordTimes,{duration:video.duration})}const snappedClips=TIGHTEN.snapClips(plan.clips,wordTimes,video.duration);editClips=(snappedClips.length?snappedClips:plan.clips).map(c=>({start:c.start,end:c.end}));editIndex=0;editFinished=false;cuts=makePauseCuts(wordTimes);video.currentTime=editClips[0].start;if(typeof plan.hook==='string'&&plan.hook.trim()){titleGraphic={text:plan.hook.trim().slice(0,75),start:editClips[0].start,end:Math.min(editClips[0].end,editClips[0].start+3.5)}}drawPreview();const keptSeconds=editClips.reduce((sum,c)=>sum+c.end-c.start,0);say('Your first cut is ready. Play the preview to review the selected sections. Captions, a hook title and selected zooms are included. Music and advanced graphics are not yet added.'+(keptSeconds<video.duration*.4?' Warning: the AI selected only '+fmt(keptSeconds)+' from '+fmt(video.duration)+' of footage; check that important parts of the story were not removed.':''));
+    installPlan(plan);
     if(Array.isArray(plan.broll)&&plan.broll.length){say('Looking for relevant public-domain images…');try{await findImages(plan.broll)}catch(error){say('Image search was unavailable; the first cut is still ready.')}}planningStatus.textContent='Edit plan ready.';
   }catch(e){$('#transcribeStatus').textContent='Edit request did not finish.';say(e.name==='TimeoutError'?'The request timed out. Please try again.':(e.message||'Planning failed.'))}finally{button.disabled=false;aiBusy=false}
 }
 $('#planVideo').onclick=()=>makePlan();
+$('#steerForm').onsubmit=e=>{e.preventDefault();const t=$('#steerInput').value;$('#steerInput').value='';revisePlan(t)};
 
 
 /* Prototype integration snippet. Insert into the website only after the service is deployed and tested. */
@@ -137,7 +191,7 @@ function makeCloudTimeline(duration, selectedClips, removedPauses, zooms, words,
   if (extras) {
     const toOut = t => { let off = 0; for (const c of clips) { if (t < c.start) return off; if (t <= c.end) return off + t - c.start; off += c.end - c.start; } return off; };
     out.captions = (extras.captions || []).map(c => ({start: c.start, end: c.end, text: c.text})).slice(0, 1500);
-    out.cards = (extras.cards || []).map(c => ({template: c.template, start: toOut(c.start), end: toOut(c.end), text: c.text, kicker: c.kicker || '', subtext: c.subtext || ''})).filter(c => c.end - c.start >= 0.8).slice(0, 12);
+    out.cards = (extras.cards || []).map(c => { const card = {template: c.template, start: toOut(c.start), end: toOut(c.end), text: c.text, kicker: c.kicker || '', subtext: c.subtext || ''}; for (const k of ['value', 'from', 'to', 'max']) if (Number.isFinite(c[k])) card[k] = c[k]; for (const k of ['unit', 'labelA', 'labelB']) if (c[k]) card[k] = String(c[k]); return card; }).filter(c => c.end - c.start >= 0.8).slice(0, 12);   // data graphics (gauge/meter/thermo/compare) carry their numbers through
     out.broll = (extras.broll || []).map(b => ({start: toOut(b.start), end: toOut(b.end), query: b.query})).filter(b => b.end - b.start >= 0.8).slice(0, 6);
     if (extras.mood) out.music_mood = extras.mood;
   }
