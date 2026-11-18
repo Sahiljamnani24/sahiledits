@@ -116,6 +116,46 @@
         "text": "Something which is not cool something in middle of sad and good",
         "time": "2026-11-18T07:17:23.502Z"
       }
+    },
+    {
+      "id": "qtlsulv",
+      "kind": "pick",
+      "question": "NDTV creative reel: which song? (all between sad and good, 30 s each)",
+      "context": "Got it: house subtitles (B). I build with A meanwhile; the song gets quiet on 'I can't breathe' and grows on the turn to Goa.",
+      "from": "NDTV creative cut",
+      "time": "2026-11-18T13:00:36+05:30",
+      "items": [
+        {
+          "type": "video",
+          "url": "m/qtlsulv/1.mp4",
+          "poster": "m/qtlsulv/1.jpg",
+          "label": "A: Near Light"
+        },
+        {
+          "type": "video",
+          "url": "m/qtlsulv/2.mp4",
+          "poster": "m/qtlsulv/2.jpg",
+          "label": "B: Experience (Einaudi)"
+        },
+        {
+          "type": "video",
+          "url": "m/qtlsulv/3.mp4",
+          "poster": "m/qtlsulv/3.jpg",
+          "label": "C: Your Hand in Mine"
+        },
+        {
+          "type": "video",
+          "url": "m/qtlsulv/4.mp4",
+          "poster": "m/qtlsulv/4.jpg",
+          "label": "D: Sunset Lover"
+        }
+      ],
+      "options": [
+        "A: Near Light",
+        "B: Experience (Einaudi)",
+        "C: Your Hand in Mine",
+        "D: Sunset Lover"
+      ]
     }
   ]
 }
