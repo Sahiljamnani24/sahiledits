@@ -161,6 +161,19 @@
         "text": "",
         "time": "2026-11-18T07:37:24.489Z"
       }
+    },
+    {
+      "id": "q7hh5cp",
+      "kind": "ok",
+      "question": "Cut the 4 spec re-cuts like this?",
+      "context": "Sam, Christian, Aurora, Empist. Nadia skipped.",
+      "from": "SJ DM re-cuts",
+      "time": "2026-11-19T00:48:32+05:30",
+      "body": "4 spec re-cuts, plan before I cut. Each ~25-34 s, vertical, their own colours. No title at the start: the first word is the point.\n\nNADIA: skipped. Her reels have text top and bottom the whole way, and she has no long video. She gets the plain short DM.\n\n1) SAM: his own screenshot reel, re-cut (41 s -> 25 s). Both his podcasts are audio only, so this is the only footage. A closer crop hides his old captions.\n- \"We built a tool to scan through all of these screenshots in about six seconds. It can find places and events...\" (face, then app scanning)\n- small tag: Sam Levy, ex-COO of Hinge, building Rodeo\n- \"This weekend, I searched what to do with my son on Sunday. It reminded me that I had a gift certificate to a bowling alley.\" (app screens)\n- \"It was all just a super easy way to get out of the house.\" (his son bowling)\n- \"If you're interested, leave a comment. I'll get 100 people on this build...\" / \"It's free, it's easy to use, and hopefully it's useful.\" (face)\nCut: \"Hi, I'm Sam\" and the filler lines.\n\n2) CHRISTIAN: from the Dragonfruit vlog (4K), ~28 s. A big theory, then Matt's joke.\n- Christian: \"This is how consumer tech evolves.\" / \"There's human motives that are just inherent to nature.\" / Matt bored, chin on hand: \"...we want to socialize.\"\n- \"Let's go back to the 1900s, was mail... Email became a thing... then email became social media.\"\n- \"Online dies, real life exists, too much real life, now people want to go online, and it's a cycle.\"\n- Matt: \"You lost me probably like 10 minutes ago.\" / Christian: \"How did I lose you, bro?\" / Matt: \"I don't know, I just need to sit on it for a little bit.\" END\n\n3) AURORA: from their Real Talk with Mercedes Bidart (Quipu), ~34 s. (Her dad story had their quote text over it the whole time, so this part instead.)\n- \"Let's say you have a beauty salon in a low-income neighborhood.\"\n- \"You have inventory, equipment, clients, but you can't prove your financial statements. Maybe no bank account, not registered.\"\n- \"So we capture your inventory, your equipment, your transactions, even on a digital wallet.\"\n- \"That's how we can measure not just your present and your risk, but also your potential.\" END\n\n4) EMPIST: from their podcast Tech One, Two EP 9 (68 views), ~28 s.\n- Nick: \"My boss asked me to do this report with five different spreadsheets. I'm just going to throw it into ChatGPT. Nobody's going to know. I'm going to look so smart in front of my boss...\"\n- \"So guess what? You just exposed your organization to huge risks: operational, financial, reputational.\"\n- \"We don't use AI in the work environment because of convenience.\"\n- John: \"We really want to look at how do we use AI responsibly, securely, and to truly drive some business value.\" END\n\nNew DMs (after you OK the cuts), e.g. Sam: \"Sam, the chronic screenshotter reel is a great way to show Rodeo.\" / \"I edit talking-head reels. I re-cut it with the tool in the first second and the bowling story up front.\" / \"Want to see it?\"",
+      "options": [
+        "OK, cut all 4",
+        "Change (write below)"
+      ]
     }
   ]
 }
