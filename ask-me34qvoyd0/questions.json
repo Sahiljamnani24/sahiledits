@@ -92,6 +92,20 @@
         "A: ref 3 style",
         "B: TPB house style"
       ]
+    },
+    {
+      "id": "ql6bum0",
+      "kind": "choice",
+      "question": "NDTV creative reel: which song? (I start with Let It Happen; IG audio can replace it)",
+      "context": "",
+      "from": "NDTV creative cut",
+      "time": "2026-11-18T12:36:03+05:30",
+      "options": [
+        "Let It Happen - Tame Impala",
+        "On Melancholy Hill - Gorillaz",
+        "Talk of the Town - Fred again (ref 1)",
+        "A-Punk - Vampire Weekend (ref 3)"
+      ]
     }
   ]
 }
