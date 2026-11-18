@@ -105,7 +105,12 @@
         "On Melancholy Hill - Gorillaz",
         "Talk of the Town - Fred again (ref 1)",
         "A-Punk - Vampire Weekend (ref 3)"
-      ]
+      ],
+      "answered": {
+        "answer": "other",
+        "text": "Something which is not cool something in middle of sad and good",
+        "time": "2026-11-18T07:17:23.502Z"
+      }
     }
   ]
 }
