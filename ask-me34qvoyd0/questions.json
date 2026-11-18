@@ -68,6 +68,30 @@
         "text": "",
         "time": "2026-11-17T16:21:58.044Z"
       }
+    },
+    {
+      "id": "q8vlutf",
+      "kind": "pick",
+      "question": "NDTV creative reel: which subtitles? (rest of the look is the same in both)",
+      "context": "Plan: your cut, your order. Ref 1 = giant words + numbers (2019, 400). Ref 2 = blue card with PK photo + fast smog cuts. Ref 3 = word-by-word subs, blue label, silence on 'I can't breathe'. Ref 4 = paper collage for 'geographical, topographical'. Then map Delhi to Goa, Goa villa shots, PK at the Komorebi window on 'balcony windows'. I keep building A meanwhile.",
+      "from": "NDTV creative cut",
+      "time": "2026-11-18T12:35:58+05:30",
+      "items": [
+        {
+          "type": "image",
+          "url": "m/q8vlutf/1.jpg",
+          "label": "A: ref 3 style"
+        },
+        {
+          "type": "image",
+          "url": "m/q8vlutf/2.jpg",
+          "label": "B: TPB house style"
+        }
+      ],
+      "options": [
+        "A: ref 3 style",
+        "B: TPB house style"
+      ]
     }
   ]
 }
