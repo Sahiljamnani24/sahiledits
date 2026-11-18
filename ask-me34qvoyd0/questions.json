@@ -155,7 +155,12 @@
         "B: Experience (Einaudi)",
         "C: Your Hand in Mine",
         "D: Sunset Lover"
-      ]
+      ],
+      "answered": {
+        "answer": "A: Near Light",
+        "text": "",
+        "time": "2026-11-18T07:37:24.489Z"
+      }
     }
   ]
 }
