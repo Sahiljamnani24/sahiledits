@@ -173,7 +173,12 @@
       "options": [
         "OK, cut all 4",
         "Change (write below)"
-      ]
+      ],
+      "answered": {
+        "answer": "OK, cut all 4",
+        "text": "",
+        "time": "2026-11-18T19:28:54.162Z"
+      }
     }
   ]
 }
