@@ -91,7 +91,12 @@
       "options": [
         "A: ref 3 style",
         "B: TPB house style"
-      ]
+      ],
+      "answered": {
+        "answer": "B: TPB house style",
+        "text": "",
+        "time": "2026-11-18T07:17:53.790Z"
+      }
     },
     {
       "id": "ql6bum0",
