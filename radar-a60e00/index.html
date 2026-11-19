@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Reel Radar · Sahil Edits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root{--bg:#0e0d0b;--card:#171613;--line:#2a2823;--text:#efe9df;--muted:#9c958a;--accent:#e7b35a;--rec:#ff4a2b;
+--S:#ff7a59;--A:#e7b35a;--B:#7fc7b8;--C:#6fa0ff;--D:#77716a;
+--serif:"Instrument Serif",Georgia,serif;--sans:"Inter Tight",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.5}
+.wrap{max-width:680px;margin:0 auto;padding:32px max(16px,env(safe-area-inset-right)) 64px max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:18px}
+.top{font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+h1{font-family:var(--serif);font-weight:400;font-size:3rem;line-height:1;margin:0}
+h1 em{color:var(--muted)}
+.sub{color:var(--muted);margin:8px 0 0}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav a{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--text);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+nav a:hover{border-color:var(--muted)}
+.day{display:flex;flex-direction:column;gap:14px}
+.date{font-family:var(--mono);font-size:.75rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin:8px 0 0}
+.status{display:flex;align-items:center;gap:8px;margin:0;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.status.live{color:var(--text)}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--rec);flex:none;animation:blink 2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.status i{animation:none}}
+h2{font-family:var(--serif);font-weight:400;font-size:2rem;line-height:1.1;margin:22px 0 0;scroll-margin-top:16px}
+h2 small{display:block;font-family:var(--sans);font-size:.9rem;color:var(--muted);margin-top:4px}
+.theme,.note{font-family:var(--serif);font-style:italic;font-size:1.35rem;line-height:1.25;margin:0;color:var(--accent)}
+.card,.idea{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.idea.win{border-color:var(--S);box-shadow:0 0 0 1px var(--S) inset}
+.meta{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;flex-wrap:wrap}
+.meta .tg{color:var(--accent)}
+.meta b{margin-left:auto;font-weight:500;text-transform:none}
+h3{font-size:1.12rem;font-weight:600;line-height:1.3;margin:0}
+h3 a{color:var(--text);text-decoration:none}
+h3 a:hover{text-decoration:underline}
+.card p,.idea p{margin:0}
+.angle{color:var(--muted)}
+.angle b,.lab b{font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-right:4px}
+.lab.risk b{color:var(--muted)}
+.hook{font-family:var(--serif);font-size:1.3rem;line-height:1.25;color:var(--text)}
+.rank{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.rank b{color:var(--text);font-size:1rem}
+.rank em{margin-left:auto;font-style:normal}
+.tier{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:6px;font-family:var(--mono);font-weight:600;font-size:.9rem;color:#0e0d0b;flex:none}
+.t-S{background:var(--S)}.t-A{background:var(--A)}.t-B{background:var(--B)}.t-C{background:var(--C)}.t-D{background:var(--D)}.t-q{background:var(--line);color:var(--text)}
+.votes{display:flex;flex-wrap:wrap;gap:6px}
+.votes span{font-family:var(--mono);font-size:.72rem;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--muted)}
+.votes span.pick{border-color:var(--accent);color:var(--text)}
+.srcs{display:flex;flex-wrap:wrap;gap:12px}
+.srcs a,.src{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-decoration:none}
+.srcs a:hover{color:var(--text)}
+.board{display:grid;grid-template-columns:auto 1fr;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.tiers{display:flex;flex-direction:column;gap:6px}
+.trow{display:flex;align-items:center;gap:8px;font-family:var(--mono)}
+.trow b{font-size:.95rem}.trow i{color:var(--muted)}
+.verdict{margin:0 0 8px;font-weight:500}
+.board ul{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:.92rem}
+.board li b{color:var(--text);font-weight:500}
+.small{font-size:.88rem;color:var(--muted);margin:4px 0}
+.empty{color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:16px;margin:0}
+.vids{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.vids a{display:flex;flex-direction:column;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--text);text-decoration:none}
+.vids a:hover{border-color:var(--muted)}
+.who{font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
+.vids .t{font-weight:500}
+.vids .v{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.vids em{font-style:normal;color:#0e0d0b;background:var(--S);border-radius:4px;padding:0 5px;margin-left:4px}
+details.niche,details.day{border-top:1px solid var(--line);padding-top:14px}
+summary{cursor:pointer;font-family:var(--mono);font-size:.78rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+details[open] summary{margin-bottom:8px}
+h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;font-weight:500}
+.list{margin:0;padding-left:18px}
+.list li{margin:3px 0}.list a{color:var(--text)}.list span{color:var(--muted);font-size:.88rem}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:520px){h1{font-size:2.4rem}.board{grid-template-columns:1fr}.tiers{flex-direction:row;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="top">Sahil Edits · Reel Radar</div>
+<header><h1>Reel <em>radar</em></h1>
+<p class="sub">News in your lane, what creators in your niche are making, and 5 reel ideas the board votes on every morning.</p></header>
+<section class="day" data-day="2026-11-19" data-n="12" data-b="0">
+<p class="date">Thu 19 Nov · 0 ideas · 12 news · 17 creator videos</p>
+<p class="status">Final · new research starts tonight at 9 pm</p>
+<nav><a href="#ideas">Ideas + board</a><a href="#news">News</a><a href="#creators">Creators</a></nav>
+<h2 id="ideas">Reel ideas<small>5 ideas from today's news, what creators are making and what you watched. The AI board voted.</small></h2>
+<p class="empty">The 5 ideas and the board vote come after 6 am (once the night's news is in).</p>
+<h2 id="news">News in your lane<small>Anthropic raises 81 billion dollars in a record IPO despite massive losses.</small></h2>
+<article class="card">
+<div class="meta"><span class="tg">Business</span><span>Mint companies</span><b>7:20 pm</b></div>
+<h3><a href="https://www.livemint.com/companies/news/who-owns-deepinder-goyal-temple-wearable-startup-stake-11795082965679.html" target="_blank" rel="noopener">A mystery investor owns 31 percent of Deepinder Goyal&#x27;s new startup</a></h3>
+<p>Filings reveal a silent investor owns 31 percent of Deepinder Goyal&#x27;s wearable startup Temple. This mystery owner holds a larger share than Goyal himself in the 1,715-crore company.</p><p class="angle"><b>Reel angle</b> Viewers love startup secrets and seeing who really controls high-profile founder businesses.</p>
+</article><article class="card">
+<div class="meta"><span class="tg">India</span><span>Mint companies</span><b>7:20 pm</b></div>
+<h3><a href="https://www.livemint.com/companies/why-indian-it-firms-are-losing-ground-to-global-tech-giants-11795082531526.html" target="_blank" rel="noopener">Indian IT giants lose forty percent of their brand value</a></h3>
+<p>A new Kantar report shows IT leaders TCS, Infosys, and Wipro lost over 40 percent of their brand value in 2026.</p><p class="angle"><b>Reel angle</b> Millions of Indians work in IT or own tech shares, so a crash in brand value sparks debate.</p>
+</article><article class="card">
+<div class="meta"><span class="tg">Money</span><span>Business Standard</span><b>7:20 pm</b></div>
+<h3><a href="https://www.business-standard.com/companies/news/tiger-global-management-backed-razorpay-prepares-to-file-for-ipo-next-week-126111900494_1.html" target="_blank" rel="noopener">Tiger Global-backed Razorpay prepares to file for IPO next week</a></h3>
+<p>Bengaluru-based payments company Razorpay is set to file for an IPO next week. It plans investor roadshows right away and could list on the market by February.</p><p class="angle"><b>Reel angle</b> Most Indians use Razorpay to pay online, making its journey to the stock market relatable and exciting.</p>
+</article><article class="card">
+<div class="meta"><span class="tg">AI</span><span>ET Tech</span><b>7:20 pm</b></div>
+<h3><a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/trump-administration-weighs-forcing-us-firms-to-disclose-chinese-ai-use/articleshow/135966297.cms" target="_blank" rel="noopener">US considers forcing companies to reveal if they use Chinese AI</a></h3>
+<p>The US government is discussing plans to make American firms disclose their use of Chinese AI models. For example, Airbnb currently uses Alibaba&#x27;s Qwen model for customer service.</p><p class="angle"><b>Reel angle</b> It shows the global power struggle between the US and China over who controls AI tools.</p>
+</article><article class="card">
+<div class="meta"><span class="tg">AI</span><span>Mint companies</span><b>4:58 pm</b></div>
+<h3><a href="https://www.livemint.com/companies/news/anthropic-raised-81-billion-in-ipo-despite-104-billion-loss-why-wall-street-is-betting-big-on-claude-11795049829392.html" target="_blank" rel="noopener">Anthropic raises 81 billion dollars in record IPO despite huge loss</a></h3>
+<p>AI maker Anthropic sold shares at 83 dollars each to raise 81.3 billion dollars. The company did this even after reporting a 104 billion dollar net loss.</p><p class="angle"><b>Reel angle</b> Shows how investors are pouring crazy amounts of cash into AI even when companies lose billions.</p>
+</article><article class="card">
+<div class="meta"><span class="tg">Tech</span><span>ET Tech</span><b>4:58 pm</b></div>
+<h3><a href="https://economictimes.indiatimes.com/tech/technology/no-one-can-replace-jensen-elon-musk-says-nvidia-decision-to-sack-jensen-huang-was-not-smart/articleshow/135975859.cms" target="_blank" rel="noopener">Elon Musk slams Nvidia for sacking CEO Jensen Huang</a></h3>
+<p>Elon Musk said pushing out Jensen Huang was a bad move. He compared it to dropping Michael Jordan in the middle of a winning streak.</p><p class="angle"><b>Reel angle</b> When the top AI chip company removes its leader, the entire tech industry feels the shakeup.</p>
+</article><article class="card">
+<div class="meta"><span class="tg">Money</span><span>CNBC TV18</span><b>4:58 pm</b></div>
+<h3><a href="https://news.google.com/rss/articles/CBMi7wFBVV95cUxPX2JJU28wMnd4d1FYam5mVEZISEhISFZDWEZhVE13UkFTY1Z5dHlVNkwyR1JiQ3pWZlBtRUpVZ1gwclcwTkRYdXNaWU9lUlpQV0FjamFXQll6WXNwd2dycnFCa0lEMVVrSm93a2dJcnVneC1Xd3JTMEkzR3NrMkJQVEloMDJQTWNSb0pSXzREVFVXVElFVDZ6U29uWWhlOWg4X2w4cjNXU3J4cGxMQkdqVUVrTV9yd212TTUtVzBQQjRoTDFKdFg1WXBfM2lmSTN5WkZGWHRuVlRwWjFJRjI5cmtOS3dJSHBiSWE1UHo1RdIB9AFBVV95cUxQSFlzWldRMTc1VHR1ek5qcUpzdDdHVGJVdWEtTDE3RXRfZjZHbFRpZkRlZzE4ZXMyRnBBY0QxSWNVaDcwOU9nZTIwZHoyYkw1X0FSUmdMdW9KVTgzeTZDVWdXMkNtTG12M081cEctSXlvblJUTHlJY2oxMDhJdkM4MUtGWi1oZ0ozcUhKRUIxMjFRUXFPbktKWE1jM0NDZ1BUTGwzVWNWalpDa3dRR3liVmpYTS1PYTZUOHpLTklIODBnXzBDcjZWTDg2QXkwX0Jfb19aLUk2SFMyUzJvMjBwSkZhRGV5Mmx4Wm8tVmhyMElpbU5F?oc=5" target="_blank" rel="noopener">EPFO lets members withdraw ninety percent of provident fund money</a></h3>
+<p>The retirement body EPFO announced new rules for PF accounts. Members can now take out up to 90 percent of their money, and retirees can take monthly instalments.</p><p class="angle"><b>Reel angle</b> Directly changes how every salaried Indian can access and spend their retirement savings.</p>
+</article><article class="card">
+<div class="meta"><span class="tg">India</span><span>Business Standard</span><b>4:58 pm</b></div>
+<h3><a href="https://www.business-standard.com/industry/news/tax-cuts-given-but-where-are-jobs-higher-wages-pm-modi-asks-india-inc-126111900563_1.html" target="_blank" rel="noopener">PM Modi asks companies where new jobs and higher wages went</a></h3>
+<p>Prime Minister Modi asked Indian businesses if corporate tax cuts created new jobs and better pay. He told companies to focus on India&#x27;s long-term growth.</p><p class="angle"><b>Reel angle</b> Questions whether tax cuts for big corporations actually helped everyday working Indians.</p>
+</article><article class="card">
+<div class="meta"><span class="tg">Business</span><span>Mint markets</span><b>4:58 pm</b></div>
+<h3><a href="https://www.livemint.com/market/stock-market-news/paytm-share-price-crash-payment-stock-slides-7-on-upi-mdr-rollout-delay-pine-labs-one-mobikwik-systems-also-tumble-11795062771594.html" target="_blank" rel="noopener">Paytm stock slides as UPI merchant fee rollout gets delayed again</a></h3>
+<p>Paytm shares dropped nearly 7 percent after reports that UPI merchant charges are delayed again. Shares of rivals Pine Labs and MobiKwik also fell.</p><p class="angle"><b>Reel angle</b> Shows why Indian payment apps still struggle to make money from free UPI services.</p>
+</article><article class="card">
+<div class="meta"><span class="tg">World</span><span>Mint companies</span><b>4:58 pm</b></div>
+<h3><a href="https://www.livemint.com/companies/people/i-would-have-spent-less-money-elon-musk-calls-400-million-republican-campaign-spending-pretty-foolish-11795058578307.html" target="_blank" rel="noopener">Elon Musk regrets spending 400 million dollars on US election</a></h3>
+<p>Elon Musk said he feels foolish after spending over 400 million dollars backing political candidates. He admitted the huge spending failed to bring the results he wanted.</p><p class="angle"><b>Reel angle</b> A clear lesson on how even the richest person in the world can waste fortunes trying to influence politics.</p>
+</article><article class="card">
+<div class="meta"><span class="tg">AI</span><span>TechCrunch</span><b>4:58 pm</b></div>
+<h3><a href="https://techcrunch.com/2026/11/18/more-banks-says-customers-using-ai-agents-are-on-their-own-even-if-they-get-hacked/" target="_blank" rel="noopener">Banks warn customers using AI money agents will not get refund</a></h3>
+<p>Major banks including Citi are warning users of AI finance agents. If an AI agent controls your bank account and gets hacked, you must bear the loss alone.</p><p class="angle"><b>Reel angle</b> A big warning for people who trust new AI tools to handle their personal bank accounts.</p>
+</article><article class="card">
+<div class="meta"><span class="tg">India</span><span>Mint companies</span><b>4:58 pm</b></div>
+<h3><a href="https://www.livemint.com/companies/people/finally-data-spoke-what-all-felt-64-of-indian-employees-report-working-extra-unpaid-hours-who-is-taking-max-burden-11795068866613.html" target="_blank" rel="noopener">Survey shows 64 percent of Indian employees work unpaid overtime</a></h3>
+<p>A survey across 36 markets found that 64 percent of Indian staff work at least six unpaid hours every week. Nearly a quarter work 16 or more unpaid hours.</p><p class="angle"><b>Reel angle</b> Hits home for millions of young Indians dealing with heavy work hours and toxic hustle culture.</p>
+</article>
+<h2 id="creators">What your niche is making<small>New videos from creators like you, last 48 hours. <em>hot</em> = more views than their normal.</small></h2>
+<ul class="vids"><li><a href="https://www.youtube.com/shorts/CbaPcQBVPPs" target="_blank" rel="noopener">
+<span class="who">Zero1 by Zerodha · Short</span>
+<span class="t">Anthropic IPO: Reality Check 🤯</span>
+<span class="v">5.1K views · 1 h ago</span></a></li><li><a href="https://www.youtube.com/shorts/DJqoBbAEgWA" target="_blank" rel="noopener">
+<span class="who">Aevy TV · Short</span>
+<span class="t">The Dell Pro Precision helps us grow our ideas into something bigger and better.</span>
+<span class="v">4.5K views · 3 h ago</span></a></li><li><a href="https://www.youtube.com/shorts/awFJZVD-qjk" target="_blank" rel="noopener">
+<span class="who">Ankur Warikoo · Short</span>
+<span class="t">₹2 LAKH Mahine Mein Kaisi Life Aur Kitni Bachat? #shorts</span>
+<span class="v">19K views · 7 h ago</span></a></li><li><a href="https://www.youtube.com/watch?v=w-VsGPEivyU" target="_blank" rel="noopener">
+<span class="who">bycloud</span>
+<span class="t">On-Policy Distillation: LLM&#x27;s Post-Training Meta of 2026</span>
+<span class="v">46K views · 20 h ago</span></a></li><li><a href="https://www.youtube.com/shorts/hf7OIuo4BlU" target="_blank" rel="noopener">
+<span class="who">Varun Mayya · Short</span>
+<span class="t">GTA VI is finally out!</span>
+<span class="v">75K views · 21 h ago</span></a></li><li><a href="https://www.youtube.com/shorts/gzYBSy_2bxU" target="_blank" rel="noopener">
+<span class="who">Cleo Abram · Short</span>
+<span class="t">NASA&#x27;s Voyager 1 Just Hit A Big Milestone</span>
+<span class="v">280K views · 21 h ago</span></a></li><li><a href="https://www.youtube.com/shorts/KhAnCUDzO5E" target="_blank" rel="noopener">
+<span class="who">Labour Law Advisor · Short</span>
+<span class="t">Who gets Dad&#x27;s Property? | #LLAShorts 1698</span>
+<span class="v">61K views · 21 h ago</span></a></li><li><a href="https://www.youtube.com/watch?v=UJwddV0BCt8" target="_blank" rel="noopener">
+<span class="who">Think School</span>
+<span class="t">Tesla&#x27;s Cybertruck Disaster | How Elon Musk&#x27;s Dream Truck Became His Biggest Failure?</span>
+<span class="v">274K views · 22 h ago</span></a></li><li><a href="https://www.youtube.com/watch?v=yl0F5pihW94" target="_blank" rel="noopener">
+<span class="who">Ankur Warikoo</span>
+<span class="t">I DOUBLED Indian Salaries Until It Got RIDICULOUS</span>
+<span class="v">142K views · 23 h ago</span></a></li><li><a href="https://www.youtube.com/shorts/YfLbtGLuDhM" target="_blank" rel="noopener">
+<span class="who">Aevy TV · Short</span>
+<span class="t">Vice City is real!</span>
+<span class="v">144K views · 1 d ago</span></a></li><li><a href="https://www.youtube.com/shorts/GtGCh9m-nnk" target="_blank" rel="noopener">
+<span class="who">Ankur Warikoo · Short</span>
+<span class="t">Crores Ka Kela?! REAL Price Ya Fake? #shorts</span>
+<span class="v">39K views · 1 d ago</span></a></li><li><a href="https://www.youtube.com/shorts/A8SclygFeGM" target="_blank" rel="noopener">
+<span class="who">Good Work (Dan Toomey) · Short</span>
+<span class="t">finance guy reacts to no money</span>
+<span class="v">261K views · 1 d ago</span></a></li><li><a href="https://www.youtube.com/shorts/Jt7gjSnGWvM" target="_blank" rel="noopener">
+<span class="who">Cleo Abram · Short</span>
+<span class="t">The Biggest Asteroid That Ever Hit Earth</span>
+<span class="v">522K views · 1 d ago</span></a></li><li><a href="https://www.youtube.com/shorts/8FVjtbnsN3c" target="_blank" rel="noopener">
+<span class="who">Aevy TV · Short</span>
+<span class="t">AI is getting a NOSE! Here&#x27;s how.</span>
+<span class="v">63K views · 1 d ago</span></a></li><li><a href="https://www.youtube.com/shorts/tEd1AxHdFP0" target="_blank" rel="noopener">
+<span class="who">Labour Law Advisor · Short</span>
+<span class="t">Don&#x27;t TRUST Friends &amp; Relatives | #LLAShorts 1697</span>
+<span class="v">127K views · 1 d ago</span></a></li><li><a href="https://www.youtube.com/shorts/WKrmotVvxdw" target="_blank" rel="noopener">
+<span class="who">Zero1 by Zerodha · Short</span>
+<span class="t">A Chaiwala Explains the Stock Market ☕📈</span>
+<span class="v">13K views · 1 d ago</span></a></li><li><a href="https://www.youtube.com/watch?v=FhVbxweMaWM" target="_blank" rel="noopener">
+<span class="who">How Money Works</span>
+<span class="t">Why is Anthropic&#x27;s Business Model So... Strange?</span>
+<span class="v">834K views · 1 d ago</span></a></li></ul>
+<details class="niche"><summary>Who is in your niche (20 on YouTube, 14 on Instagram)</summary>
+<p class="small">YouTube channels are checked every hour (their new videos show above). Instagram pages can't be read
+automatically, so open them yourself. The list comes from Reel Lab (ACCOUNTS.md).</p>
+<h4>YouTube (checked every hour)</h4><ul class="list"><li><a href="https://www.youtube.com/channel/UCsQoiOrh7jzKmE8NBofhTnQ" target="_blank" rel="noopener">Varun Mayya</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UCA295QVkf9O1RQ8_-s3FVXg" target="_blank" rel="noopener">Aevy TV</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UCoch_d78Aosmp14ey1HgGSQ" target="_blank" rel="noopener">100x Engineers</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UC_hJCLHRAnWU9BTCd5oPEAQ" target="_blank" rel="noopener">Sachin Jain (tellmesachin)</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UCwVEhEzsjLym_u1he4XWFkg" target="_blank" rel="noopener">Finance With Sharan</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UCVOTBwF0vnSxMRIbfSE_K_g" target="_blank" rel="noopener">Labour Law Advisor</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UCKZozRVHRYsYHGEyNKuhhdA" target="_blank" rel="noopener">Think School</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UCRzYN32xtBf3Yxsx5BvJWJw" target="_blank" rel="noopener">Ankur Warikoo</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UCqW8jxh4tH1Z1sWPbkGWL4g" target="_blank" rel="noopener">Akshat Shrivastava</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UCUUlw3anBIkbW9W44Y-eURw" target="_blank" rel="noopener">Zero1 by Zerodha</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UCzHDKR4zchL8NbFWMKgR0BQ" target="_blank" rel="noopener">Sarthak Ahuja</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UC-CSyyi47VX1lD9zyeABW3w" target="_blank" rel="noopener">Dhruv Rathee</a> <span>India</span></li><li><a href="https://www.youtube.com/channel/UC_-hYjoNe4PJNFa9iZ4lraA" target="_blank" rel="noopener">Good Work (Dan Toomey)</a> <span>World</span></li><li><a href="https://www.youtube.com/channel/UCsBjURrPoezykLs9EqgamOA" target="_blank" rel="noopener">Fireship</a> <span>World</span></li><li><a href="https://www.youtube.com/channel/UC415bOPUcGSamy543abLmRA" target="_blank" rel="noopener">Cleo Abram</a> <span>World</span></li><li><a href="https://www.youtube.com/channel/UCkCGANrihzExmu9QiqZpPlQ" target="_blank" rel="noopener">How Money Works</a> <span>World</span></li><li><a href="https://www.youtube.com/channel/UCASM0cgfkJxQ1ICmRilfHLw" target="_blank" rel="noopener">Patrick Boyle</a> <span>World</span></li><li><a href="https://www.youtube.com/channel/UCbzVRTkX3bzNZuBd9In4XyA" target="_blank" rel="noopener">Modern MBA</a> <span>World</span></li><li><a href="https://www.youtube.com/channel/UCgfe2ooZD3VJPB6aJAnuQng" target="_blank" rel="noopener">bycloud</a> <span>World</span></li><li><a href="https://www.youtube.com/channel/UCNJ1Ymd5yFuUPtn21xtRbbw" target="_blank" rel="noopener">AI Explained</a> <span>World</span></li></ul>
+<h4>Instagram (open by hand)</h4><ul class="list"><li><a href="https://www.instagram.com/ashmit_gogoi/" target="_blank" rel="noopener">@ashmit_gogoi</a> <span>&#x27;How X really makes money&#x27; stories, confident verdict style</span></li><li><a href="https://www.instagram.com/thevarunmayya/" target="_blank" rel="noopener">@thevarunmayya</a> <span>AI + tech + business, your favourite</span></li><li><a href="https://www.instagram.com/aevytvdaily/" target="_blank" rel="noopener">@aevytvdaily</a> <span>AevyTV: culture + tech + money</span></li><li><a href="https://www.instagram.com/divyam.explains/" target="_blank" rel="noopener">@divyam.explains</a> <span>158K with only 17 posts: grew very fast</span></li><li><a href="https://www.instagram.com/tellmesachin/" target="_blank" rel="noopener">@tellmesachin</a> <span>news + money, &#x27;the real reason&#x27; hooks</span></li><li><a href="https://www.instagram.com/compoundwithraunak/" target="_blank" rel="noopener">@compoundwithraunak</a> <span>follow-the-money news stories</span></li><li><a href="https://www.instagram.com/karaninvests/" target="_blank" rel="noopener">@karaninvests</a> <span>bold-claim hooks</span></li><li><a href="https://www.instagram.com/mokshinfinance/" target="_blank" rel="noopener">@mokshinfinance</a> <span>humour + finance</span></li><li><a href="https://www.instagram.com/thefinancegirly/" target="_blank" rel="noopener">@thefinancegirly</a> <span>AI x finance, your exact lane</span></li><li><a href="https://www.instagram.com/breakdownbyaeos/" target="_blank" rel="noopener">@breakdownbyaeos</a> <span>market and startup reports</span></li><li><a href="https://www.instagram.com/hackonomics.ai/" target="_blank" rel="noopener">@hackonomics.ai</a> <span>AI + economics</span></li><li><a href="https://www.instagram.com/fulldisclosure.ig/" target="_blank" rel="noopener">@fulldisclosure.ig</a> <span>careers + economics</span></li><li><a href="https://www.instagram.com/thethinkschool/" target="_blank" rel="noopener">@thethinkschool</a> <span>Indian business case studies</span></li><li><a href="https://www.instagram.com/finshots.in/" target="_blank" rel="noopener">@finshots.in</a> <span>daily finance explainers</span></li></ul></details>
+</section>
+<footer>News and creator videos: every hour from 9 pm to 6 pm. Ideas + board: once a day after 6 am.
+Gemini picks the news in simple words and writes the ideas (it checks numbers with web search, but always open the source
+before you say a number on camera). The board members are AI imitations made from public videos, not the real people.<br><br>
+News: Google News: India business · Google News: tech · Google News: AI companies · Google News: India money · Google News: oil + world economy · Google News: the rich + big companies · Mint markets · Mint companies · Economic Times · ET Tech · Business Standard · Finshots · BBC Business · CNBC · TechCrunch · The Verge AI</footer>
+</main>
+</body>
+</html>
