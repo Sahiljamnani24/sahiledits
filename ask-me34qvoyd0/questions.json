@@ -192,6 +192,19 @@
         "Yes, send all 8",
         "Don't send"
       ]
+    },
+    {
+      "id": "qol4vp2",
+      "kind": "ok",
+      "question": "Portfolio remake 03 (AI explainer, split screen like Kallaway): storyboard OK? I'm building v1 now.",
+      "context": "Talking footage = Jake Dawson (Creative Commons). Reply with notes in 'other' if you want changes.",
+      "from": "portfolio remake 03",
+      "time": "2026-11-20T11:54:09+05:30",
+      "body": "REMAKE 03 - AI explainer, split screen (Kallaway format) - storyboard v1, 20 Nov\nAbout 58 s, 9:16.\n\nFootage: Jake Dawson, YouTube \"How to Build Your First AI Agent\" (4K).\nCreative Commons, reuse allowed: we only add a credit line.\n(Your own talking footage is on the hard drive, which is not plugged in.)\n\nLayout like Kallaway: top half = a picture that shows the words, bottom half = the speaker.\nA few lines = full face. Small white subtitles on the middle line, bigger ones on full-face shots.\n\n1. 0-4 s | \"Your AI is no longer a tab that you have to open.\" | top: browser tabs, the AI tab closes\n2. 4-6 s | \"It's a contact in your phone.\" | top: phone contacts, the \"Agent\" contact lights up\n3. 6-10 s | \"It's an AI agent that runs on its own computer in the background.\" | top: stock clip, a computer working at night\n4. 10-12 s | \"Here's the whole idea in one sentence.\" | full face\n5. 12-17 s | \"A normal AI answers you, an agent does things for you.\" | full-screen picture (his video has no face here): a chat answer, then the agent ticking off tasks\n6. 17-19 s | \"That's it. That's the whole difference.\" | full face, a bit closer, eyes in the same spot\n7. 19-29 s | \"Watch this competitor's pricing page and ping me if anything changes. Draft replies to anything routine. Remind me to follow up with anyone who went quiet.\" | top: phone chat with the agent, each message types in on his words, then a quick look at the result (price drop ping, drafts ready, reminder)\n8. 29-38 s | \"None of those are impressive on their own, but added up, they gave me back the first two hours of my day.\" | top: the 7-9 am block in a calendar clears, then a pile of notifications\n9. 38-46 s | \"Stop thinking of AI as something you talk to, start thinking of it as something you hand a job to.\" | top: stock, someone talking to a phone, then hands passing a folder\n10. 46-48 s | \"It's not chatting, it's doing.\" | full face, \"doing\" in italic\n11. 48-52 s | \"This stuff that used to take a developer now takes a sentence.\" | top: stock, a coder at screens, then one line typed and sent\n12. 52-57 s | \"Let me know in the comments: what's the first thing you'd hand off to an agent?\" | top: comment box, a few answers pop in\n\nSound: his voice, quiet music, small clicks and whooshes on picture changes.\nNo title in the first second (your rule). Kallaway opens with a red title banner: say if you want one.",
+      "options": [
+        "OK, send it",
+        "No"
+      ]
     }
   ]
 }
