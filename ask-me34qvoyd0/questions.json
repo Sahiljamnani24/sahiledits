@@ -191,7 +191,12 @@
       "options": [
         "Yes, send all 8",
         "Don't send"
-      ]
+      ],
+      "answered": {
+        "answer": "other",
+        "text": "Remove should I send couple of reel, i want to say something like free reel, and i don't feel message, I feel it is written by ai, i want short and good message, very direct, and we can write it like u r doing good but if I make it better, if u think it sucks I will transfer u money for wasting ur time (something like this)",
+        "time": "2026-11-20T06:30:27.251Z"
+      }
     },
     {
       "id": "qol4vp2",
