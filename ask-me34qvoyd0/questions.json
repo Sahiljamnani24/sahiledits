@@ -215,6 +215,19 @@
         "text": "",
         "time": "2026-11-20T06:26:48.883Z"
       }
+    },
+    {
+      "id": "qi7gu68",
+      "kind": "ok",
+      "question": "Remake 03 (AI agent explainer, split screen) is ready. OK?",
+      "context": "",
+      "from": "Remake 03 sample",
+      "time": "2026-11-23T17:12:38+05:30",
+      "body": "https://drive.google.com/open?id=1FcMOOy-uB7W81e2plpzj701pf7IB9dif\nMusic is See Line Funk. Say if you want another.",
+      "options": [
+        "OK, send it",
+        "No"
+      ]
     }
   ]
 }
