@@ -233,6 +233,19 @@
         "text": "",
         "time": "2026-11-23T11:57:01.673Z"
       }
+    },
+    {
+      "id": "qr48y06",
+      "kind": "ok",
+      "question": "Remake 03 polished: cleaner ending (comment box rises after his last word) + no empty wall before the hand-off.",
+      "context": "",
+      "from": "Remake 03 sample",
+      "time": "2026-11-23T17:34:04+05:30",
+      "body": "https://drive.google.com/open?id=1_AKcED5LqAgkc3DBNU4oLwnkccEqZ79X",
+      "options": [
+        "Seen",
+        "Change something"
+      ]
     }
   ]
 }
