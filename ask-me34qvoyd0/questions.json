@@ -246,6 +246,19 @@
         "Seen",
         "Change something"
       ]
+    },
+    {
+      "id": "qez4cor",
+      "kind": "ok",
+      "question": "Remake 08 (doctor talking head, like Doctor Mike): OK to build this plan?",
+      "context": "Free CC BY footage of a US ER doctor, ~65 s",
+      "from": "remake 08",
+      "time": "2026-11-23T17:39:22+05:30",
+      "body": "REMAKE 08 - Expert talking head (Doctor Mike format) - storyboard v1, 23 Nov\nAbout 65 s, 9:16.\n\nWhat the reference does (Doctor Mike, 107 s): one expert talks to camera. Small white bold\nsubtitles, 1-3 words, on his chest. Key lines become big 2-line text. Face zooms in and out.\nStock clips with words on top. A source page with a yellow highlighter. One blurred-face moment\nwith huge words. Ends on his face.\n\nFootage: Seth Capehart MD (ER doctor), YouTube \"The Longevity Lie No One Talks About\" (4K, 1.5M views).\nCreative Commons: free to reuse, we add a credit line. Stock clips: Pexels (free).\n(Your own footage is on the hard drive, which is not plugged in.)\n\n1. 0-8 s | \"Modern medicine has gotten incredibly good at keeping people alive. It has not gotten very good\n   at keeping people healthy.\" | his face, zoom in on \"It has not\". Big text: KEEPING PEOPLE HEALTHY\n2. 8-16 s | \"People live a long time in a very broken, unhealthy state. I'm talking about men and women...\"\n   | stock: old man in a hospital bed. Big text: BROKEN, UNHEALTHY STATE\n3. 16-20 s | \"...who aren't that old, sometimes 60s, sometimes even 50s,\" | his face, closer\n4. 20-23 s | \"who can't walk across a room without getting winded,\" | stock: older man out of breath\n5. 23-27 s | \"who fall because they're weak, not because they're unlucky,\" | stock: two people help a weak old man sit\n6. 27-34 s | \"and who come in over and over again for things that are completely predictable and sadly were\n   very preventable.\" | his face. Big text: VERY PREVENTABLE\n7. 34-37 s | \"And here's a stat that should bother you.\" | quick zoom-blur into a close shot of his face\n8. 37-47 s | \"After age 30, adults lose 3 to 8% of muscle mass per decade... After 60, that accelerates even\n   faster.\" | full-screen chart: a muscle bar shrinks at 30, 40, 50, 60; after 60 it drops faster (red)\n9. 47-53 s | \"Falls are one of the leading causes of injury-related death and disability in older adults.\"\n   | a clean fact page; yellow highlighter runs over \"Falls are the leading cause of injury death for\n   adults 65+\". Source: CDC\n10. 53-56 s | \"Not cancer. Not heart attacks. Falls.\" | page blurs, huge words one by one:\n   NOT CANCER. / NOT HEART ATTACKS. / FALLS.\n11. 56-65 s | \"Longevity isn't about avoiding death. It's about avoiding dependence. And the earlier you\n   start, the lighter the load is on everyone else.\" | his face. Big text: AVOIDING DEPENDENCE. Ends on him.\n\nSound: his voice, quiet calm music, soft whoosh on the zoom-blur, small pop on big words.\nCredit line, last 3 s: Footage: Seth Capehart MD (YouTube, CC BY), edited · Stock: Pexels · Music: Mixkit\nNote: his own video is blurred with text in parts 2, 8, 9-10, so those parts are covered by stock or graphics.\nThe falls line is checked (CDC). The 3-8% is his number (Harvard says 3-5%); we show it as his words.",
+      "options": [
+        "OK, send it",
+        "No"
+      ]
     }
   ]
 }
