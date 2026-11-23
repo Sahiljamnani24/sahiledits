@@ -245,7 +245,12 @@
       "options": [
         "Seen",
         "Change something"
-      ]
+      ],
+      "answered": {
+        "answer": "Seen",
+        "text": "",
+        "time": "2026-11-23T12:39:55.632Z"
+      }
     },
     {
       "id": "qez4cor",
