@@ -27,7 +27,7 @@ details{margin:10px 0}summary{cursor:pointer;color:var(--soft);font-size:15px;pa
 </style></head><body><main>
 <header><h1>Your watch list</h1><p>New videos every morning for your goals: clients, editing, reels, AI, money, Spain, and some fun.</p></header>
 <div class="learned">Tap 👍 or 👎 on each video. Tomorrow&#x27;s picks learn from your taps.</div>
-<section><h2>Today · Mon 23 Nov</h2>
+<section><h2><span class="rel" data-day="2026-11-23"></span>Mon 23 Nov</h2>
 <article class="card" data-id="i7O4AtfeM6k" data-day="2026-11-23">
  <a class="thumb" href="https://www.youtube.com/watch?v=i7O4AtfeM6k" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/i7O4AtfeM6k/hqdefault.jpg" alt=""><span class="len">4 min</span></a>
  <div class="body">
@@ -96,7 +96,7 @@ details{margin:10px 0}summary{cursor:pointer;color:var(--soft);font-size:15px;pa
 </article>
 </section>
 <div class="note"><h2>Tell me what you want</h2><textarea id="note" placeholder="e.g. more on how agencies hire editors, less AI news"></textarea><button id="send">Send</button><span class="ok" id="ok"></span></div>
-<footer>Updated 23 Nov, 6:03 pm</footer>
+<footer>Updated 23 Nov, 6:06 pm</footer>
 </main>
 <script>
 const D={"topic": "sjwl-923577b614125af4118cd02c", "synced": {}};const K="wl-votes-v1";let V={};
@@ -114,6 +114,9 @@ document.querySelectorAll(".card").forEach(el=>{paint(el);const id=el.dataset.id
  el.querySelectorAll(".why-no button").forEach(b=>b.onclick=()=>{V[id]={v:-1,r:b.dataset.r,t:Date.now(),d:el.dataset.day};keep();paint(el);send([id])})});
 const pend=Object.keys(V).filter(id=>V[id].t>0&&(V[id].v===0?(id in D.synced):D.synced[id]!==V[id].v+":"+(V[id].r||"")));
 if(pend.length)send(pend);
+const td=new Date(),iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const yd=new Date(td);yd.setDate(td.getDate()-1);
+document.querySelectorAll(".rel").forEach(s=>{s.textContent=s.dataset.day===iso(td)?"Today · ":s.dataset.day===iso(yd)?"Yesterday · ":""});
 document.getElementById("send").onclick=()=>{const n=document.getElementById("note");const t=n.value.trim();if(!t)return;
  post({k:"note",text:t,t:Date.now()}).then(()=>{n.value="";document.getElementById("ok").textContent="Got it. I'll use this from tomorrow."})};
 </script></body></html>
