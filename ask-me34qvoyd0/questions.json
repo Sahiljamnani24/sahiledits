@@ -281,7 +281,12 @@
       "options": [
         "OK, send it",
         "No"
-      ]
+      ],
+      "answered": {
+        "answer": "OK, send it",
+        "text": "",
+        "time": "2026-11-23T15:14:08.388Z"
+      }
     }
   ]
 }
