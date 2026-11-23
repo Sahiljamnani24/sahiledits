@@ -269,6 +269,19 @@
         "text": "",
         "time": "2026-11-23T12:39:45.120Z"
       }
+    },
+    {
+      "id": "q2fecr6",
+      "kind": "ok",
+      "question": "Remake 08 doctor reel is on Drive. OK?",
+      "context": "",
+      "from": "remake 08",
+      "time": "2026-11-23T19:43:40+05:30",
+      "body": "Remake 08 (doctor reel, Doctor Mike style, 65 s): https://drive.google.com/open?id=1bruVwYLeOOSVyKdhyddjQ4TqhpGUphKO\nMusic is calm Mixkit 132. Say if you want another.",
+      "options": [
+        "OK, send it",
+        "No"
+      ]
     }
   ]
 }
