@@ -327,18 +327,6 @@
         "Yes, send",
         "No, skip today"
       ]
-    },
-    {
-      "id": "q3xgi82",
-      "kind": "choice",
-      "question": "Instagram DMs are STOPPED: TEST reason: pretend Instagram said try again later. What now?",
-      "context": "",
-      "from": "dm-daily",
-      "time": "2026-11-24T23:06:40+05:30",
-      "options": [
-        "Start again tomorrow (10 DMs)",
-        "Keep it stopped"
-      ]
     }
   ]
 }
