@@ -300,15 +300,6 @@
         "Navy card with COMMENT 'PRIVADO' to get in touch",
         "Privado white card: logo + privadohomes.com"
       ]
-    },
-    {
-      "id": "qjyyy1z",
-      "kind": "text",
-      "question": "--help",
-      "context": "",
-      "from": "",
-      "time": "2026-11-24T22:21:20+05:30",
-      "options": []
     }
   ]
 }
