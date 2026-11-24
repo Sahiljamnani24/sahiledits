@@ -287,6 +287,19 @@
         "text": "",
         "time": "2026-11-23T15:14:08.388Z"
       }
+    },
+    {
+      "id": "qjxbkxo",
+      "kind": "choice",
+      "question": "Komo Amit reel 2 (all 3 intro versions): Amit ends with 'maybe it's time you call us'. No comment word. Which end card?",
+      "context": "VO says 'maybe you need to build it', outro says 'maybe it's time you call us'. I keep the outro line once.",
+      "from": "Komo Amit reel 2",
+      "time": "2026-11-24T15:23:20+05:30",
+      "options": [
+        "Navy card like Arpora: TPB + Privado logos, www.tpbllp.com, no comment line",
+        "Navy card with COMMENT 'PRIVADO' to get in touch",
+        "Privado white card: logo + privadohomes.com"
+      ]
     }
   ]
 }
