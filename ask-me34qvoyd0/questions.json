@@ -314,19 +314,6 @@
         "Your agency girly reel hit 41k. Can I edit your next one for free? If you don't like it, I'll pay you for your time.",
         "Don't send anything to her"
       ]
-    },
-    {
-      "id": "qh33uu5",
-      "kind": "ok",
-      "question": "TEST (ignore): dm-daily card format",
-      "context": "test only",
-      "from": "dm-daily-test",
-      "time": "2026-11-24T22:25:53+05:30",
-      "body": "1. @test | US | 1K followers",
-      "options": [
-        "Yes, send",
-        "No, skip today"
-      ]
     }
   ]
 }
