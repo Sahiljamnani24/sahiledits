@@ -314,6 +314,19 @@
         "Your agency girly reel hit 41k. Can I edit your next one for free? If you don't like it, I'll pay you for your time.",
         "Don't send anything to her"
       ]
+    },
+    {
+      "id": "q89w7w8",
+      "kind": "ok",
+      "question": "Send these 10 DMs from SJ on Wed 25 Nov?",
+      "context": "Free-reel DM, same text as 23 Nov.",
+      "from": "dm-daily",
+      "time": "2026-11-24T23:04:21+05:30",
+      "body": "10 new people today. Same message to everyone:\n\n\"Can I edit your next reel for free? If you don't like it, I'll pay you for your time.\"\n\n1. @thejanehandforth | Canada | 2K followers | about 3 reels a week, last post today | personal financial planning and family insurance\n2. @jennifersfrugal | Canada | 912 followers | about 3 reels a week, last post yesterday | frugal living and early debt retirement\n3. @heylodestar | US | 1.2K followers | about 3 reels a week, last post yesterday | practical AI tools and smart digital hacks\n4. @brayroos | Canada | 2.3K followers | about 3 reels a week, last post today | frugal living and intentional spending tips\n5. @legacymovesco | US | 1K followers | about 2 reels a week, last post 5 days ago | building multiple income streams and side hustles\n6. @missionsidehustle | US | 5K followers | about 2 reels a week, last post 5 days ago | testing online side hustles to make money\n7. @coachtish | US | 2.9K followers | about 2 reels a week, last post 5 days ago | business advice and AI tools for work\n8. @thefinancediaries | Canada | 4.7K followers | about 2 reels a week, last post today | relatable budgeting and beginner investing tips\n9. @aiempoweredmom | US | 9K followers | about 2 reels a week, last post yesterday | AI tools and ChatGPT for busy moms\n10. @bassemaskari | Canada | 6.7K followers | about 1 reels a week, last post today | personal finance and investing for Canadians\n\nIf you tap Yes: sent from SJ on Wed 25 Nov evening, 19:00 to 23:30, 3 to 5 minutes apart.\nStops by itself if Instagram shows any warning.",
+      "options": [
+        "Yes, send",
+        "No, skip today"
+      ]
     }
   ]
 }
