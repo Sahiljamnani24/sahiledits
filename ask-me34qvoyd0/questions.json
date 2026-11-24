@@ -327,18 +327,6 @@
         "Yes, send",
         "No, skip today"
       ]
-    },
-    {
-      "id": "qy2j6wx",
-      "kind": "choice",
-      "question": "TEST (ignore): Sarah (@x) answered your free-reel DM: \"Yes please\" (3m ago)",
-      "context": "",
-      "from": "dm-daily-test",
-      "time": "2026-11-24T23:05:36+05:30",
-      "options": [
-        "I will answer myself",
-        "Draft a reply for me"
-      ]
     }
   ]
 }
