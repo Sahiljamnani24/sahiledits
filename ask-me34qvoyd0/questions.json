@@ -313,7 +313,12 @@
         "Saw your 'free my storage' day. Can I edit one of those clips for free? If you don't like it, I'll pay you for your time.",
         "Your agency girly reel hit 41k. Can I edit your next one for free? If you don't like it, I'll pay you for your time.",
         "Don't send anything to her"
-      ]
+      ],
+      "answered": {
+        "answer": "Saw you posted 12 reels in one day. Need an extra editor for your founder clients? I'll do the first one free, and if you don't like it, I'll pay you for your time.",
+        "text": "",
+        "time": "2026-11-24T17:46:17.419Z"
+      }
     },
     {
       "id": "q89w7w8",
