@@ -342,6 +342,36 @@
         "text": "",
         "time": "2026-11-24T17:45:14.336Z"
       }
+    },
+    {
+      "id": "q6lvw40",
+      "kind": "pick",
+      "question": "Komo Reel 2: which end card after Amit's pool line? (3 s)",
+      "context": "Simple and no tagline: TPB + Privado logos with names and www.tpbllp.com",
+      "from": "komo-outro",
+      "time": "2026-11-25T14:49:21+05:30",
+      "items": [
+        {
+          "type": "link",
+          "url": "https://drive.google.com/open?id=1-0O8bbUdOMDELLPpP3vw1OvDSyMKOcrq",
+          "label": "A - Amit's pool shot softens + logos"
+        },
+        {
+          "type": "link",
+          "url": "https://drive.google.com/open?id=1ZoXf--S-S85iFH3q8V1ydDAdmfG7C-tO",
+          "label": "B - clean light card"
+        },
+        {
+          "type": "link",
+          "url": "https://drive.google.com/open?id=1zmZpMQE6F36wOO1UNePNdSYRmMLBiSNG",
+          "label": "C - calm house shot + logos in the sky"
+        }
+      ],
+      "options": [
+        "A - Amit's pool shot softens + logos",
+        "B - clean light card",
+        "C - calm house shot + logos in the sky"
+      ]
     }
   ]
 }
