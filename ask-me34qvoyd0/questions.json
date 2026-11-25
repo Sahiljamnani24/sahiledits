@@ -467,6 +467,31 @@
         "Yes, build it",
         "Changes first (typed in the box)"
       ]
+    },
+    {
+      "id": "qub1daj",
+      "kind": "pick",
+      "question": "ChatGPT reel v5 (55 s, horizontal): built from storyboard v1, your real Claude screen, music + sound. Notes?",
+      "context": "Type changes with times in the box. Nothing posted.",
+      "from": "own reel 25 Nov",
+      "time": "2026-11-25T23:02:16+05:30",
+      "items": [
+        {
+          "type": "video",
+          "url": "m/qub1daj/1.mp4",
+          "poster": "m/qub1daj/1.jpg",
+          "label": "Looks good"
+        },
+        {
+          "type": "image",
+          "url": "m/qub1daj/2.jpg",
+          "label": "Key frames"
+        }
+      ],
+      "options": [
+        "Looks good",
+        "Key frames"
+      ]
     }
   ]
 }
