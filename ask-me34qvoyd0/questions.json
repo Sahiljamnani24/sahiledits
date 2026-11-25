@@ -419,6 +419,19 @@
         "Cut OK",
         "Reference I studied"
       ]
+    },
+    {
+      "id": "qz2fsn9",
+      "kind": "ok",
+      "question": "ChatGPT reel STORYBOARD (reference style). OK to build this? Answer the 4 questions in the box.",
+      "context": "",
+      "from": "own reel 25 Nov",
+      "time": "2026-11-25T22:05:31+05:30",
+      "body": "STORYBOARD (style of your reference reel). Nothing built yet.\n\nRule: you talking, and every 2-3 s a full-screen REAL picture of the exact thing you say. Words 1-3 at a time, thin white, key word BIG beside your head.\n\n0:00  \"Using AI tools can make you dumb.\"\n   -> Him. \"Using AI\" BIG left of head, \"dumb.\" BIG right.\n0:02  \"because of cognitive debt.\"\n   -> Full screen: real Harvard Gazette article, highlight bar slides over \"cognitive debt\".\n0:03  \"You just want to relax and don't want to work,\"\n   -> Real clip: someone lying back on a sofa, laptop on the belly. Big word \"relax\".\n0:05  \"because AI is doing your work.\"\n   -> Screen clip: ChatGPT typing a full answer by itself, no hands on keys.\n0:07  \"but that is also making you dumber.\"\n   -> Him, slow push-in. \"dumber.\" BIG beside head.\n0:09  \"And this exact thing happened to me as well.\"\n   -> Him. Small chest words.\n0:11  \"I was just giving command to Claude Code\"\n   -> YOUR real screen: Claude Code terminal, your prompt being typed (I record it on your Mac).\n0:14  \"make this type of video... five videos at a time.\"\n   -> Same screen: windows multiply 1 -> 5 in a grid. Big \"5\" in the middle.\n0:18  \"doing four or five sessions at one time\"\n   -> Collage page: 5 terminal cards on white paper, pill caption \"5 sessions at once\".\n0:20  \"and feeling productive.\"\n   -> Him. \"productive.\" BIG beside head.\n0:21  \"I was losing creativity. I was losing my inputs.\"\n   -> Him, darker, tighter frame. No picture: let the line land.\n0:24  \"AI can do my work fully automated.\"\n   -> Real clip: factory robot arms working with no people. Big \"automated\".\n0:27  \"but if I do that, I will create average output in the average world.\"\n   -> Grid of 9 identical ChatGPT answers (same text 9 times). Big \"average\".\n0:31  \"Because AI gives you average output.\"\n   -> Him. \"average\" BIG beside head.\n0:33  \"this is also studied by the Harvard professors\"\n   -> Him + real Harvard Gazette headline card in the space next to his head (NYT-card style). Then black-and-white photos of the two professors (Glassman, Gajos) on the collage page.\n0:36  \"So they have made the tool\"\n   -> Real Harvard campus clip (Harvard Yard), \"Harvard\" logo/label.\n0:38  \"where AI doesn't do your work\"\n   -> Him. Small chest words.\n0:40  \"but it gives you 25 other options\"\n   -> Full screen: a page of 25 real-looking sentences scrolling, counter \"25\".\n0:42  \"where people have wrote similar things.\"\n   -> Same page, highlight bar jumps across 3-4 lines.\n0:44  \"and you just have to write your own in a way.\"\n   -> Real clip: a hand writing one line in a notebook (pen, close-up).\n0:47  \"So you don't lose your cognitive ability to think,\"\n   -> Him, push-in. \"think\" BIG beside head.\n0:51  \"and use AI to think more creatively and freely.\"\n   -> Him. Small chest words.\n0:53  \"Let me know if you have felt this as well.\"\n   -> Him, hold. \"Let me know\" left, \"felt this?\" right. Ends on his face.\n\nQUESTIONS (type in the box):\n1. Use this reference word style instead of the old Kallaway subs?\n2. Grade even darker + soft dark edges, so words beside your head read?\n3. Can I record your real Claude Code screen for 0:11-0:18?\n4. Music: same calm lane as before?",
+      "options": [
+        "OK, build it",
+        "Change it"
+      ]
     }
   ]
 }
