@@ -377,6 +377,18 @@
         "text": "",
         "time": "2026-11-25T09:36:50.384Z"
       }
+    },
+    {
+      "id": "qziqpku",
+      "kind": "choice",
+      "question": "Nov upload stopped at 23 Nov. Folder: Paras's 'Slow Live with Paras' > 'Nov circle' (drive.google.com/drive/folders/1jJUD09fZy3Cb_lO32D3ZZm8LhETWWuN-). 2,643 files are up. 309 files (52 GB, 170 videos) are missing. Upload the missing ones into this folder?",
+      "context": "Nov circle: 15 GB up of 67 GB. ~1.6 h at 9 MB/s. Nothing deleted, same folders, only missing files added.",
+      "from": "Paras Nov upload",
+      "time": "2026-11-25T20:03:02+05:30",
+      "options": [
+        "Yes, upload to this folder",
+        "No, different folder"
+      ]
     }
   ]
 }
