@@ -394,6 +394,31 @@
         "text": "",
         "time": "2026-11-25T15:02:17.429Z"
       }
+    },
+    {
+      "id": "q9fkc7u",
+      "kind": "pick",
+      "question": "ChatGPT reel v3 (56 s, horizontal): your 6 fixes done. Cut OK now?",
+      "context": "Fixed: 'time' at 22s, 'Yes' fumble 29s, Harvard line removed, 44s + 48s fumbles, last take of the end line.",
+      "from": "own reel 25 Nov",
+      "time": "2026-11-25T22:05:10+05:30",
+      "items": [
+        {
+          "type": "video",
+          "url": "m/q9fkc7u/1.mp4",
+          "poster": "m/q9fkc7u/1.jpg",
+          "label": "Cut OK"
+        },
+        {
+          "type": "image",
+          "url": "m/q9fkc7u/2.jpg",
+          "label": "Reference I studied"
+        }
+      ],
+      "options": [
+        "Cut OK",
+        "Reference I studied"
+      ]
     }
   ]
 }
