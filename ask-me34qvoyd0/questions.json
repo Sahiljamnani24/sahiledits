@@ -388,7 +388,12 @@
       "options": [
         "Yes, upload to this folder",
         "No, different folder"
-      ]
+      ],
+      "answered": {
+        "answer": "Yes, upload to this folder",
+        "text": "",
+        "time": "2026-11-25T15:02:17.429Z"
+      }
     }
   ]
 }
