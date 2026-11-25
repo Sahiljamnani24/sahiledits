@@ -419,6 +419,31 @@
         "Cut + grade OK",
         "Change the grade"
       ]
+    },
+    {
+      "id": "qkovoss",
+      "kind": "pick",
+      "question": "ChatGPT reel v2: HORIZONTAL 16:9 + darker grade (62 s, basic cut only). OK? Type cut/remove/add notes in the box.",
+      "context": "Your notes done: underexposed (~0.6 stop darker), horizontal. No effects, subs or music yet.",
+      "from": "own reel 25 Nov",
+      "time": "2026-11-25T21:42:44+05:30",
+      "items": [
+        {
+          "type": "video",
+          "url": "m/qkovoss/1.mp4",
+          "poster": "m/qkovoss/1.jpg",
+          "label": "Looks good"
+        },
+        {
+          "type": "image",
+          "url": "m/qkovoss/2.jpg",
+          "label": "Still too bright"
+        }
+      ],
+      "options": [
+        "Looks good",
+        "Still too bright"
+      ]
     }
   ]
 }
