@@ -371,7 +371,12 @@
         "A - Amit's pool shot softens + logos",
         "B - clean light card",
         "C - calm house shot + logos in the sky"
-      ]
+      ],
+      "answered": {
+        "answer": "B - clean light card",
+        "text": "",
+        "time": "2026-11-25T09:36:50.384Z"
+      }
     }
   ]
 }
