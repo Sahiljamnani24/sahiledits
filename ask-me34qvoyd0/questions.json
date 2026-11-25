@@ -394,6 +394,31 @@
         "text": "",
         "time": "2026-11-25T15:02:17.429Z"
       }
+    },
+    {
+      "id": "qns3kju",
+      "kind": "pick",
+      "question": "ChatGPT reel ROUGH CUT (62 s, Rec 709 + grade). Cut OK? Type your notes (graphics, subs, music) in the box.",
+      "context": "Picked C8064 (ChatGPT/Harvard + your Claude story). Anthropic take skipped: unchecked numbers. No graphics/subs/music yet.",
+      "from": "own reel 25 Nov",
+      "time": "2026-11-25T21:27:57+05:30",
+      "items": [
+        {
+          "type": "video",
+          "url": "m/qns3kju/1.mp4",
+          "poster": "m/qns3kju/1.jpg",
+          "label": "Cut + grade OK"
+        },
+        {
+          "type": "image",
+          "url": "m/qns3kju/2.jpg",
+          "label": "Change the grade"
+        }
+      ],
+      "options": [
+        "Cut + grade OK",
+        "Change the grade"
+      ]
     }
   ]
 }
