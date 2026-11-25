@@ -394,6 +394,31 @@
         "text": "",
         "time": "2026-11-25T15:02:17.429Z"
       }
+    },
+    {
+      "id": "qimupww",
+      "kind": "pick",
+      "question": "ChatGPT reel v6: same edit + 8 premium transitions (start + middle). Better?",
+      "context": "Flash+negative at 0:02 and 0:12, zoom-through 0:03, whip 0:06, carry-over 0:14, zoom into window 0:18, flash 0:25, light leak 0:36. Nothing posted.",
+      "from": "own reel 25 Nov",
+      "time": "2026-11-25T23:38:50+05:30",
+      "items": [
+        {
+          "type": "video",
+          "url": "m/qimupww/1.mp4",
+          "poster": "m/qimupww/1.jpg",
+          "label": "Yes"
+        },
+        {
+          "type": "image",
+          "url": "m/qimupww/2.jpg",
+          "label": "v6"
+        }
+      ],
+      "options": [
+        "Yes",
+        "v6"
+      ]
     }
   ]
 }
