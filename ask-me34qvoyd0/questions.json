@@ -455,6 +455,18 @@
         "Frames 17-20 (0:36-0:41)",
         "Frames 21-24 (0:43-0:53)"
       ]
+    },
+    {
+      "id": "q3chbz7",
+      "kind": "choice",
+      "question": "ChatGPT reel: build the motion graphics from storyboard v1?",
+      "context": "Also: OK to screen-record your real Claude Code for frames 7-9?",
+      "from": "own reel 25 Nov",
+      "time": "2026-11-25T22:31:56+05:30",
+      "options": [
+        "Yes, build it",
+        "Changes first (typed in the box)"
+      ]
     }
   ]
 }
