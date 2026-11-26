@@ -419,6 +419,19 @@
         "Yes",
         "v6"
       ]
+    },
+    {
+      "id": "q24prr6",
+      "kind": "ok",
+      "question": "Send these 10 DMs from SJ tonight?",
+      "context": "Yesterday: 9 sent, 0 skipped. White-label free-edit DM to small agencies (25 Nov).",
+      "from": "dm-daily",
+      "time": "2026-11-26T08:15:08+05:30",
+      "body": "10 new people for today. Same message to everyone:\n\n\"Need an extra editor when client reels pile up? I'll edit one for you free, under your name. If you don't like it, I'll pay you for your time.\"\n\n1. @niva_creative | Australia | 842 followers | about 1 reels a week, last post 3 days ago | social media and marketing agency\n2. @cleahcreative | UK | 3.3K followers | about 1 reels a week, last post 3 days ago | branding and social media creative studio\n3. @crrade.agency | Singapore | 1.1K followers | about 1 reels a week, last post 3 days ago | creative marketing and content agency\n4. @labellavita.media | unknown | 783 followers | about 2 reels a week, last post yesterday | content creation and social media management\n5. @the.graycanvas | other | 763 followers | about 1 reels a week, last post yesterday | creative brand video production company\n6. @graphikko | Australia | 1K followers | about 1 reels a week, last post 6 days ago | branding design and content creation studio\n7. @megamediatv | Australia | 1.4K followers | about 1 reels a week, last post 2 days ago | creative media and video production agency\n8. @capturaaurastudios | Australia | 553 followers | about 1 reels a week, last post 4 days ago | podcast studio and content creation\n9. @acesandoak | Australia | 1.4K followers | about 1 reels a week, last post yesterday | social media and digital marketing agency\n10. @shootingstars.nyc | US | 298 followers | about 1 reels a week, last post yesterday | social media and short-form content agency\n\nSent from SJ tonight, 19:00 to 23:30, 3 to 5 minutes apart.\nNo need to tap: if you don't answer, they go out by themselves. Tap \"No, skip today\" to stop them, or type a note to hold them.\nStops by itself if Instagram shows any warning.",
+      "options": [
+        "Yes, send",
+        "No, skip today"
+      ]
     }
   ]
 }
