@@ -449,7 +449,12 @@
       "options": [
         "Yes, send",
         "No, skip today"
-      ]
+      ],
+      "answered": {
+        "answer": "Yes, send",
+        "text": "",
+        "time": "2026-11-27T02:41:31.782Z"
+      }
     }
   ]
 }
