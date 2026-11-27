@@ -466,7 +466,12 @@
       "options": [
         "I will answer myself",
         "Draft a reply for me"
-      ]
+      ],
+      "answered": {
+        "answer": "Draft a reply for me",
+        "text": "",
+        "time": "2026-11-27T17:17:46.845Z"
+      }
     }
   ]
 }
