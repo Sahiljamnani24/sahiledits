@@ -455,6 +455,18 @@
         "text": "",
         "time": "2026-11-27T02:41:31.782Z"
       }
+    },
+    {
+      "id": "qz50sv9",
+      "kind": "choice",
+      "question": "eSolutify (@esolutify) answered your free-reel DM: \"Thanks for reaching out! I'm eSolutify's virtual assistant. I can't take on freelance or editing partnership offers, but I'll pass your mess\" (33m ago)",
+      "context": "",
+      "from": "dm-daily",
+      "time": "2026-11-27T22:29:20+05:30",
+      "options": [
+        "I will answer myself",
+        "Draft a reply for me"
+      ]
     }
   ]
 }
