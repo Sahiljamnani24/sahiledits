@@ -490,6 +490,18 @@
         "text": "",
         "time": "2026-11-28T05:13:47.832Z"
       }
+    },
+    {
+      "id": "qeqyrcs",
+      "kind": "choice",
+      "question": "Cineflaremedia (@cineflare.media) answered your free-reel DM: \"Hi, thanks for contacting Cineflare Media! Please let us know your enquiries\" (14m ago)",
+      "context": "",
+      "from": "dm-daily",
+      "time": "2026-11-28T20:18:21+05:30",
+      "options": [
+        "I will answer myself",
+        "Draft a reply for me"
+      ]
     }
   ]
 }
